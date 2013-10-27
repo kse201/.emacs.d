@@ -1,4 +1,5 @@
 ;;; @ twittering-mode
+;;; <pkg-manager> install imagemagick gpg
 (when (require 'twittering-mode nil t)
   ;; 起動時パスワード認証 *要 gpgコマンド
   (setq twittering-use-master-password t)

@@ -17,7 +17,6 @@
     ("C-c l" . toggle-truncate-lines)
     ("C-t" . nil)
     ;;    ("C-x C-o" . my-other-window)
-    ("M-a" . mark-whole-buffer)
     ("M-y" . backward-kill-word ); 一つ前の単語削除
     ("C-x o" . browse-url-at-point );ブラウザ起動
     ("C-x C-g" . goto-line ); 指定行へ移動

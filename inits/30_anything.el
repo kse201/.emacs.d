@@ -87,6 +87,19 @@
   ;; @ anything-auto-install
   (require 'anything-auto-install nil t)
   
+  ;; @ anything-include
+  (when (require 'anything-include nil t)
+    (setq anything-sources
+          (list anything-c-source-buffers
+                anything-c-source-files-in-current-dir
+                anything-c-source-recentf
+                anything-c-source-emacs-commands
+                anything-c-source-info-pages
+                anything-c-source-include))
+    (setq anything-include-save-file "~/.anything-include")
+    (setq anything-include-max-saved-items 100))
+
+  
   ;; @ anything-gtags
   (when (and (require 'anything-exuberant-ctags nil t)
              (require 'anything-gtags nil t))

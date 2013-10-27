@@ -1,0 +1,48 @@
+[user]
+    name = kse201
+    email = kse.201@gmail.com
+
+[color]
+    status = auto
+    branch = auto
+    ui = auto
+[core]
+	excludesfile = .gitignore
+	paper = lv -c
+    autocrlf = false
+    editor = vim
+	; pager = nkf -w | LESSCHARSET=utf-8 less
+; http://qiita.com/taise/items/73b2b295350f4fe35b65
+; git config --global url."https://".insteadOf git://
+; [remote "origin"]
+    ; fetch = +refs/heads/*:refs/remotes/origin/*
+    ; url = git@github.com:kse201/dotfiles.git
+    
+[alias]
+; show git log with graph http://d.hatena.ne.jp/akihito_s/20110903
+    graph    = log --graph --date-order -C -M --pretty= format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date      = short
+    ignore   = update-index --assume-unchanged
+    unignore = update-index --no-assume-unchanged
+    ignored  = !git ls-files -v | grep "^[a-z]" ; view ignored files
+
+    st       = status
+    sh       = show
+    sb       = show-branch
+    rema     = rebase origin/master master
+    ci       = commit
+    cm       = commit
+    cmt      = commit -v
+    coma     = commit -a -v
+    cma      = commit -a -v
+    co       = checkout
+    cl       = clone
+    dc       = diff --cached
+    df       = diff
+    d        = diff -C
+    ds       = diff -C --stat
+    dsp      = diff -C --stat -p
+    dw       = diff -C --color-words
+    lg       = log --graph --all --color --pretty= '%x09%h %cn%x09%s %Cred%d'
+    l        = log
+    m        = checkout master
+    ituja    = log --patch -S

@@ -29,7 +29,7 @@
 
 ;; http://d.hatena.ne.jp/tomoya/20110217/1297928222
 (when (require 'recentf nil t)
-  (setq recentf-max-saved-items 2000)
+  (setq recentf-max-saved-items 100)
   (setq recentf-exclude '(".recentf"))
   (setq recentf-auto-cleanup 10)
   (setq recentf-auto-save-timer
