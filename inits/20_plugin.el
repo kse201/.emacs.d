@@ -27,16 +27,6 @@
 ;; 最近使ったファイルに加えないファイルを正規表現で指定する
 (setq recentf-exclude '("/TAGS$" "/var/tmp/"))
 
-;; http://d.hatena.ne.jp/tomoya/20110217/1297928222
-(when (require 'recentf nil t)
-  (setq recentf-max-saved-items 100)
-  (setq recentf-exclude '(".recentf"))
-  (setq recentf-auto-cleanup 10)
-  (setq recentf-auto-save-timer
-        (run-with-idle-timer 30 t 'recentf-save-list))
-  (recentf-mode 1)
-  (require 'recentf-ext))
-
 (when (require 'auto-async-byte-compile nil t)
   ;; 自動バイトコンパイルを無効にするファイル名の正規表現
   (setq auto-async-byte-compile-exclude-files-regexp "init.el")
