@@ -34,7 +34,7 @@
 ;; タイトルバーにファイルのフルパスを表示
 (setq frame-title-format "%f")
 ;; 行番号表示
-(global-linum-mode t)
+(global-linum-mode 0)
 ;; 行番号のフォーマット
 (set-face-attribute 'linum nil :foreground "red" :height 1)
 (setq linum-format "%2d")
@@ -84,7 +84,6 @@
      ()))
   "*Face used by hl-line.")
 (setq hl-line-face 'hlline-face)
-(global-hl-line-mode 1)
 
 ;; モードラインに時刻を表示する
 (display-time)
@@ -95,7 +94,7 @@
 ;; スタートアップ時のエコー領域メッセージの非表示
 (setq inhibit-startup-echo-area-message -1)
 ;; カーソルの点滅を止める
-(blink-cursor-mode 0)
+(blink-cursor-mode 1)
 ;; リージョンに色をつける
 (transient-mark-mode 1)
 ;; スクロールバーを右側に
@@ -155,5 +154,4 @@
   "hl-line's my face")
 (setq hl-line-face 'my-hl-line-face)
 (global-hl-line-mode t)
-
 
