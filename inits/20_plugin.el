@@ -455,3 +455,8 @@ j  (require 'hideshow nil t)
     (holiday-fixed 11 23 "勤労感謝の日")
     (holiday-fixed 12 23 "天皇誕生日")
 ))
+
+;; @ popwin:select-popup-window
+(require 'popup nil t )
+(require 'popup-select-window nil t)
+(global-set-key "\C-xo" 'popup-select-window)
