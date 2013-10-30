@@ -55,7 +55,7 @@
   (setq org-return-follows-link t)
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
   (org-remember-insinuate)
-  (setq org-directory "~/Dropbox/documents/memo/")
+  (setq org-directory "~/work/memo/")
   (setq org-default-notes-file (concat org-directory "notes.org"))
   (setq org-agenda-files (concat org-directory "notes.org"))
   (setq org-remember-templates
@@ -207,9 +207,6 @@
   "Set local key defs for inf-ruby in ruby-mode")
 
 
-
-
-
 ;; http://tcnksm.sakura.ne.jp/blog/2012/05/07/emacs-%E3%81%A7-ruby-%E3%81%AE%E5%85%A5%E5%8A%9B%E8%87%AA%E5%8B%95%E8%A3%9C%E5%AE%8C%E3%81%A8%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9%E3%81%AE%E8%A1%A8%E7%A4%BA/
 ((when require 'rsense nil t)
 (setq rsense-home "~/.emacs.d/opt/rsense-0.3")
@@ -275,7 +272,7 @@
   ;; 履歴の行数を制限しない
   (setq navi2ch-history-max-line nil))
 
-;;; @ paredit.el
+;; @ paredit.el
 (when (require 'paredit nil t)
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
   (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
@@ -283,18 +280,18 @@
   (add-hook 'ielm-mode-hook 'enable-paredit-mode)
   (add-hook 'c-mode-hook 'enable-paredit-mode))
 
-;;; @ color-theme (emacs 23)
+;; @ color-theme (emacs 23)
 (if (string-match "^23\." emacs-version)
     (when (require 'color-theme nil t)
       (color-theme-xemacs)
       ))
 
-;;; @ newsticker
+;; @ newsticker
 (when (require 'newsticker nil t)
   (autoload 'newsticker-start "newsticker" "Emacs Newsticker" t)
   (autoload 'newsticker-show-news "newsticker" "Emacs Newsticker" t))
 
- ;;; @ rainbow-delimiters
+ ;; @ rainbow-delimiters
 (when (require 'rainbow-delimiters nil t)
   (global-rainbow-delimiters-mode t)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
@@ -303,12 +300,12 @@
   (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'ielm-mode-hook 'rainbow-delimiters-mode))
 
-;;; @ smartchr.el
+;; @ smartchr.el
 ;; http://tech.kayac.com/archive/emacs-tips-smartchr.html
 (require 'smartchr nil t)
 (global-set-key (kbd "=") (smartchr '(" = "  " == " "=")))
 
-;;; @ C/C++
+;; @ C/C++
 (add-hook 'c-mode-common-hook
           '(lambda ()
              ;; センテンスの終了である ';' を入力したら、自動改行+インデント
@@ -316,15 +313,15 @@
              ;; RET キーで自動改行+インデント
              (define-key c-mode-base-map "\C-m" 'newline-and-indent)))
 
-  ;;; - リスト11 kill-lineで行が連結したときにインデントを減らす
+  ;; - リスト11 kill-lineで行が連結したときにインデントを減らす
 (defadvice kill-line (before kill-line-and-fixup activate)
   (when (and (not (bolp)) (eolp))
     (forward-char)
     (fixup-whitespace)
     (backward-char)))
 
-;;; @ bongo
-;;; http://pastelwill.jp/wiki/doku.php?id=emacs#bongo_itunes_の代わりに_emacs_を使う
+;; @ bongo
+;; http://pastelwill.jp/wiki/doku.php?id=emacs#bongo_itunes_の代わりに_emacs_を使う
 (add-to-load-path "elisp/bongo/")
 (when (require 'bongo-mplayer nil t)
   (autoload 'bongo "bongo"
@@ -337,10 +334,10 @@
    'exec-path)
   (setq bongo-enabled-backends '(mplayer)))
 
-  ;;; 日本語マニュアル
+  ;; 日本語マニュアル
 (add-to-list 'Info-directory-list "~/.emacs.d/info")
 
-;;; @ popwin
+;; @ popwin
 (setq pop-up-windows t)
 (when (require 'popwin nil t)
   (setq anything-samewindow nil)
@@ -374,11 +371,11 @@
   (push '("\\*.*\\.po\\*"        :regexp t        :position bottom        :height 20)      popwin:special-display-config)
   )
 
-;;; @ egg
+;; @ egg
 ;;(when (executable-find "git")
 ;;  (require 'egg nil t))
 
-;;; @ time-stamp
+;; @ time-stamp
 (when (require 'time-stamp nil t)
   (add-hook 'before-save-hook 'time-stamp)
   (setq time-stamp-active t)
@@ -386,7 +383,7 @@
   (setq time-stamp-format "%02d-%3b-%04y.")
   (setq time-stamp-end " \\|$"))
 
-;;; @ foreign-regexp
+;; @ foreign-regexp
 (when (require 'foreign-regexp nil t)
   (custom-set-variables
    ;; 正規表現、perlかrubyを選択
@@ -460,3 +457,6 @@ j  (require 'hideshow nil t)
 (require 'popup nil t )
 (require 'popup-select-window nil t)
 (global-set-key "\C-xo" 'popup-select-window)
+
+;; @ powerline
+(require 'powerline nil t)
