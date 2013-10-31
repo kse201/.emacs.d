@@ -15,21 +15,19 @@
 (add-hook 'emacs-startup-hook
           (lambda ()
             ;; 起動時にEmacsWikiのページ名を補完候補に加える
-            (auto-install-update-emacswiki-package-name t)
+            ;;;; (auto-install-update-emacswiki-package-name t)
             (auto-install-compatibility-setup)))
 
                                         ;(add-to-list 'load-path "~/src/emacswikipages/" t)
 
 ;; 履歴を次回Emacs起動時にも保存する
-(require 'saveplace)
-(savehist-mode t)
+(when (require 'saveplace nil t)
+  (savehist-mode t))
 
-;; 最近使ったファイルに加えないファイルを正規表現で指定する
-(setq recentf-exclude '("/TAGS$" "/var/tmp/"))
 
 (when (require 'auto-async-byte-compile nil t)
   ;; 自動バイトコンパイルを無効にするファイル名の正規表現
-  (setq auto-async-byte-compile-exclude-files-regexp "init.el")
+  (auto-async-byte-compile-exclude-files-regexp "^#.+#")
   (add-hook 'emacs-lisp-mode-hook 'enable-auto-async-byte-compile-mode))
 
 ;;; --------------------------------------------------
@@ -42,7 +40,7 @@
 
 ;;; @ minor-mode-hack
 ;;; マイナーモード衝突問題を解決する
-(when (require 'minor-mode-hack nil t))
+(require 'minor-mode-hack nil t)
 
 ;;; http://e-arrows.sakura.ne.jp/2010/02/vim-to-emacs.html
 ;; org-mode
@@ -65,7 +63,7 @@
 
 ;;; @ color-moccur 検索結果のリストアップ
 (when (require 'color-moccur nil t)
-  (global-set-key (kbd "M-o") 'occur-by-moccur)
+  (global-set-key (kbd "M-s") 'occur-by-moccur)
   ;; スペース区切りでAND検索
   (setq moccur-split-word t)
   ;; ディレクトリ検索のとき除外するファイル
@@ -91,15 +89,12 @@
 (when (require 'undo-tree nil t)
   (global-undo-tree-mode))
 
-(when (require 'auto-save-buffers nil t)
-  (run-with-idle-timer 10 t 'auto-save-buffers))
-
 ;;; @ screen-lines 物理行で移動
 (when (require 'screen-lines)
   (add-hook 'text-mode-hook 'turn-on-screen-lines-mode))
 
 ;;; @ text-adjust 日本語の文章を整形する
-(when (require 'text-adjust nil t))
+(require 'text-adjust nil t)
 
 ;;; @ multi-shell
 (when (require 'multi-shell nil t)
@@ -109,8 +104,13 @@
 (when (require 'yasnippet-config nil t)
   (yas/setup "~/.emacs.d/elisp/yasnippet-0.6.1c"))
 
+;; @ redo+
 (when (require 'redo+ nil t)
-  (global-set-key (kbd  "C-.") 'redo))
+  (global-set-key (kbd  "C-.") 'redo)
+  (setq undo-no-redo t)
+  ;; undoする情報を保持する量
+  (setq undo-limit 60000)
+  (setq undo-strong-limit 90000))
 
 ;; http://d.hatena.ne.jp/sandai/20120303/p1
 ;; カーソル付近にあるEmacs Lispの関数や変数のヘルプをエコーエリアに表示
@@ -119,13 +119,13 @@
   (require 'eldoc-extension nil t)
   (defun elisp-mode-hooks ()
     ;;  "lisp-mode-hooks"
-    (setq eldoc-idle-delay 0.2)
+    (setq eldoc-idle-delay 0.5)
     (setq eldoc-area-use-multiline-p t)
     (turn-on-eldoc-mode))
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-  (setq eldoc-idle-delay 0.2)
+  (setq eldoc-idle-delay 0.5)
   (setq eldoc-minor-mode-string "")
   (add-hook 'emacs-lisp-mode-hook 'elisp-mode-hooks))
 
@@ -134,7 +134,7 @@
 (when (require 'c-eldoc nil t)
   (add-hook 'c-mode-hook
             (lambda ()
-              (set (make-local-variable 'eldoc-idle-delay) 0.2)
+              (set (make-local-variable 'eldoc-idle-delay) 0.5)
               (set (make-local-variable 'eldoc-minor-mode-string) "")
               (c-turn-on-eldoc-mode))))
 
@@ -209,41 +209,42 @@
 
 ;; http://tcnksm.sakura.ne.jp/blog/2012/05/07/emacs-%E3%81%A7-ruby-%E3%81%AE%E5%85%A5%E5%8A%9B%E8%87%AA%E5%8B%95%E8%A3%9C%E5%AE%8C%E3%81%A8%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9%E3%81%AE%E8%A1%A8%E7%A4%BA/
 ((when require 'rsense nil t)
-(setq rsense-home "~/.emacs.d/opt/rsense-0.3")
-(add-to-list 'load-path (concat rsense-home "/etc"))
-(add-hook 'ruby-mode-hook
-          '(lambda ()
-             ;; .や::を入力直後から補完開始
-             (add-to-list 'ac-sources 'ac-source-rsense-method)
-             (add-to-list 'ac-sources 'ac-source-rsense-constant)
-             ;; C-x .で補完出来るようキーを設定
-             (define-key ruby-mode-map (kbd "C-x .") 'ac-complete-rsense)))
+ (setq rsense-home "~/.emacs.d/opt/rsense-0.3")
+ (add-to-list 'load-path (concat rsense-home "/etc"))
+ (add-hook 'ruby-mode-hook
+           '(lambda ()
+              ;; .や::を入力直後から補完開始
+              (add-to-list 'ac-sources 'ac-source-rsense-method)
+              (add-to-list 'ac-sources 'ac-source-rsense-constant)
+              ;; C-x .で補完出来るようキーを設定
+              (define-key ruby-mode-map (kbd "C-x .") 'ac-complete-rsense)))
 
-;; ruby-mode-hook用の関数を定義
-(defun ruby-mode-hooks ()
-  (inf-ruby-keys)
-  (ruby-electric-mode t)
-  (ruby-block-mode t))
-(add-hook 'ruby-mode-hook 'ruby-mode-hooks) ; ruby-mode-hookに追加
+ ;; ruby-mode-hook用の関数を定義
+ (defun ruby-mode-hooks ()
+   (inf-ruby-keys)
+   (ruby-electric-mode t)
+   (ruby-block-mode t))
+ (add-hook 'ruby-mode-hook 'ruby-mode-hooks) ; ruby-mode-hookに追加
 )
 ;; 再帰的にgrep
 ;; http://www.clear-code.com/blog/2011/2/16.html
-(require 'grep nil t)
-(setq grep-command-before-query "grep -nH -r -e ")
-(defun grep-default-command ()
-  (if current-prefix-arg
-      (let ((grep-command-before-target
-             (concat grep-command-before-query
-                     (shell-quote-argument (grep-tag-default)))))
-        (cons (if buffer-file-name
-                  (concat grep-command-before-target
-                          " *."
-                          (file-name-extension buffer-file-name))
-                (concat grep-command-before-target " ."))
-              (+ (length grep-command-before-target) 1)))
-    (car grep-command)))
-(setq grep-command (cons (concat grep-command-before-query " .")
-                         (+ (length grep-command-before-query) 1)))
+(when (require 'grep nil t)
+  (setq grep-command-before-query "grep -nH -r -e ")
+  (defun grep-default-command ()
+    (if current-prefix-arg
+        (let ((grep-command-before-target
+               (concat grep-command-before-query
+                       (shell-quote-argument (grep-tag-default)))))
+          (cons (if buffer-file-name
+                    (concat grep-command-before-target
+                            " *."
+                            (file-name-extension buffer-file-name))
+                  (concat grep-command-before-target " ."))
+                (+ (length grep-command-before-target) 1)))
+      (car grep-command)))
+  (setq grep-command (cons (concat grep-command-before-query " .")
+                           (+ (length grep-command-before-query) 1)))
+)
 
 ;; diredを便利に
 (require 'dired-x nil t)
@@ -302,8 +303,8 @@
 
 ;; @ smartchr.el
 ;; http://tech.kayac.com/archive/emacs-tips-smartchr.html
-(require 'smartchr nil t)
-(global-set-key (kbd "=") (smartchr '(" = "  " == " "=")))
+(when(require 'smartchr nil t)equal equal 
+     (global-set-key (kbd "=") (smartchr '(" = "  "== " "="))))
 
 ;; @ C/C++
 (add-hook 'c-mode-common-hook
@@ -320,19 +321,6 @@
     (fixup-whitespace)
     (backward-char)))
 
-;; @ bongo
-;; http://pastelwill.jp/wiki/doku.php?id=emacs#bongo_itunes_の代わりに_emacs_を使う
-(add-to-load-path "elisp/bongo/")
-(when (require 'bongo-mplayer nil t)
-  (autoload 'bongo "bongo"
-    "Start Bongo by switching to a Bongo buffer." t)
-  (defun load-path-setter (path-list target-path)
-    (dolist (x path-list) (add-to-list target-path x)))
-  (load-path-setter
-   '("/usr/local/Cellar/mplayer/1.1/bin"
-     "/Applications/VLC.app/Contents/MacOS")
-   'exec-path)
-  (setq bongo-enabled-backends '(mplayer)))
 
   ;; 日本語マニュアル
 (add-to-list 'Info-directory-list "~/.emacs.d/info")
@@ -342,7 +330,7 @@
 (when (require 'popwin nil t)
   (setq anything-samewindow nil)
   (setq display-buffer-function 'popwin:display-buffer)
-  (setq popwin:popup-window-height 0.4)
+  (setq popwin:popup-window-height 0.2)
   (setq popwin:popup-window-position 'bottom)
   ;; フレームのサイズに応じてpopwinの出現位置を決める
   ;; http://qiita.com/items/7f9fe4abac5044025e0f
@@ -365,15 +353,15 @@
   (push '("*Backtrace*" :noselect t) popwin:special-display-config )
   (push '(fundamental-mode  :noselect t) popwin:special-display-config )
   (push '(typeset-mode :noselect t) popwin:special-display-config )
-  (push '(" *auto-async-byte-compile*"  :position bottom :noselect t :height 0 . 1 :stick nil) popwin:special-display-config )
+  (push '(" *auto-async-byte-compile*"  :position bottom :noselect t :height 0.3 :stick nil) popwin:special-display-config )
   (push '("*YaTeX-typesetting*" :position bottom :noselect t) popwin:special-display-config )
   (push '("*VC-log*" :position bottom) popwin:special-display-config )
   (push '("\\*.*\\.po\\*"        :regexp t        :position bottom        :height 20)      popwin:special-display-config)
   )
 
 ;; @ egg
-;;(when (executable-find "git")
-;;  (require 'egg nil t))
+(when (executable-find "git")
+  (require 'egg nil t))
 
 ;; @ time-stamp
 (when (require 'time-stamp nil t)
@@ -394,7 +382,7 @@
 ;; ブロックの折畳みと展開
 ;; http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el
 (when (require 'fold-dwim nil t)
-j  (require 'hideshow nil t)
+  (require 'hideshow nil t)
   ;; 機能を利用するメジャーモード一覧
   (let ((hook))
     (dolist (hook
@@ -409,9 +397,10 @@ j  (require 'hideshow nil t)
       (add-hook hook 'hs-minor-mode))))
 
 ;; Evil  Vim layer
-(add-to-load-path "~/.emacs.d/elisp/evil")
-(require 'evil)
-(evil-mode 0)
+
+(when(require 'evil nil t)
+  (add-to-load-path "~/.emacs.d/elisp/evil")
+  (evil-mode 0))
 
 ;; shellenv  set $PATH
 ;(require 'shellenv "~/.emacs.d/elisp/shellenv-el/shellenv")
@@ -419,12 +408,12 @@ j  (require 'hideshow nil t)
 
 
 ;;@ smooth-scroll
-(require 'smooth-scroll)
-(smooth-scroll-mode t)
+(when (require 'smooth-scroll nil t)
+  (smooth-scroll-mode t))
 
 ;; @Emacsのcalendarで日本の祝日を表示する
 ;; http://qiita.com/aprikip@github/items/db350720bb32e244daea
-(require 'solar)
+(when (require 'solar nil t)
 (setq holiday-general-holidays nil
       holiday-local-holidays t
       holiday-solar-holidays nil
@@ -451,12 +440,21 @@ j  (require 'hideshow nil t)
     (holiday-fixed 11 3 "文化の日")
     (holiday-fixed 11 23 "勤労感謝の日")
     (holiday-fixed 12 23 "天皇誕生日")
-))
+)))
 
 ;; @ popwin:select-popup-window
-(require 'popup nil t )
-(require 'popup-select-window nil t)
-(global-set-key "\C-xo" 'popup-select-window)
+(when (require 'popup nil t )
+  (requireire 'popup-select-window nil t)
+  (global-set-key "\C-xo" 'popup-select-window)
+  (setq popup-select-window-popup-windows 2))
 
 ;; @ powerline
 (require 'powerline nil t)
+
+
+
+
+
+
+
+

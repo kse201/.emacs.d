@@ -13,10 +13,10 @@
     (define-many-keys global-map
       '(( "M-y" . anything-show-kill-ring)
         ( "C-;" . anything-M-x)
-        ( "C-x C-b" . anything-for-files)
+        ( "C-x b" . anything-for-files)
         ( "C-x C-f" . anything-find-files)
         ("C-x g" . anything-imenu)
-        ("TAB" . anything-lisp-completion-at-point-or-indent)
+        ;("TAB" . anything-lisp-completion-at-point-or-indent)
         ("C-M-z" . anything-resume)
         ("C-x C-o" . other-window)))
     (define-many-keys anything-map

@@ -8,7 +8,7 @@
         ((eq ws 'ns)
          ;; for MacBook Air(Late2010) 11inch display
          (set-frame-position (selected-frame) 0 0)
-         (set-frame-size (selected-frame) 95 47))))
+         (set-frame-size (selected-frame) 95 30))))
 ;; スクロール時のカーソル位置の維持
 (setq scroll-preserve-screen-position nil)
 ;; 画面スクロール時の重複行数
@@ -21,15 +21,6 @@
 ;;; 見た目関連
 ;; 選択範囲に色をつけて見た目をわかりやすく
 (transient-mark-mode 1)
-;; フォント設定
-(set-face-attribute
- 'default nil
- :family "Ricty"
- :height 160)
-(set-fontset-font
- nil 'japanese-jisx0208
- (font-spec
-  :family "Ricty"))
 
 ;; タイトルバーにファイルのフルパスを表示
 (setq frame-title-format "%f")
@@ -102,6 +93,7 @@
 ;; 現在の関数名をモードラインに
 (which-function-mode 1)
 (setq custom-theme-load-path "~/.emacs.d/themes")
+(color-theme-molokai)
 
 ;;; 画像ファイルを表示
 (auto-image-file-mode t)
