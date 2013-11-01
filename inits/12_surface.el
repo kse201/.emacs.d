@@ -54,8 +54,6 @@
 (add-to-list 'default-mode-line-format
              '(:eval (count-lines-and-chars)))
 
-;; バッテリー残量表示
-(display-battery-mode t)
 ;; ファイルサイズを表示
 (size-indication-mode t)
 
@@ -98,7 +96,7 @@
 ;;; 画像ファイルを表示
 (auto-image-file-mode t)
 ;; 空白や長すぎる行を視覚化する。
-(require 'whitespace)
+(require 'whitespace nil t)
 ;; 1行が80桁を超えたら長すぎると判断する。
 (setq whitespace-line-column 80)
 (setq whitespace-style '(face              ; faceを使って視覚化する。
@@ -119,7 +117,7 @@
 (setq initial-scratch-message "Scratch\n========\n\n")
 
 ;; 対応する括弧を光らせる
-(require 'paren)
+(require 'paren nil t)
 ;; 画面内に収まらない時は括弧内も光らせる
 (setq show-paren-style 'mixed)
 (make-face 'paren-mismatch)
