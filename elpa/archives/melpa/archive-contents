@@ -173,7 +173,7 @@
 		       [(20110901 930)
 			nil "operate on current line if region undefined [github]" single])
  (whitespace-cleanup-mode .
-			  [(20131015 1129)
+			  [(20131031 1405)
 			   nil "Intelligently call whitespace-cleanup on save [github]" single])
  (wgrep-helm .
 	     [(20121201 2230)
@@ -851,7 +851,7 @@
 	   [(20130312 1839)
 	    nil "Support sequential operation which omitted prefix keys. [github]" single])
  (smartparens .
-	      [(20131030 1600)
+	      [(20131031 1625)
 	       ((cl-lib
 		 (0 1))
 		(dash
@@ -947,14 +947,14 @@
  (shut-up .
 	  [(20131029 1602)
 	   nil "Shut up would you! [github]" single])
- (showcss-mode .
-	       [(20130605 1824)
-		nil "No description available. [github]" tar])
  (show-marks .
 	     [(20130805 1549)
 	      ((fm
 		(1 0)))
 	      "Navigate and visualize the mark-ring [github]" single])
+ (show-css .
+	   [(20130605 1824)
+	    nil "Show the css of the html attribute the cursor is on [github]" tar])
  (shorten .
 	  [(20130621 1740)
 	   nil "component-wise string shortener [github]" single])
@@ -1183,7 +1183,7 @@
 	   [(20121207 1930)
 	    nil "Roy major mode [github]" single])
  (robe .
-       [(20130730 1120)
+       [(20131101 638)
 	((inf-ruby
 	  (2 3 0)))
 	"Code navigation, documentation lookup and completion for Ruby [github]" tar])
@@ -1400,8 +1400,8 @@
 		 [(20131013 2047)
 		  nil "Draw tokens as Unicode glyphs. [github]" single])
  (pretty-mode .
-	      [(20130331 1551)
-	       nil "redisplay parts of the buffer as pretty symbols [wiki]" single])
+	      [(20131031 104)
+	       nil "Redisplay parts of the buffer as pretty symbols. [github]" tar])
  (pretty-lambdada .
 		  [(20130723 2216)
 		   nil "Show the word `lambda' as the Greek letter. [wiki]" single])
@@ -1477,19 +1477,19 @@
 	[(20130707 1516)
 	 nil "A plenv wrapper for Emacs [github]" single])
  (plantuml-mode .
-		[(20131030 2215)
+		[(20131031 2332)
 		 ((auto-complete
 		   (1 4)))
-		 "Major mode for plantuml [github]" single])
+		 "Major mode for plantuml [github]" single])
  (pkgbuild-mode .
 		[(20130816 1020)
 		 nil "Interface to the ArchLinux package manager [github]" single])
  (pkg-info .
-	   [(20131020 1746)
+	   [(20131101 1208)
 	    ((dash
 	      (1 6 0))
 	     (epl
-	      (0 1)))
+	      (0 4)))
 	    "Information about packages [github]" single])
  (pivotal-tracker .
 		  [(20130319 2233)
@@ -1806,7 +1806,7 @@
 		 (7)))
 	       "Minimalist presentation minor-mode for Emacs org-mode. [github]" single])
  (org-pomodoro .
-	       [(20130616 2158)
+	       [(20130718 2115)
 		((alert
 		  (0 5 10)))
 		"Pomodoro implementation for org-mode. [github]" tar])
@@ -2079,7 +2079,7 @@
 	      (1 2 0)))
 	    "a mustache templating library in emacs lisp [github]" tar])
  (multiple-cursors .
-		   [(20131016 1120)
+		   [(20131031 2138)
 		    nil "Multiple cursors for Emacs. [github]" tar])
  (multifiles .
 	     [(20130615 2249)
@@ -2335,7 +2335,7 @@
 		       (1 3 0)))
 		     "Push remote support for Magit. [github]" tar])
  (magit-log-edit .
-		 [(20131029 1426)
+		 [(20131031 1455)
 		  ((cl-lib
 		    (0 3))
 		   (magit
@@ -2362,7 +2362,7 @@
 			       [(20130730 1032)
 				nil "Advice for magit-log-edit-commit [github]" single])
  (magit .
-	[(20131031 1151)
+	[(20131101 131)
 	 ((cl-lib
 	   (0 3))
 	  (git-commit-mode
@@ -2783,7 +2783,7 @@
 		   (1 1 0)))
 		 "Interval tree data structure for 1D range queries [github]" single])
  (interaction-log .
-		  [(20131025 1650)
+		  [(20131031 1540)
 		   nil "exhaustive log of interactions with Emacs [github]" single])
  (instapaper .
 	     [(20130104 2221)
@@ -3056,7 +3056,7 @@
 		 (1 0)))
 	       "Color theme selection with helm interface [github]" single])
  (helm-swoop .
-	     [(20131031 1940)
+	     [(20131101 1756)
 	      ((helm
 		(1 0))
 	       (emacs
@@ -3150,7 +3150,7 @@
 			(1 5 4)))
 		      "List all helm commands with helm [github]" single])
  (helm-gtags .
-	     [(20131026 18)
+	     [(20131101 1026)
 	      ((helm
 		(1 0)))
 	      "GNU GLOBAL helm interface [github]" single])
@@ -3241,7 +3241,7 @@
 	    (20120509)))
 	  "helm-sources and some utilities for GNU R. [github]" single])
  (helm .
-       [(20131030 706)
+       [(20131031 1743)
 	nil "Helm is an Emacs incremental and narrowing framework [github]" tar])
  (header2 .
 	  [(20130824 1159)
@@ -3313,7 +3313,7 @@
 	[(20130824 1206)
 	 nil "Extensions to standard library `grep.el'. [wiki]" single])
  (grass-mode .
-	     [(20131030 1030)
+	     [(20131031 1753)
 	      ((cl-lib
 		(0 2)))
 	      "Provides Emacs modes for interacting with the GRASS GIS program [hg]" single])
@@ -3474,7 +3474,7 @@
 	   [(20130130 2150)
 	    nil "Context-aware git commands such as branch handling [wiki]" single])
  (git-commit-mode .
-		  [(20131029 1425)
+		  [(20131031 1351)
 		   nil "Major mode for editing git commit messages [github]" single])
  (git-blame .
 	    [(20110509 1226)
@@ -3803,7 +3803,7 @@
 		   (0 6 0)))
 		 "Cask support in Flycheck [github]" single])
  (flycheck .
-	   [(20131031 836)
+	   [(20131101 1046)
 	    ((s
 	      (1 6 0))
 	     (dash
@@ -4090,7 +4090,7 @@
 	    (0 3)))
 	  "A collection of emacs utilities [github]" tar])
  (ert-runner .
-	     [(20131026 1238)
+	     [(20131031 2019)
 	      ((s
 		(1 6 1))
 	       (dash
@@ -4340,7 +4340,7 @@
 		 [(20091023 1909)
 		  nil "fuzzy symbol completion. [wiki]" single])
  (el-spice .
-	   [(20131028 43)
+	   [(20131031 2138)
 	    ((thingatpt+
 	      (0)))
 	    "Extra spice for emacs lisp programming [github]" tar])
@@ -4431,7 +4431,7 @@
        [(20131015 1929)
 	nil "a BibTeX database manager [github]" tar])
  (easy-kill .
-	    [(20131030 153)
+	    [(20131101 933)
 	     ((emacs
 	       (24)))
 	     "kill things easily [github]" single])
@@ -4780,7 +4780,7 @@
 	     [(20131005 1021)
 	      nil "TCP-based client connection [github]" single])
  (conkeror-minor-mode .
-		      [(20131030 1342)
+		      [(20131031 2306)
 		       nil "Mode for editing conkeror javascript files. [github]" single])
  (confluence .
 	     [(20130814 735)
@@ -4800,7 +4800,7 @@
 		      (2 2 7)))
 		    "company-mode completion back-end for inf-ruby [github]" single])
  (company .
-	  [(20130929 226)
+	  [(20131101 302)
 	   nil "Modular in-buffer completion framework [github]" tar])
  (commander .
 	    [(20131023 1801)
@@ -4884,7 +4884,7 @@
 		      (0 8 0)))
 		    "Yasnippets for clojure [github]" tar])
  (clojure-mode .
-	       [(20131030 622)
+	       [(20131030 1554)
 		nil "Major mode for Clojure code [github]" single])
  (clojure-cheatsheet .
 		     [(20131022 1505)
@@ -4940,7 +4940,7 @@
 		     (9)))
 		   "decompilation extension for cider [github]" single])
  (cider .
-	[(20131030 1803)
+	[(20131031 1711)
 	 ((clojure-mode
 	   (2 0 0))
 	  (cl-lib
@@ -5057,7 +5057,7 @@
 		     (0 3 2)))
 		   "Context-sensitive external browse URL or Internet search [github]" single])
  (browse-kill-ring .
-		   [(20131026 1346)
+		   [(20131031 2124)
 		    nil "interactively insert items from kill-ring [github]" single])
  (bpe .
       [(20131027 1221)
@@ -5165,7 +5165,7 @@
 	 [(20130917 1848)
 	  nil "Run AWK interactively on region! [wiki]" single])
  (autopair .
-	   [(20131009 1902)
+	   [(20131101 144)
 	    nil "Automagically pair braces and quotes like TextMate [github]" single])
  (automargin .
 	     [(20130910 40)
@@ -5280,7 +5280,7 @@
       [(20130817 845)
        nil "various useful ways to do `multi-occur' [wiki]" single])
  (anzu .
-       [(20131031 35)
+       [(20131101 1621)
 	nil "Show number of matches in mode-line while searching [github]" single])
  (anything-git-grep .
 		    [(20130609 1111)
@@ -5399,7 +5399,7 @@
 	   [(20131005 1126)
 	    nil "An auto-complete source using slime completions [github]" single])
  (ac-nrepl .
-	   [(20131023 755)
+	   [(20131031 1046)
 	    ((cider
 	      (0 1))
 	     (auto-complete

@@ -1,5 +1,6 @@
 ;;; 追加elisp関連
-(require 'cl)
+(eval-when-compile (require 'cl nil t))
+(require 'cl nil t)
 ;; @ package
 (when
     (if (string-match "^23\." emacs-version)
@@ -27,7 +28,7 @@
 
 (when (require 'auto-async-byte-compile nil t)
   ;; 自動バイトコンパイルを無効にするファイル名の正規表現
-  (auto-async-byte-compile-exclude-files-regexp "^#.+#")
+;;;;   (auto-async-byte-compile-exclude-files-regexp "^#.+#")
   (add-hook 'emacs-lisp-mode-hook 'enable-auto-async-byte-compile-mode))
 
 ;;; --------------------------------------------------
@@ -208,7 +209,7 @@
 
 
 ;; http://tcnksm.sakura.ne.jp/blog/2012/05/07/emacs-%E3%81%A7-ruby-%E3%81%AE%E5%85%A5%E5%8A%9B%E8%87%AA%E5%8B%95%E8%A3%9C%E5%AE%8C%E3%81%A8%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9%E3%81%AE%E8%A1%A8%E7%A4%BA/
-((when require 'rsense nil t)
+(when (require 'rsense nil t)
  (setq rsense-home "~/.emacs.d/opt/rsense-0.3")
  (add-to-list 'load-path (concat rsense-home "/etc"))
  (add-hook 'ruby-mode-hook
@@ -405,7 +406,6 @@
 ;; shellenv  set $PATH
 ;(require 'shellenv "~/.emacs.d/elisp/shellenv-el/shellenv")
 ;(shellenv/setpath 'zsh)
-
 
 ;;@ smooth-scroll
 (when (require 'smooth-scroll nil t)
