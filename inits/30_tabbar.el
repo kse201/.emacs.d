@@ -2,7 +2,7 @@
 (when (require 'tabbar nil t)
   (require 'cl)
   (require 'tabbar-extension)
-
+  
   ;; まとめてタブに表示する
   (setq tabbar-buffer-groups-function nil)
   (setq tabbar-buffer-list-function
@@ -14,8 +14,7 @@
                (find (aref (buffer-name buffer) 0) " *")))
            (buffer-list))))
 
-  ;; tabbarを有効にする
-  (tabbar-mode t)
+  (tabbar-mode nil)
   (defvar my-tabbar-displayed-buffers
     '("*Messages*" "*Backtrace*" "*Colors*" "*Faces*" "*vc-")
     "*Regexps matches buffer names always included tabs.")
