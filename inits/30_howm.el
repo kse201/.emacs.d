@@ -9,7 +9,7 @@
                howm-keyword-to-kill-ring))
   
   ;; howmメモの保存先
-  (setq howm-directory (concat user-emacs-directory "~/howm"))
+  (setq howm-directory "~/howm")
   ;; howm-memoを1日1ファイルに
   (setq howm-file-name-format "%Y/%m/%Y/-%m-%d.howm")
   ;; howm-menuの言語を日本語に
