@@ -5,7 +5,7 @@
   (setq popup-use-optimized-column-computation nil)
   (setq ac-ignore-case 'smart)               ; 大文字が含まれている場合のみ、大文字/小文字を区別する
   ;;(ac-set-trigger-key "TAB")
-  (global-set-key (kbd "M-TAB") 'auto-complete)
+  (global-set-key (kbd "TAB") 'auto-complete)
   (setq ac-use-menu-map t)
   (setq ac-auto-start t) 
   (global-auto-complete-mode t)

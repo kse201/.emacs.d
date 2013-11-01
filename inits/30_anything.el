@@ -122,7 +122,9 @@
     (global-set-key (kbd "M-t") 'anything-for-tags))
 
   (when (require 'anything-complete nil t)
-    (anything-lisp-complete-symbol-set-timer 150))
+    (anything-lisp-complete-symbol-set-timer 300)
+    (anything-read-string-mode 1)
+    )
 
   (when (require 'descbinds-anything nil t)
     (descbinds-anything-install))
