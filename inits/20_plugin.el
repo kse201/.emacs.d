@@ -53,7 +53,6 @@
   (setq org-startup-truncated nil)
   (setq org-return-follows-link t)
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-  (org-remember-insinuate)
   (setq org-directory "~/work/memo/")
   (setq org-default-notes-file (concat org-directory "notes.org"))
   (setq org-agenda-files (concat org-directory "notes.org"))
@@ -161,7 +160,8 @@
           (:name imenu :plugin imenu :default-hide nil))))
 
 ;; @ w3m
-(when (require 'w3m nil t)
+(when (and (executable-find "w3m")
+           (require 'w3m nil t))
   (require 'w3m-load nil t)
   (setq w3m-use-cookies t)              ;クッキーを使う
   (setq browse-url-browser-function 'w3m-browse-url)
@@ -282,12 +282,6 @@
   (add-hook 'ielm-mode-hook 'enable-paredit-mode)
   (add-hook 'c-mode-hook 'enable-paredit-mode))
 
-;; @ color-theme (emacs 23)
-(if (string-match "^23\." emacs-version)
-    (when (require 'color-theme nil t)
-      (color-theme-xemacs)
-      ))
-
 ;; @ newsticker
 (when (require 'newsticker nil t)
   (autoload 'newsticker-start "newsticker" "Emacs Newsticker" t)
@@ -304,7 +298,7 @@
 
 ;; @ smartchr.el
 ;; http://tech.kayac.com/archive/emacs-tips-smartchr.html
-(when(require 'smartchr nil t)equal equal 
+(when(require 'smartchr nil t)
      (global-set-key (kbd "=") (smartchr '(" = "  "== " "="))))
 
 ;; @ C/C++
@@ -372,14 +366,6 @@
   (setq time-stamp-format "%02d-%3b-%04y.")
   (setq time-stamp-end " \\|$"))
 
-;; @ foreign-regexp
-(when (require 'foreign-regexp nil t)
-  (custom-set-variables
-   ;; 正規表現、perlかrubyを選択
-   '(foreign-regexp/regexp-type 'perl) ;; Choose by your preference.
-   '(reb-re-syntax 'foreign-regexp)) ;; Tell re-builder to use foreign regexp.
-  )
-
 ;; ブロックの折畳みと展開
 ;; http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el
 (when (require 'fold-dwim nil t)
@@ -444,17 +430,6 @@
 
 ;; @ popwin:select-popup-window
 (when (require 'popup nil t )
-  (requireire 'popup-select-window nil t)
+  (require 'popup-select-window nil t)
   (global-set-key "\C-xo" 'popup-select-window)
   (setq popup-select-window-popup-windows 2))
-
-;; @ powerline
-(require 'powerline nil t)
-
-
-
-
-
-
-
-

@@ -90,8 +90,6 @@
 (set-scroll-bar-mode 'right)            ; GUI emacs
 ;; 現在の関数名をモードラインに
 (which-function-mode 1)
-(setq custom-theme-load-path "~/.emacs.d/themes")
-(color-theme-molokai)
 
 ;;; 画像ファイルを表示
 (auto-image-file-mode t)
@@ -145,3 +143,12 @@
 (setq hl-line-face 'my-hl-line-face)
 (global-hl-line-mode t)
 
+;; @ color-theme 
+(when (require 'color-theme nil t)
+  (setq custom-theme-load-path "~/.emacs.d/themes"))
+
+(when (require 'color-theme-molokai nil t)
+  (color-theme-molokai))
+
+;; @ powerline
+(require 'powerline nil t)

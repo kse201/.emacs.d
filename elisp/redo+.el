@@ -3,12 +3,11 @@
 ;; Copyright (C) 1985, 1986, 1987, 1993-1995 Free Software Foundation, Inc.
 ;; Copyright (C) 1995 Tinker Systems and INS Engineering Corp.
 ;; Copyright (C) 1997 Kyle E. Jones
-;; Copyright (C) 2008, 2009 S. Irie
+;; Copyright (C) 2008, 2009, 2013 S. Irie
 
 ;; Author: Kyle E. Jones, February 1997
 ;;         S. Irie, March 2008
 ;; Keywords: lisp, extensions
-;; Version: 1.14
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -67,6 +66,19 @@
 
 
 ;; History:
+;; 2013-10-19  S. Irie
+;;         * Fix package.el/MELPA issue ("---" in the first line required)
+;;         * Version 1.18
+;;
+;; 2013-10-12  S. Irie
+;;         * Fix errors that occur on Emacs 22/24
+;;           (The fix in 1.16 was incorrect.  It actually did nothing.)
+;;         * Version 1.17
+;;
+;; 2013-04-23  HenryVIII
+;;         * Fix for GNU bug report #12581
+;;         * Version 1.16
+;;
 ;; 2009-01-07  S. Irie
 ;;         * Delete unnecessary messages
 ;;         * Bug fix
@@ -77,7 +89,7 @@
 ;;         * Version 1.14
 ;;
 ;; 2008-05-11  S. Irie
-;;         * record unmodified status entry when redoing
+;;         * Record unmodified status entry when redoing
 ;;         * Version 1.13
 ;;
 ;; 2008-05-10  S. Irie
@@ -100,7 +112,7 @@
 
 ;;; Code:
 
-(defvar redo-version "1.14"
+(defvar redo-version "1.18"
   "Version number for the Redo+ package.")
 
 (defvar last-buffer-undo-list nil
@@ -263,14 +275,17 @@ A numeric argument serves as a repeat count."
 (unless (featurep 'xemacs)
   ;; condition to undo
   (mapc (lambda (map)
-	  (setcar (cdr (memq :enable (assq 'undo (cdr map))))
-		  '(and (not buffer-read-only)
-			(consp buffer-undo-list)
-			(or (not (or (eq last-buffer-undo-list
-					 buffer-undo-list)
-				     (eq last-buffer-undo-list
-					 (cdr buffer-undo-list))))
-			    (listp pending-undo-list)))))
+	  (let* ((p (assq 'undo (cdr map)))
+		 (l (memq :enable (setcdr p (copy-sequence (cdr p))))))
+	    (when l
+	      (setcar (cdr l)
+		      '(and (not buffer-read-only)
+			    (consp buffer-undo-list)
+			    (or (not (or (eq last-buffer-undo-list
+					     buffer-undo-list)
+					 (eq last-buffer-undo-list
+					     (cdr buffer-undo-list))))
+				(listp pending-undo-list)))))))
 	(append (list menu-bar-edit-menu)
 		(if window-system (list tool-bar-map))))
   ;; redo's menu-bar entry
