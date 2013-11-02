@@ -15,13 +15,11 @@
     (setq ac-sources '(ac-source-words-in-same-mode-buffers
                        ac-source-symbols)))
   (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-ac-setup)
-  (when (require 'auto-complete-config nil t)
-    (add-to-list 'ac-dictionary-directories "~/.emacd.d/ac-dict")
+      (add-to-list 'ac-dictionary-directories "~/.emacd.d/ac-dict")
     (setq ac-ignore-case t)
     (define-key ac-complete-mode-map (kbd "C-n") 'ac-next)
     (define-key ac-complete-mode-map (kbd "C-p") 'ac-previous)
-    (auto-complete-mode 1))
-
+    (auto-complete-mode 1)
                                         ; Auto Complete でコメントや文字列リテラルでも補完を行う
                                         ; http://qiita.com/items/87514346bf1c008f1ef6
   (setq ac-disable-faces nil)
