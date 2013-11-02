@@ -2,6 +2,7 @@
 (when (require 'auto-complete nil t)
   (require 'popup nil t)
   (require 'fuzzy nil t)
+  (require 'auto-complete-config nil t)
   (setq popup-use-optimized-column-computation nil)
   (setq ac-ignore-case 'smart)               ; 大文字が含まれている場合のみ、大文字/小文字を区別する
   ;;(ac-set-trigger-key "TAB")
