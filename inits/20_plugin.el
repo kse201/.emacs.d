@@ -394,8 +394,8 @@
 ;(shellenv/setpath 'zsh)
 
 ;;@ smooth-scroll
-(when (require 'smooth-scroll nil t)
-  (smooth-scroll-mode t))
+;;; (when (require 'smooth-scroll nil t)
+  ;(smooth-scroll-mode 0))
 
 ;; @Emacsのcalendarで日本の祝日を表示する
 ;; http://qiita.com/aprikip@github/items/db350720bb32e244daea
