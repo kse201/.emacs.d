@@ -433,3 +433,5 @@
   (require 'popup-select-window nil t)
   (global-set-key "\C-xo" 'popup-select-window)
   (setq popup-select-window-popup-windows 2))
+
+(when (require 'git-gutter nil t))
