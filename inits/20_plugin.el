@@ -78,7 +78,8 @@
 
 ;;; @ undo-tree モードの設定
 (when (require 'undo-tree nil t)
-  (global-undo-tree-mode))
+  (global-undo-tree-mode)
+  (define-key global-map (kbd "C-.") 'undo-tree-redo))
 
 ;;; @ screen-lines 物理行で移動
 (when (require 'screen-lines)
@@ -90,14 +91,6 @@
 ;; @ yasnippet
 (when (require 'yasnippet-config nil t)
   (yas/setup "~/.emacs.d/elisp/yasnippet-0.6.1c"))
-
-;; @ redo+
-(when (require 'redo+ nil t)
-  (global-set-key (kbd  "C-.") 'redo)
-  (setq undo-no-redo t)
-  ;; undoする情報を保持する量
-  (setq undo-limit 60000)
-  (setq undo-strong-limit 90000))
 
 ;; http://d.hatena.ne.jp/sandai/20120303/p1
 ;; カーソル付近にあるEmacs Lispの関数や変数のヘルプをエコーエリアに表示
