@@ -27,7 +27,6 @@
     ("C-x SPC" . good-split-window)
     ("C-c C-@" . move-to-mark)
     ("C-c C-e" . edit-init)
-    ("C-x C-c" . helm-M-x)
     ("C-x C-z" . nil)
     ("C-a" . my-beginning-of-indented-line)
     ("M-p" . scroll-down)

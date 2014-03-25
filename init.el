@@ -1,4 +1,4 @@
-;;
+;
 ;; init.el
 ;;
 ;;;------------------------------
@@ -306,6 +306,9 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 ;;; C-x C-u/C-l 大文字小文字 upper / lower
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+
+  ;; 日本語マニュアル
+(add-to-list 'Info-directory-list "~/.emacs.d/info")
 
 ;;; 自動スペルチェック
 (defun spell-check ()
