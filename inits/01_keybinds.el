@@ -34,6 +34,9 @@
     ("M-g" . goto-line)
     ("C-M-h" . delete-horizontal-space)
     ("M-f" . forward-word)
+    ("M-u" . camel-to-snake-backward-word)
+    ("C-c C-c p" . put-current-path-to-clipboard)
+    
     ))
 
 ; http://ainame.hateblo.jp/entry/2013/11/04/015107
@@ -47,8 +50,7 @@
                (and string-exists-before-cursor string-exists-after-cursor))
 	   (progn (newline) (indent-according-to-mode)))
           (t (progn (open-line 1) (indent-according-to-mode))))))
- 
-(define-key global-map (kbd "C-m") 'newline-or-open-line)
+
 
 (windmove-default-keybindings)
 (define-key mode-specific-map "c" 'compile)
