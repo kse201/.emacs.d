@@ -9,7 +9,11 @@
                howm-keyword-to-kill-ring))
   
   ;; howmメモの保存先
-  (setq howm-directory "~/howm")
+
+  (when (eq system-type 'darwin)          ; Mac のファイル名設定
+      (setq howm-directory "~/howm"))
+(when (eq system-type 'windows-nt)             ; Windowsのファイル名設定
+    (setq howm-directory "~/Documents/howm"))
   ;; howm-memoを1日1ファイルに
   (setq howm-file-name-format "%Y/%m/%Y/-%m-%d.howm")
   ;; howm-menuの言語を日本語に

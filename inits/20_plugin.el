@@ -435,3 +435,7 @@
   (setq popup-select-window-popup-windows 2))
 
 (when (require 'git-gutter nil t))
+
+(when (require 'saveplace nil t)
+ (setq-default save-place t) 
+ (setq save-place-file "~/.saved-places") )

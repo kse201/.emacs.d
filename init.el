@@ -1,8 +1,6 @@
 ;;
 ;; init.el
 ;;
-;; Last Change: 11-May-2013.
-;;
 ;;;------------------------------
 (eval-when-compile (require 'cl))
 (require 'cl)
@@ -20,7 +18,7 @@
   (require 'ucs-normalize)
   (setq file-name-coding-system 'utf-8)
   (setq locale-coding-system 'utf-8))
-(when (eq system-type 'w32)             ; Windowsのファイル名設定
+(when (eq system-type 'windows-nt)             ; Windowsのファイル名設定
   (set-file-name-coding-system 'cp932)
   (setq locale-coding-system 'cp932))
 
