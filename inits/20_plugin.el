@@ -6,7 +6,7 @@
     (if (string-match "^23\." emacs-version)
         (require 'package-23 nil t)
       (require 'package-24 nil t))
-  
+
   ;; バッケージリポジトリにMarmaladeと開発者運営のELPAを追加
   (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
@@ -20,11 +20,6 @@
             (auto-install-compatibility-setup)))
 
                                         ;(add-to-list 'load-path "~/src/emacswikipages/" t)
-
-;; 履歴を次回Emacs起動時にも保存する
-(when (require 'saveplace nil t)
-  (savehist-mode t))
-
 
 (when (require 'auto-async-byte-compile nil t)
   ;; 自動バイトコンパイルを無効にするファイル名の正規表現
@@ -95,10 +90,6 @@
 
 ;;; @ text-adjust 日本語の文章を整形する
 (require 'text-adjust nil t)
-
-;;; @ multi-shell
-(when (require 'multi-shell nil t)
-  (setq multi-shell-command "/bin/zsh"))
 
 ;; @ yasnippet
 (when (require 'yasnippet-config nil t)
@@ -282,11 +273,6 @@
   (add-hook 'ielm-mode-hook 'enable-paredit-mode)
   (add-hook 'c-mode-hook 'enable-paredit-mode))
 
-;; @ newsticker
-(when (require 'newsticker nil t)
-  (autoload 'newsticker-start "newsticker" "Emacs Newsticker" t)
-  (autoload 'newsticker-show-news "newsticker" "Emacs Newsticker" t))
-
  ;; @ rainbow-delimiters
 (when (require 'rainbow-delimiters nil t)
   (global-rainbow-delimiters-mode t)
@@ -301,24 +287,12 @@
 (when(require 'smartchr nil t)
      (global-set-key (kbd "=") (smartchr '(" = "  "== " "="))))
 
-;; @ C/C++
-(add-hook 'c-mode-common-hook
-          '(lambda ()
-             ;; センテンスの終了である ';' を入力したら、自動改行+インデント
-             (c-toggle-auto-hungry-state 1)
-             ;; RET キーで自動改行+インデント
-             (define-key c-mode-base-map "\C-m" 'newline-and-indent)))
-
   ;; - リスト11 kill-lineで行が連結したときにインデントを減らす
 (defadvice kill-line (before kill-line-and-fixup activate)
   (when (and (not (bolp)) (eolp))
     (forward-char)
     (fixup-whitespace)
     (backward-char)))
-
-
-  ;; 日本語マニュアル
-(add-to-list 'Info-directory-list "~/.emacs.d/info")
 
 ;; @ popwin
 (setq pop-up-windows t)
@@ -366,29 +340,6 @@
   (setq time-stamp-format "%02d-%3b-%04y.")
   (setq time-stamp-end " \\|$"))
 
-;; ブロックの折畳みと展開
-;; http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el
-(when (require 'fold-dwim nil t)
-  (require 'hideshow nil t)
-  ;; 機能を利用するメジャーモード一覧
-  (let ((hook))
-    (dolist (hook
-             '(emacs-lisp-mode-hook
-               c-mode-common-hook
-               python-mode-hook
-               php-mode-hook
-               ruby-mode-hook
-               js2-mode-hook
-               css-mode-hook
-               apples-mode-hook))
-      (add-hook hook 'hs-minor-mode))))
-
-;; Evil  Vim layer
-
-(when(require 'evil nil t)
-  (add-to-load-path "~/.emacs.d/elisp/evil")
-  (evil-mode 0))
-
 ;; shellenv  set $PATH
 ;(require 'shellenv "~/.emacs.d/elisp/shellenv-el/shellenv")
 ;(shellenv/setpath 'zsh)
@@ -435,7 +386,3 @@
   (setq popup-select-window-popup-windows 2))
 
 (when (require 'git-gutter nil t))
-
-(when (require 'saveplace nil t)
- (setq-default save-place t) 
- (setq save-place-file "~/.saved-places") )

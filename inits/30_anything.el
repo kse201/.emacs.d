@@ -1,5 +1,6 @@
 ;; @ anything
 (when (require 'anything nil t)
+  ;; tuning
   (setq
    anything-idle-delay 0.3
    anything-input-idle-delay 0.2
@@ -98,29 +99,7 @@
                 anything-c-source-include))
     (setq anything-include-save-file "~/.anything-include")
     (setq anything-include-max-saved-items 100))
-
   
-  ;; @ anything-gtags
-  (when (and (require 'anything-exuberant-ctags nil t)
-             (require 'anything-gtags nil t))
-    ;; anything-gtags-for-tags のソースを定義
-    (setq anything-for-tags
-          (list anything-c-source-imenu
-                anything-c-source-gtags-select
-                ;; etagsを利用する場合ははコメントを外す
-                ;; anything-c-source-etags-select
-                anything-c-source-exuberant-ctags-select
-                ))
-    ;; anything-for-tagsコマンドを作製
-    (defun anything-for-tags ()
-      "Preconfigured `anything' for anything-for-tags."
-      (interactive)
-      (anything anything-for-tags
-                (thing-at-point 'symbol)
-                nil nil nil "*anything for tags*"))
-    ;; M-tにanything-for-tagsを割り当て
-    (global-set-key (kbd "M-t") 'anything-for-tags))
-
   (when (require 'anything-complete nil t)
     (anything-lisp-complete-symbol-set-timer 300)
     (anything-read-string-mode 1)
@@ -129,47 +108,6 @@
   (when (require 'descbinds-anything nil t)
     (descbinds-anything-install))
   
-  ;; anything でPDFを閲覧
-  (setq abks:books-dir "/home/foo/bar/pdf-files") ; PDFファイルのあるディレクトリ（★必須）
-  (setq abks:open-command "acroread") ; LinuxのAdobeReaderを使う (default)
-  
-  ;; for evince setting (default)
-  (setq abks:cache-pixel "600")
-  (setq abks:mkcover-cmd-pdf-postfix nil)
-  (setq abks:mkcover-cmd '("evince-thumbnailer" "-s" size pdf jpeg))
-
-  ;; for ImageMagick and GhostScript setting
-  ;; (setq abks:cache-pixel "600x600")
-  ;; (setq abks:mkcover-cmd-pdf-postfix "[0]")
-  ;; (setq abks:mkcover-cmd '("convert" "-resize" size pdf jpeg))
-  
-  (global-set-key (kbd "M-8") 'anything-books-command) ; キーバインド
-  ;; Emacs でPDFを読む
-  (defadvice abks:open-file (around my-abks:open-file activate)
-    (if (require 'doc-view  nil t)
-        (find-file (ad-get-arg 0))
-      ad-do-it))
-  (add-hook 'view-mode-hook
-            (lambda ()
-              (when (eql major-mode 'doc-view-mode)
-                (define-key view-mode-map "-" nil)
-                (define-key view-mode-map "n" nil)
-                (define-key view-mode-map "p" nil))))
-  (setq anything-for-document-source
-        (list anything-c-source-man-pages
-              anything-c-source-info-cl
-              anything-c-source-info-pages
-              anything-c-source-info-elisp
-              anything-c-source-apropos-emacs-commands
-              anything-c-source-apropos-emacs-functions
-              anything-c-source-apropos-emacs-variables))
-  ;; anything-for-documentコマンドを作成
-  (defun anything-for-document ()
-    "Preconficured `anything' for anything-for-document."
-    (interactive)
-    (anything anything-for-document-source
-              (thing-at-point 'symbol) nil nil nil
-              "*anything for document*"))
   ;; man パスを設定
   (setq woman-manpath '("/usr/share/man"
                         "/usr/loca/share/man"

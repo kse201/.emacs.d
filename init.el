@@ -1,7 +1,6 @@
-;;
 ;; init.el
-;;
-;;;------------------------------
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (eval-when-compile (require 'cl))
 (require 'cl)
 
@@ -13,7 +12,7 @@
 (set-terminal-coding-system 'utf-8)
 (set-buffer-file-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
-;; ファイル名
+;; filename coding system
 (when (eq system-type 'darwin)          ; Mac のファイル名設定
   (require 'ucs-normalize)
   (setq file-name-coding-system 'utf-8)
@@ -25,20 +24,21 @@
 (require 'server)
 (unless (server-running-p)
   (server-start))
-;;; ------------------------------
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; @ Function
-;;; init.el開く
+;;; open conf
 (defun edit-init ()
   "edit init.el"
   (interactive)
   (find-file "~/.emacs.d"))
-;;; scratch開く
+;;; open scratch
 (defun edit-scratch ()
   "edit *scratch*"
   (interactive)
   (switch-to-buffer "*scratch*"))
 
-;;; load-path を追加する関数を定義
+;;; add load-path
 (defun add-to-load-path (&rest paths)
   "load-pathを追加する関数を定義"
   (let (path)
@@ -60,7 +60,7 @@
   (setq load-path (cons default-directory load-path))
   (normal-top-level-add-subdirs-to-load-path))
 
-;; 起動時にウィンドウ最大化
+;; maximizing window-size in Emacs boot
 ;; http://www.emacswiki.org/emacs/FullScreen#toc12
 (defun jbr-init ()
   "Called from term-setup-hook after the default
@@ -90,7 +90,7 @@
     (if (< (window-width) max-width)
         (enlarge-window-horizontally (- max-width (window-width))))))
 
-;;; マーク箇所に移動
+;;; move marked place
 (defun move-to-mark ()
   "マーク箇所に移動"
   (interactive)
@@ -98,9 +98,8 @@
     (goto-char (mark))
     (push-mark pos)))
 
-;;; ネットワーク設定
-;; proxy setting
-;; 参考: http://e-arrows.sakura.ne.jp/2010/12/emacs-anywhere.html
+;; @ network proxy config function
+;; ref: http://e-arrows.sakura.ne.jp/2010/12/emacs-anywhere.html
 (defun machine-ip-address (dev)
   "Return IP address of a network device."
   (let ((info (network-interface-info dev)))
@@ -125,8 +124,9 @@
         )
     (progn
       (setq url-proxy-services nil))))
-;; C-a でインデントで飛ばした行頭に移動
-;; http://e-arrows.sakura.ne.jp/2010/02/vim-to-emacs.html
+
+;; インデントで飛ばした行頭に移動
+;; ref: http://e-arrows.sakura.ne.jp/2010/02/vim-to-emacs.html
 (defun my-beginning-of-indented-line (current-point)
   (interactive "d")
   (if (string-match
@@ -137,7 +137,8 @@
           current-point)))
       (beginning-of-line)
     (back-to-indentation)))
-;; *scratch*を消さない
+
+;; don't remove *scratch*を
 (defun my-make-scratch (&optional arg)
   (interactive)
   (progn
@@ -163,7 +164,7 @@
           (lambda ()
             (unless (member (get-buffer "*scratch*") (buffer-list))
               (my-make-scratch 1))))
-;; beepを消す
+;; silent beep
 (defun my-bell-function ()
   (unless (memq this-command
                 '(isearch-abort abort-recursive-edit exit-minibuffer
@@ -172,7 +173,7 @@
     (ding)))
 
 (defun open-current-dir-with-finder ()
-  "編集中のファイルのディレクトリを開く"
+  "編集中のファイルのディレクトリをFinderで開く"
   (interactive)
   (shell-command (concat "open .")))
 
@@ -246,8 +247,8 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
                (symbol-name feature))))))
 
 ;; http://qiita.com/items/61b8eeac2ebcf5993419
-(global-set-key (kbd "M-u") 'camel-to-snake-backward-word)
 (defun camel-to-snake-backward-word ()
+  "convert from camel-case into snake-case"
   (interactive)
   (let ((case-fold-search nil)
         (s (buffer-substring
@@ -258,13 +259,30 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
                      (replace-regexp-in-string
                       "\\([A-Z]\\)" "_\\1"
                       (store-substring s 0 (downcase (string-to-char s))))))))
-;;; ------------------------------------------------------------------
-;; 引数のディレクトリとそのサブディレクトリをload-pathに追加
+
+;; http://qiita.com/items/8f1d3342180d42ad9f78
+(defun put-current-path-to-clipboard ()
+  "Get current path and put it to clipboard"
+  (interactive)
+  (let ((file-path buffer-file-name)
+        (dir-path default-directory))
+    (cond (file-path
+           (kill-new (expand-file-name file-path))
+           (message "This file path is on the clipboard!"))
+          (dir-path
+           (kill-new (expand-file-name dir-path))
+           (message "This directory path is on the clipboard!"))
+          (t
+           (error-message-string "Fail to get path name.")
+           ))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; @ plugins 
 (add-to-load-path "conf" "public_repos" "elpa" "elisp" "themes")
-;;; @ auto-install 
+;;; @ auto-install
 (when (require 'auto-install nil t)
   (setq auto-install-directory "~/.emacs.d/elisp/")
-  ;; install-elisp.el互換モードにする
+  ;; set Compatibility with install-elisp.el
   (auto-install-compatibility-setup)
   ;; ediff関連のバッファを1つのフレームにまとめる
   (setq ediff-window-setup-function 'ediff-setup-windows-plain))
@@ -283,32 +301,21 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
            (init-loader-error-log (format "%s. %s" (locate-library el) (error-message-string e))) ;追加
            ))))))
 
-;; http://qiita.com/items/8f1d3342180d42ad9f78
-;;; Get current path and put it to clipboard
-(defun put-current-path-to-clipboard ()
-  (interactive)
-  (let ((file-path buffer-file-name)
-        (dir-path default-directory))
-    (cond (file-path
-           (kill-new (expand-file-name file-path))
-           (message "This file path is on the clipboard!"))
-          (dir-path
-           (kill-new (expand-file-name dir-path))
-           (message "This directory path is on the clipboard!"))
-          (t
-           (error-message-string "Fail to get path name.")
-           ))))
-(global-set-key (kbd "C-c C-c p") 'put-current-path-to-clipboard)
-;;; ------------------------------
-;;; バッファ自動再読み込み
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; @ General conf
+;;; auto reload buff
 (global-auto-revert-mode 1)
-;;; 大文字小文字返還
-;;; C-x C-u/C-l 大文字小文字 upper / lower
+;; convert upper/lower
+;; C-x C-u/C-l
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
-;;; 自動スペルチェック
+  ;; Japanese man path
+(add-to-list 'Info-directory-list "~/.emacs.d/info")
+
+
 (defun spell-check ()
+  "auto spell check "
   (setq-default flyspell-mode t)
   (setq ispell-dictionaryonary "american")
   (setq ispell-program-name "aspell")
@@ -322,39 +329,19 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 (scroll-bar-mode 0)
 (menu-bar-mode 0)
 
-;; Localeに合わせた環境の設定
+;; Locale
 (set-locale-environment nil)
+
 (show-paren-mode 1)
 
-;; http://d.hatena.ne.jp/syohex/20121225/1356449561
-;; look command with auto-complete
-(defun my/ac-look ()
-  "`look' command with auto-completelook"
-  (interactive)
-  (unless (executable-find "look")
-    (error "Please install `look' command"))
-  (let ((word (thing-at-point 'word)))
-    (unless word
-      (error "not found word"))
-    (let ((cmd (format "look %s" word)))
-      (with-temp-buffer
-        (call-process-shell-command cmd nil t)
-        (split-string-and-unquote (buffer-string) "\n")))))
+;; emacsでゴミ箱を使う
+;; http://qiita.com/items/d5d7190a256e72451543
+(custom-set-variables
+ '(delete-by-moving-to-trash t)
+ '(trash-directory "~/.Trash"))
 
-(defun ac-look ()
-  (interactive)
-  (let ((ac-menu-height 50)
-        (ac-candidate-limit t))
-    (auto-complete '(ac-source-look))))
-
-(defvar ac-source-look
-  '((candidates . my/ac-look)
-    (requires . 2)))
-
-(global-set-key (kbd "C-M-l") 'ac-look) ;; 好きなキーにしてください
-;; ---------------------------------
-
-;; 選択リージョンを使って検索
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; search by selected word
 (defadvice isearch-mode
   (around isearch-mode-default-string
           (forward &optional regexp op-fun recursive-edit word-p) activate)
@@ -374,25 +361,24 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
   (when (process-list)
     (dolist (p (process-list))
       (set-process-query-on-exit-flag p nil))))
-;; GCを減らして軽くする
+;; GC size
 (setq gc-cons-threshold (* 5242880 2))
-;; ログの記録行数を増やす
-(setq message-log-max 10000)
+;; log size
+(setq message-log-max 1000)
+;; history 
+(setq history-length 1000)
 
-;;; ------------------------------
-;;; @ 各種設定
-;; zsh を使う
+;; use zsh
 (setq shell-file-name "/bin/zsh")
+
 (setq enable-recursice-minibuffers t)
 
-;; ダイアログボックスを使わないようにする
+;; dont user dialog box
 (setq use-dialog-box nil)
 (defalias 'message-box 'message)
-;; 履歴をたくさん保存する
-(setq history-length 10000)
-;; キーストロークをエコーエリアに早く表示する
+
+;; sec showing keystrokes
 (setq echo-keystrokes 0.1)
-;; 大きいファイルを開こうとしたときに警告を発生させる
 (setq large-file-worning-threshold (* 25 1024 1024))
 ;; ミニバッファで入力を取り消しても履歴に残す
 ;; 誤って取り消して入力が失われるのを防ぐため
@@ -402,18 +388,9 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 
 (setq max-specpdl-size 6000)
 (setq max-lisp-eval-depth 1000)
-;; ミニバッファの履歴を保存する
+;; save mini-buffer history
 (savehist-mode 1)
 
-;; *.elを保存時、自動バイトコンパイル
-;; (add-hook 'after-save-hook
-;;         (lambda ()
-;;          (let ((file (buffer-file-name)))
-;;           (when (string-match ".*\\.el$" file)
-;;            (byte-compile-file file))))
-
-;;; @ key bind ------------------------------ 
-;
 ;; 自動でファイルを挿入する
 (auto-insert-mode t)
 
@@ -421,7 +398,7 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 (ido-mode 1)                            ; コマンドがidoのものに置き換わる
 (ido-everywhere 1)                      ; バッファ名・ファイル名入力全てがidoに置き換わる
 
-;; evalした結果全部表示
+;; output a result of eval
 (setq eval-expression-print-length nil)
 
 (eval-when-compile
@@ -430,13 +407,9 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 ;; 最終行に必ず１行挿入する
 (setq require-final-newline t)
 
-;; バッファの最後でnewlineで新規行を追加するのを禁止
-(setq next-line-add-newlines nil)
-
-;; 終了時にautosavefileを消す
 (setq delete-auto-save-files t)
 
-;; 補完時に大文字小文字を区別しない
+;; ignore case in completion
 (setq completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
 
@@ -474,7 +447,7 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 (windmove-default-keybindings 'super)
 ;;Mac用
 ;; (windmove-default-keybindings 'meta)
-;; (windmove-default-keybindings) 引数なしの場合はShift
+;; (Windmove-default-keybindings) 引数なしの場合はShift
 
 ;; ウィンドウ操作の履歴をundo/redo
 ;; C-c <left> / C-c <right>
@@ -490,17 +463,3 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
       (add-to-list 'exec-path (expand-file-name "~/bin"))
       (setenv "PATH" (mapconcat 'identity exec-path ":"))))
 
-;; GUIで直接ファイルを開いた場合フレームを作成しない
-                                        ;(add-hook 'before-make-frame-hook
-                                        ;         (lambda ()
-                                        ;          (when (eq tabbar-mode t)
-                                        ;           (switch-to-buffer (buffer-name))
-                                        ;          (delete-this-frame))))
-;; 変更のあったファイルの自動再読み込み
-(global-auto-revert-mode 1)
-
-;; emacsでゴミ箱を使う
-;; http://qiita.com/items/d5d7190a256e72451543
-(custom-set-variables
- '(delete-by-moving-to-trash t)
- '(trash-directory "~/.Trash"))
