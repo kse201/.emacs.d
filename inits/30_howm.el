@@ -15,7 +15,7 @@
 (when (eq system-type 'windows-nt)             ; Windowsのファイル名設定
     (setq howm-directory "~/Documents/howm"))
   ;; howm-memoを1日1ファイルに
-  (setq howm-file-name-format "%Y/%m/%Y/-%m-%d.howm")
+  (setq howm-file-name-format "%Y/%m/%Y-%m-%d-%H%M%S.txt")
   ;; howm-menuの言語を日本語に
   (setq howm-menu-lang 'ja)
   (define-key global-map (kbd "C-x C-, C-, ") 'howm-menu)
