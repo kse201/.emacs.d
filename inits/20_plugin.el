@@ -76,10 +76,6 @@
   ;; M-x grep-findでPerlのackコマンドを使うよう変更
   (setq grep-find-command "ack --nocolor --nogroup "))
 
-;;; @ undohist 編集履歴の記憶
-(when (require 'undohist nil t)
-  (undohist-initialize))
-
 ;;; @ undo-tree モードの設定
 (when (require 'undo-tree nil t)
   (global-undo-tree-mode))
