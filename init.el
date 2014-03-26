@@ -276,9 +276,30 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
            (error-message-string "Fail to get path name.")
            ))))
 
+;; マクロ定義
+;;; http://e-arrows.sakura.ne.jp/2010/03/macros-in-emacs-el.html
+;;;; usege : like that
+;;;; (add-hook-fn 'php-mode-hook
+;;;;    (require 'symfony)
+;;;;    (setq tab-width 2))
+(defmacro add-hook-fn (name &rest body)
+  `(add-hook ,name #'(lambda () ,@body)))
+
+;; lazy load
+;;; usage:
+;;; (lazyload (php-mode) "php-mode"
+;;;; (req symfony)
+;;;; (setq tab-width 2))
+(defmacro lazyload (func lib &rest body)
+  `(when (locate-library ,lib)
+     ,@(mapcar (lambda (f) `(autoload ',f ,lib nil t)) func)
+     (eval-after-load ,lib
+       '(progn
+          ,@body))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; @ plugins 
-(add-to-load-path "conf" "public_repos" "elpa" "elisp" "themes")
+(add-to-load-path "conf" "elpa" "elisp")
 ;;; @ auto-install
 (when (require 'auto-install nil t)
   (setq auto-install-directory "~/.emacs.d/elisp/")
@@ -289,7 +310,7 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 
 ;;; @ init-loader
 (when (require 'init-loader nil t)
-  (init-loader-load "~/.emacs.d/inits")
+  (init-loader-load "~/.emacs.d/conf")
   (defun init-loader-re-load (re dir &optional sort)
     (let ((load-path (cons dir load-path)))
       (dolist (el (init-loader--re-load-files re dir sort))
@@ -400,9 +421,6 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 
 ;; output a result of eval
 (setq eval-expression-print-length nil)
-
-(eval-when-compile
-  (require 'cl))
 
 ;; 最終行に必ず１行挿入する
 (setq require-final-newline t)

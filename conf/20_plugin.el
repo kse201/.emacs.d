@@ -76,13 +76,10 @@
   ;; M-x grep-findでPerlのackコマンドを使うよう変更
   (setq grep-find-command "ack --nocolor --nogroup "))
 
-;;; @ undohist 編集履歴の記憶
-(when (require 'undohist nil t)
-  (undohist-initialize))
-
 ;;; @ undo-tree モードの設定
 (when (require 'undo-tree nil t)
-  (global-undo-tree-mode))
+  (global-undo-tree-mode)
+  (define-key global-map (kbd "C-.") 'undo-tree-redo))
 
 ;;; @ screen-lines 物理行で移動
 (when (require 'screen-lines)
@@ -94,14 +91,6 @@
 ;; @ yasnippet
 (when (require 'yasnippet-config nil t)
   (yas/setup "~/.emacs.d/elisp/yasnippet-0.6.1c"))
-
-;; @ redo+
-(when (require 'redo+ nil t)
-  (global-set-key (kbd  "C-.") 'redo)
-  (setq undo-no-redo t)
-  ;; undoする情報を保持する量
-  (setq undo-limit 60000)
-  (setq undo-strong-limit 90000))
 
 ;; http://d.hatena.ne.jp/sandai/20120303/p1
 ;; カーソル付近にあるEmacs Lispの関数や変数のヘルプをエコーエリアに表示
@@ -128,8 +117,6 @@
               (set (make-local-variable 'eldoc-idle-delay) 0.5)
               (set (make-local-variable 'eldoc-minor-mode-string) "")
               (c-turn-on-eldoc-mode))))
-
-(require 'hideshow nil t)
 
 ;; @ e2wm
 ;; http://d.hatena.ne.jp/kiwanami/20100528/1275038929
@@ -189,35 +176,6 @@
             (t
              (message "not movie."))))))
 
-;;; ruby
-(require 'ruby-electric nil t)          ; 括弧の自動挿入
-(when (require 'ruby-block nil t)       ; end に対応する行のハイライト
-  (setq ruby-block-highlight nil))
-(autoload 'run-ruby "inf-ruby"
-  "Run an inferior Ruby process")
-(autoload 'inf-ruby-keys "inf-ruby"
-  "Set local key defs for inf-ruby in ruby-mode")
-
-
-;; http://tcnksm.sakura.ne.jp/blog/2012/05/07/emacs-%E3%81%A7-ruby-%E3%81%AE%E5%85%A5%E5%8A%9B%E8%87%AA%E5%8B%95%E8%A3%9C%E5%AE%8C%E3%81%A8%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9%E3%81%AE%E8%A1%A8%E7%A4%BA/
-(when (require 'rsense nil t)
- (setq rsense-home "~/.emacs.d/opt/rsense-0.3")
- (add-to-list 'load-path (concat rsense-home "/etc"))
- (add-hook 'ruby-mode-hook
-           '(lambda ()
-              ;; .や::を入力直後から補完開始
-              (add-to-list 'ac-sources 'ac-source-rsense-method)
-              (add-to-list 'ac-sources 'ac-source-rsense-constant)
-              ;; C-x .で補完出来るようキーを設定
-              (define-key ruby-mode-map (kbd "C-x .") 'ac-complete-rsense)))
-
- ;; ruby-mode-hook用の関数を定義
- (defun ruby-mode-hooks ()
-   (inf-ruby-keys)
-   (ruby-electric-mode t)
-   (ruby-block-mode t))
- (add-hook 'ruby-mode-hook 'ruby-mode-hooks) ; ruby-mode-hookに追加
-)
 ;; 再帰的にgrep
 ;; http://www.clear-code.com/blog/2011/2/16.html
 (when (require 'grep nil t)

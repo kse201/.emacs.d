@@ -13,7 +13,7 @@
     ;; anything関連キーバインド
     (define-many-keys global-map
       '(( "M-y" . anything-show-kill-ring)
-        ( "C-;" . anything-M-x)
+        ( "C-x C-:" . anything-M-x)
         ( "C-x b" . anything-for-files)
         ( "C-x C-f" . anything-find-files)
         ("C-x g" . anything-imenu)
