@@ -14,7 +14,7 @@
 (prefer-coding-system 'utf-8)
 ;; filename coding system
 (when (eq system-type 'darwin)          ; Mac のファイル名設定
-  (require 'ucs-normalize)
+  (require 'ucs-normalize nil t)
   (setq file-name-coding-system 'utf-8)
   (setq locale-coding-system 'utf-8))
 (when (eq system-type 'windows-nt)             ; Windowsのファイル名設定
