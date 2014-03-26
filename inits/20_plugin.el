@@ -118,8 +118,6 @@
               (set (make-local-variable 'eldoc-minor-mode-string) "")
               (c-turn-on-eldoc-mode))))
 
-(require 'hideshow nil t)
-
 ;; @ e2wm
 ;; http://d.hatena.ne.jp/kiwanami/20100528/1275038929
 (when (require 'e2wm nil t)
