@@ -2,3 +2,4 @@
 eshell/*
 conf/*.elc
 init.elc
+tramp
