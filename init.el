@@ -276,6 +276,27 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
            (error-message-string "Fail to get path name.")
            ))))
 
+;; マクロ定義
+;;; http://e-arrows.sakura.ne.jp/2010/03/macros-in-emacs-el.html
+;;;; usege : like that
+;;;; (add-hook-fn 'php-mode-hook
+;;;;    (require 'symfony)
+;;;;    (setq tab-width 2))
+(defmacro add-hook-fn (name &rest body)
+  `(add-hook ,name #'(lambda () ,@body)))
+
+;; lazy load
+;;; usage:
+;;; (lazyload (php-mode) "php-mode"
+;;;; (req symfony)
+;;;; (setq tab-width 2))
+(defmacro lazyload (func lib &rest body)
+  `(when (locate-library ,lib)
+     ,@(mapcar (lambda (f) `(autoload ',f ,lib nil t)) func)
+     (eval-after-load ,lib
+       '(progn
+          ,@body))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; @ plugins 
 (add-to-load-path "conf" "elpa" "elisp")
