@@ -60,19 +60,6 @@
   (setq load-path (cons default-directory load-path))
   (normal-top-level-add-subdirs-to-load-path))
 
-;; maximizing window-size in Emacs boot
-;; http://www.emacswiki.org/emacs/FullScreen#toc12
-(defun jbr-init ()
-  "Called from term-setup-hook after the default
-  terminal setup is
-  done or directly from startup if term-setup-hook not
-  used.  The value
-  0xF030 is the command for maximizing a window."
-  (interactive)
-  (w32-send-sys-command #xf030)
-  (ecb-redraw-layout)
-  (calendar))
-
 ;; 良い感じにウィンドウ分割
 (defun good-split-window ()
   "良い感じにウィンドウ分割"
@@ -167,7 +154,7 @@
 ;; silent beep
 (defun my-bell-function ()
   (unless (memq this-command
-                '(isearch-abort abort-recursive-edit exit-minibuffer
+                '(isearch-abort abort-recbursive-edit exit-minibuffer
                                 keyboard-quit mwheel-scroll down up next-line previous-line
                                 backward-char forward-char))
     (ding)))
