@@ -2,3 +2,4 @@
 eshell/*
 *.elc
 tramp
+!howm*.elc
