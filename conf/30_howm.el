@@ -24,7 +24,7 @@
     "howmメモを保存と同時に閉じる"
     (interactive)
     (when (and (buffer-file-name)
-               (string-match "\\.howm" (buffer-name)))
+               (string-match "\\.txt" (buffer-name)))
       (save-buffer)
       (kill-buffer)))
   (define-key howm-mode-map (kbd "C-c C-c") 'howm-save-buffer-and-kill))
