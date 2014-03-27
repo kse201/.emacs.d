@@ -1,5 +1,4 @@
 **/*hist*
 eshell/*
-conf/*.elc
-init.elc
+*.elc
 tramp
