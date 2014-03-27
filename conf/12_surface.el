@@ -1,14 +1,4 @@
 ;;; @ surface
-;;; OS 別設定
-(let ((ws window-system))
-  (cond ((eq ws 'w32)
-         (set-frame-position (selected-frame) 0 0)
-         (setq term-setup-hook 'jbr-init)
-         (setq window-setup-hook 'jbr-init))
-        ((eq ws 'ns)
-         ;; for MacBook Air(Late2010) 11inch display
-         (set-frame-position (selected-frame) 0 0)
-         (set-frame-size (selected-frame) 95 30))))
 ;; スクロール時のカーソル位置の維持
 (setq scroll-preserve-screen-position nil)
 ;; 画面スクロール時の重複行数
