@@ -56,181 +56,6 @@
           ("Bug" ?b "** TODO %?   :bug:\n   %i\n   %a\n   %t" nil "Inbox")
           ("Idea" ?i "** %?\n   %i\n   %a\n   %t" nil "New Ideas"))))
 
-;;; @ color-moccur 検索結果のリストアップ
-(when (require 'color-moccur nil t)
-  (global-set-key (kbd "M-s") 'occur-by-moccur)
-  ;; スペース区切りでAND検索
-  (setq moccur-split-word t)
-  ;; ディレクトリ検索のとき除外するファイル
-  (add-to-list 'dmoccur-exclusion-mask "\\.DS_Store")
-  (add-to-list 'dmoccur-exclusion-mask "^#.+#$")
-  ;; MMigemoを利用できる環境であればMigemoを使う
-  (when (and (executable-find "cmigemo")
-             (require 'migemo nil t ))
-    (setq cmigemo-command "cmigemo") ; cmigemoを使う
-    (setq moccur-use-migemo t)))
-
-;;; @ grep結果バッファでのカーソル移動でダイナミックにファイルを開いてくれる
-(when (require 'color-grep nil t)
-  (setq color-grep-sync-kill-buffer t)
-  ;; M-x grep-findでPerlのackコマンドを使うよう変更
-  (setq grep-find-command "ack --nocolor --nogroup "))
-
-;;; @ undo-tree モードの設定
-(when (require 'undo-tree nil t)
-  (global-undo-tree-mode)
-  (define-key global-map (kbd "C-.") 'undo-tree-redo))
-
-;;; @ screen-lines 物理行で移動
-(when (require 'screen-lines)
-  (add-hook 'text-mode-hook 'turn-on-screen-lines-mode))
-
-;;; @ text-adjust 日本語の文章を整形する
-(require 'text-adjust nil t)
-
-;; @ yasnippet
-(when (require 'yasnippet-config nil t)
-  (yas/setup "~/.emacs.d/elisp/yasnippet-0.6.1c"))
-
-;; http://d.hatena.ne.jp/sandai/20120303/p1
-;; カーソル付近にあるEmacs Lispの関数や変数のヘルプをエコーエリアに表示
-;; http://www.emacswiki.org/emacs/eldoc-extension.el
-(when (require 'eldoc nil t)
-  (require 'eldoc-extension nil t)
-  (defun elisp-mode-hooks ()
-    ;;  "lisp-mode-hooks"
-    (setq eldoc-idle-delay 0.5)
-    (setq eldoc-area-use-multiline-p t)
-    (turn-on-eldoc-mode))
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-  (setq eldoc-idle-delay 0.5)
-  (setq eldoc-minor-mode-string "")
-  (add-hook 'emacs-lisp-mode-hook 'elisp-mode-hooks))
-
-;;;  @ C-eldoc
-;; C言語の関数や変数のヘルプをエコーエリアに表示
-(when (require 'c-eldoc nil t)
-  (add-hook 'c-mode-hook
-            (lambda ()
-              (set (make-local-variable 'eldoc-idle-delay) 0.5)
-              (set (make-local-variable 'eldoc-minor-mode-string) "")
-              (c-turn-on-eldoc-mode))))
-
-;; @ e2wm
-;; http://d.hatena.ne.jp/kiwanami/20100528/1275038929
-(when (require 'e2wm nil t)
-  (global-set-key (kbd "M-+") 'e2wm:start-management)
-  (setq e2wm:c-code-recipe
-        '(| (:left-max-size 12)
-            (- (:upper-size-ratio 0.7)
-               files history)
-            (- (:upper-size-ratio 0.7)
-               (| (:right-max-size 12)
-                  main imenu)
-               sub)))
-  (setq e2wm:c-code-winfo
-        '((:name main)
-          (:name files :plugin files)
-          (:name history :plugin history-list)
-          (:name sub :buffer "*info*" :default-hide t)
-          (:name imenu :plugin imenu :default-hide nil))))
-
-;; @ w3m
-(when (and (executable-find "w3m")
-           (require 'w3m nil t))
-  (require 'w3m-load nil t)
-  (setq w3m-use-cookies t)              ;クッキーを使う
-  (setq browse-url-browser-function 'w3m-browse-url)
-  (setq w3m-key-binding 'info)
-                                        ;(global-set-key (kbd "C-x C-b") 'bs-show)
-  ;; URLらしき部分を選択してC-xmするとemacs-w3m起動
-  (global-set-key "\C-xm" 'browse-url-at-point)
-  ;; 検索の設定 M-x w3m-search
-  (autoload 'w3m-search "w3m-search" "Search QUERY using SEARCH-ENGINE." t)
-  ;; 検索をGoogle(日本語サイト)でおこなう
-  (setq w3m-search-default-engine "google")
-  ;; C-csを押下するとどのBufferからでも検索を開始
-  (global-set-key "\C-cs" 'w3m-search)
-  (autoload 'w3m-weather "w3m-weather" "Display weather report." t)
-  (autoload 'w3m-antenna "w3m-antenna" "Report chenge of WEB sites." t)
-  (autoload 'w3m-namazu "w3m-namazu" "Search files with Namazu." t)
-                                        ;formに入力可能とする。今は不要かもしれない
-  (setq w3m-use-form t)
-                                        ;うまく起動しない場合以下を設定してみるとよい
-                                        ;(setq w3m-command "/usr/local/bin/w3m")
-                                        ;初期起動時に表示する画面
-  (setq w3m-home-page "http://www.google.co.jp")
-  (setq w3m-default-display-inline-images t)       ;画像を表示する
-
-  ;; http://mugijiru.seesaa.net/article/258382587.html
-  (defun w3m-play-movie ()
-    (interactive)
-    (let ((url (w3m-anchor)))
-      (cond ((string-match "^http:\\/\\/www\\.youtube\\.com" url)
-             (message (concat "loading from youtube... " url))
-             (call-process "play-youtube" nil nil nil url))
-            ((string-match (concat "^http.*" (regexp-opt '(".mpg" ".wmv" ".avi" ".flv")) "$") url)
-             (call-process "mplayer" nil nil nil "-fs" url))
-            (t
-             (message "not movie."))))))
-
-;; 再帰的にgrep
-;; http://www.clear-code.com/blog/2011/2/16.html
-(when (require 'grep nil t)
-  (setq grep-command-before-query "grep -nH -r -e ")
-  (defun grep-default-command ()
-    (if current-prefix-arg
-        (let ((grep-command-before-target
-               (concat grep-command-before-query
-                       (shell-quote-argument (grep-tag-default)))))
-          (cons (if buffer-file-name
-                    (concat grep-command-before-target
-                            " *."
-                            (file-name-extension buffer-file-name))
-                  (concat grep-command-before-target " ."))
-                (+ (length grep-command-before-target) 1)))
-      (car grep-command)))
-  (setq grep-command (cons (concat grep-command-before-query " .")
-                           (+ (length grep-command-before-query) 1)))
-)
-
-;; diredを便利に
-(require 'dired-x nil t)
-;; diredから"r"でファイル名をインライン編集する
-(require 'wdired nil t)
-(define-key dired-mode-map "r" 'wdir3ed-change-to-wdired-mode)
-
-;; ファイル名が重複していたらディレクトリ名を追加
-(when (require 'uniquify nil t)
-  (setq uniquify-buffer-name-style 'forward)
-  (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-  (setq uniquify-ignore-buffers-re "*[^*]+*"))
-
-(when (require 'navi2ch nil t)
-  ;; レスをすべて表示する
-  (setq navi2ch-article-exist-message-range '(1 . 1000)) ;既存スレ
-  (setq navi2ch-article-new-message-range '(1000 . 1))   ;新スレ
-  ;; Boardモードのレス数欄にレスの増加数を表示する
-  (setq  navi-board-insert-subject-with-diff t)
-  ;; Boardモードのレス数欄にレスの未読数を表示する
-  (setq navi2ch-board-insert-subject-with-unread t)
-  ;; 板一覧のカテゴリをデフォルトですべて開いて表示する
-  (setq navi2ch-list-init-open-category nil)
-  ;; スレをexpire(削除)しない
-  (setq navi2ch-board-expire-date nil)
-  ;; 履歴の行数を制限しない
-  (setq navi2ch-history-max-line nil))
-
-;; @ paredit.el
-(when (require 'paredit nil t)
-  (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-  (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
-  (add-hook 'lisp-mode-hook 'enable-paredit-mode)
-  (add-hook 'ielm-mode-hook 'enable-paredit-mode)
-  (add-hook 'c-mode-hook 'enable-paredit-mode))
-
  ;; @ rainbow-delimiters
 (when (require 'rainbow-delimiters nil t)
   (global-rainbow-delimiters-mode t)
@@ -244,13 +69,6 @@
 ;; http://tech.kayac.com/archive/emacs-tips-smartchr.html
 (when(require 'smartchr nil t)
      (global-set-key (kbd "=") (smartchr '(" = "  "== " "="))))
-
-  ;; - リスト11 kill-lineで行が連結したときにインデントを減らす
-(defadvice kill-line (before kill-line-and-fixup activate)
-  (when (and (not (bolp)) (eolp))
-    (forward-char)
-    (fixup-whitespace)
-    (backward-char)))
 
 ;; @ popwin
 (setq pop-up-windows t)
@@ -286,57 +104,6 @@
   (push '("\\*.*\\.po\\*"        :regexp t        :position bottom        :height 20)      popwin:special-display-config)
   )
 
-;; @ egg
-(when (executable-find "git")
-  (require 'egg nil t))
-
-;; @ time-stamp
-(when (require 'time-stamp nil t)
-  (add-hook 'before-save-hook 'time-stamp)
-  (setq time-stamp-active t)
-  (setq time-stamp-start "Last Change: " )
-  (setq time-stamp-format "%02d-%3b-%04y.")
-  (setq time-stamp-end " \\|$"))
-
-;; shellenv  set $PATH
-;(require 'shellenv "~/.emacs.d/elisp/shellenv-el/shellenv")
-;(shellenv/setpath 'zsh)
-
-;;@ smooth-scroll
-;;; (when (require 'smooth-scroll nil t)
-  ;(smooth-scroll-mode 0))
-
-;; @Emacsのcalendarで日本の祝日を表示する
-;; http://qiita.com/aprikip@github/items/db350720bb32e244daea
-(when (require 'solar nil t)
-(setq holiday-general-holidays nil
-      holiday-local-holidays t
-      holiday-solar-holidays nil
-      holiday-bahai-holidays nil
-      holiday-christian-holidays nil
-      holiday-hebrew-holidays nil
-      holiday-islamic-holidays nil
-      holiday-oriental-holidays nil
-      holiday-other-holidays nil
-      mark-holidays-in-calendar t)
-(setq holiday-local-holidays
-      '((holiday-fixed 1 1 "元日")
-    (holiday-float 1 1 2 "成人の日")
-    (holiday-fixed 2 11 "建国記念の日")
-    (holiday-sexp '(map 'list 'truncate (solar-equinoxes/solstices 0 year)) "春分の日")
-    (holiday-fixed 4 29 "昭和の日")
-    (holiday-fixed 5 3 "憲法記念日")
-    (holiday-fixed 5 4 "みどりの日")
-    (holiday-fixed 5 5 "こどもの日")
-    (holiday-float 7 1 3 "海の日")
-    (holiday-float 7 1 3 "敬老の日")
-    (holiday-sexp '(map 'list 'truncate (solar-equinoxes/solstices 2 year)) "秋分の日")
-    (holiday-float 10 1 2 "体育の日")
-    (holiday-fixed 11 3 "文化の日")
-    (holiday-fixed 11 23 "勤労感謝の日")
-    (holiday-fixed 12 23 "天皇誕生日")
-)))
-
 ;; @ popwin:select-popup-window
 (when (require 'popup nil t )
   (require 'popup-select-window nil t)
@@ -344,3 +111,7 @@
   (setq popup-select-window-popup-windows 2))
 
 (when (require 'git-gutter nil t))
+
+;;; @ stripe-buffer
+(add-hook 'dired-mode-hook 'stripe-listify-buffer)
+(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)

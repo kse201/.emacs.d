@@ -28,12 +28,6 @@
 ;; インデントにタブ文字を使用しない
 (setq-default indent-tabs-mode nil)
 
-;; 対応括弧のハイライト
-(show-paren-mode nil)
-(set-face-background 'show-paren-match-face nil)
-(set-face-underline-p 'show-paren-match-face "red")
-(setq show-paren-delay 0.125) ; 表示までの秒数 emacs24では0だと重い 1x http://suzukima.hatenablog.com/entry/2012/08/16/232210
-
 ;; リージョン内の行数と文字数をモードラインに表示する (範囲指定字のみ)
 ;; http://d.hatena.nejp/sonota88/20110224/
 (defun count-lines-and-chars ()
@@ -121,24 +115,9 @@
 (setq-default line-spacing 1)
 (global-set-key [f12] 'speedbar)
 
-(defface my-hl-line-face
-  ;; 背景がdarkならば背景色を紺に
-  '((((class clolor) (background dark))
-     (:background "NavyBlue" t))
-    ;; 背景がlightならば背景色を緑に
-    (((class color) (background light))
-     (:background "LightGoldenrodYellow" t))
-    (t (:bold t)))
-  "hl-line's my face")
-(setq hl-line-face 'my-hl-line-face)
-(global-hl-line-mode t)
-
 ;; @ color-theme 
 (when (require 'color-theme nil t)
   (setq custom-theme-load-path "~/.emacs.d/themes"))
 
 (when (require 'color-theme-molokai nil t)
   (color-theme-molokai))
-
-;; @ powerline
-(require 'powerline nil t)
