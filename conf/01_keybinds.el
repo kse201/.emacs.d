@@ -28,6 +28,7 @@
     ("C-c C-@" . move-to-mark)
     ("C-c C-e" . edit-init)
     ("C-x C-z" . nil)
+    ("C-." . undo )
     ("C-a" . my-beginning-of-indented-line)
     ("M-p" . scroll-down)
     ("M-n" . scroll-up)
