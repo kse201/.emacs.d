@@ -45,19 +45,6 @@
 (setq-default show-trailing-whitespace t)
 (set-face-background 'trailing-whitespace "#b14770")
 
-;; 現在行に色をつける
-(defface hlline-face
-  '((((class color)
-      (background dark))
-     (:background "dark slate gray"))
-    (((class color)
-      (background light))
-     (:background  "#98FB98"))
-    (t
-     ()))
-  "*Face used by hl-line.")
-(setq hl-line-face 'hlline-face)
-
 ;; モードラインに時刻を表示する
 (display-time)
 ;;; カーソルの位置が何文字目かを表示する
@@ -72,8 +59,6 @@
 (transient-mark-mode 1)
 ;; スクロールバーを右側に
 (set-scroll-bar-mode 'right)            ; GUI emacs
-;; 現在の関数名をモードラインに
-(which-function-mode 1)
 
 ;;; 画像ファイルを表示
 (auto-image-file-mode t)
@@ -85,8 +70,6 @@
                          trailing          ; 行末の空白を対象とする。
                          space-before-tab  ; タブの前にあるスペースを対象とする。
                          space-after-tab)) ; タブの後にあるスペースを対象とする。
-;; デフォルトで視覚化を有効にする。
-(global-whitespace-mode 0)
 
 ;; よそのwindowにカーソルを表示しない
 (setq cursor-in-non-selected-windows nil)
@@ -98,24 +81,13 @@
 ;; スクラッチバッファの初期メッセージ消去
 (setq initial-scratch-message "Scratch\n========\n\n")
 
-;; 対応する括弧を光らせる
-(require 'paren nil t)
-;; 画面内に収まらない時は括弧内も光らせる
-(setq show-paren-style 'mixed)
-(make-face 'paren-mismatch)
-(set-face-foreground 'paren-mismatch "white")
-(set-face-background 'paren-mismatch "lightcoral")
 ;; 正規表現見やすく
 (set-face-foreground 'font-lock-regexp-grouping-backslash "#66CC99")
 (set-face-foreground 'font-lock-regexp-grouping-construct "#9966CC")
 (setq show-paren-face  'paren-match)
 (setq show-paren-mismatch-face 'paren-mismatch)
 
-;; line-space
-(setq-default line-spacing 1)
-(global-set-key [f12] 'speedbar)
-
-;; @ color-theme 
+;; @ color-theme
 (when (require 'color-theme nil t)
   (setq custom-theme-load-path "~/.emacs.d/themes"))
 

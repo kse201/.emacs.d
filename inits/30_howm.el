@@ -7,7 +7,7 @@
    '(howm-menu howm-list-all howm-list-recent
                howm-list-grep howm-create
                howm-keyword-to-kill-ring))
-  
+
   ;; howmメモの保存先
 
   (when (eq system-type 'darwin)          ; Mac のファイル名設定

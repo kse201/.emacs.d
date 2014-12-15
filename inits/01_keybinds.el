@@ -8,36 +8,23 @@
 (define-many-keys global-map
   '(("C-h" . delete-backward-char)
     ("<f1>" . help-for-help)
-    ("C-c i" . indent-region ); インデント
-    ("C-c C-i" . dabbrev-expand ); 補完
-    ("C-c );" . comment-region ); コメントアウト
-    ("C-c :" . uncomment-region ); コメント解除
-    ("C-\\" . nil ); \C-\の日本語入力の設定を無効にする
-    ("C-m" . newline-and-indent)
-    ("C-c l" . toggle-truncate-lines)
-    ("C-t" . nil)
-    ;;    ("C-x C-o" . my-other-window)
-    ("M-y" . backward-kill-word ); 一つ前の単語削除
-    ("C-x o" . browse-url-at-point );ブラウザ起動
-    ("C-x C-g" . goto-line ); 指定行へ移動
-    ("C-x w h" . windmove-left)
-    ("C-x w j" . windmove-down)
-    ("C-x w k" . windmove-up)
-    ("C-x w l" . windmove-right)
-    ("C-x SPC" . good-split-window)
-    ("C-c C-@" . move-to-mark)
-    ("C-c C-e" . edit-init)
-    ("C-x C-z" . nil)
-    ("C-." . undo )
-    ("C-a" . my-beginning-of-indented-line)
-    ("M-p" . scroll-down)
-    ("M-n" . scroll-up)
-    ("M-g" . goto-line)
-    ("C-M-h" . delete-horizontal-space)
-    ("M-f" . forward-word)
-    ("M-u" . camel-to-snake-backward-word)
-    ("C-c C-c p" . put-current-path-to-clipboard)
-    
+     ("C-c i" . indent-region ); インデント
+     ("C-c C-i" . dabbrev-expand ); 補完
+     ("C-c );" . comment-region ); コメントアウト
+     ("C-\\" . nil ); \C-\の日本語入力の設定を無効にする
+     ("C-m" . newline-and-indent)
+     ("C-c l" . toggle-truncate-lines)
+     ("C-t" . nil)
+     ("M-y" . backward-kill-word ); 一つ前の単語削除
+     ("C-x C-g" . goto-line ); 指定行へ移動
+     ("C-x SPC" . good-split-window)
+     ("C-c C-@" . move-to-mark)
+     ("C-x C-z" . nil)
+     ("C-." . undo )
+     ("C-a" . my-beginning-of-indented-line)
+     ("M-p" . scroll-down)
+     ("M-n" . scroll-up)
+     ("M-g" . goto-line)
     ))
 
 ; http://ainame.hateblo.jp/entry/2013/11/04/015107
