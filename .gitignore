@@ -1,5 +1,7 @@
-**/*hist*
-eshell/*
+eshell
 *.elc
 tramp
-!howm*.elc
+undohist/*
+history
+ac-comphist.dat
+!**/.gitkeep
