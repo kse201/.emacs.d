@@ -257,7 +257,6 @@
 (when (require 'newsticker nil t)
   (autoload 'newsticker-start "newsticker" "Emacs Newsticker" t)
   (autoload 'newsticker-show-news "newsticker" "Emacs Newsticker" t))
->>>>>>> master
 
  ;; @ rainbow-delimiters
 (when (require 'rainbow-delimiters nil t)

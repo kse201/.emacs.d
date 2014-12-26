@@ -303,8 +303,8 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 (put 'downcase-region 'disabled nil)
 
   ;; Japanese man path
+(require 'info)
 (add-to-list 'Info-directory-list "~/.emacs.d/info")
-
 
 (defun spell-check ()
   "auto spell check "
