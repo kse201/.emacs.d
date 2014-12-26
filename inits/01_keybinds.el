@@ -8,18 +8,18 @@
 (define-many-keys global-map
   '(("C-h" . delete-backward-char)
     ("<f1>" . help-for-help)
-    ("C-c i" . indent-region ); インデント
-    ("C-c C-i" . dabbrev-expand ); 補完
-    ("C-c );" . comment-region ); コメントアウト
-    ("C-c :" . uncomment-region ); コメント解除
-    ("C-\\" . nil ); \C-\の日本語入力の設定を無効にする
+    ("C-c i" . indent-region )
+    ("C-c C-i" . dabbrev-expand )
+    ("C-c );" . comment-region )
+    ("C-c :" . uncomment-region )
+    ("C-\\" . nil )
     ("C-m" . newline-and-indent)
     ("C-c l" . toggle-truncate-lines)
     ("C-t" . nil)
     ;;    ("C-x C-o" . my-other-window)
-    ("M-y" . backward-kill-word ); 一つ前の単語削除
-    ("C-x o" . browse-url-at-point );ブラウザ起動
-    ("C-x C-g" . goto-line ); 指定行へ移動
+    ("M-y" . backward-kill-word )
+    ("C-x o" . browse-url-at-point )
+    ("C-x C-g" . goto-line )
     ("C-x w h" . windmove-left)
     ("C-x w j" . windmove-down)
     ("C-x w k" . windmove-up)
@@ -27,7 +27,6 @@
     ("C-x SPC" . good-split-window)
     ("C-c C-@" . move-to-mark)
     ("C-c C-e" . edit-init)
-    ("C-x C-c" . helm-M-x)
     ("C-x C-z" . nil)
     ("C-a" . my-beginning-of-indented-line)
     ("M-p" . scroll-down)
