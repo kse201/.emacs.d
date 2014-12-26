@@ -1,4 +1,4 @@
-;;; 追加elisp関連
+;;; additional elisp
 (eval-when-compile (require 'cl nil t))
 (require 'cl nil t)
 ;; @ package
@@ -7,7 +7,6 @@
         (require 'package-23 nil t)
       (require 'package-24 nil t))
   
-  ;; バッケージリポジトリにMarmaladeと開発者運営のELPAを追加
   (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -15,19 +14,16 @@
 (require 'melpa)
 (add-hook 'emacs-startup-hook
           (lambda ()
-            ;; 起動時にEmacsWikiのページ名を補完候補に加える
-            ;;;; (auto-install-update-emacswiki-package-name t)
+  ;;;; (auto-install-update-emacswiki-package-name t)
             (auto-install-compatibility-setup)))
 
                                         ;(add-to-list 'load-path "~/src/emacswikipages/" t)
 
-;; 履歴を次回Emacs起動時にも保存する
 (when (require 'saveplace nil t)
   (savehist-mode t))
 
 
 (when (require 'auto-async-byte-compile nil t)
-  ;; 自動バイトコンパイルを無効にするファイル名の正規表現
 ;;;;   (auto-async-byte-compile-exclude-files-regexp "^#.+#")
   (add-hook 'emacs-lisp-mode-hook 'enable-auto-async-byte-compile-mode))
 
@@ -40,12 +36,10 @@
 (define-auto-insert "\\.rb$" "template.rb")
 
 ;;; @ minor-mode-hack
-;;; マイナーモード衝突問題を解決する
 (require 'minor-mode-hack nil t)
 
 ;;; http://e-arrows.sakura.ne.jp/2010/02/vim-to-emacs.html
 ;; org-mode
-;; Emacsでメモ・TODO管理
 (when  (require 'org-install nil t)
   (define-key global-map "\C-cl" 'org-store-link)
   (define-key global-map "\C-ca" 'org-agenda)
@@ -61,39 +55,35 @@
           ("Bug" ?b "** TODO %?   :bug:\n   %i\n   %a\n   %t" nil "Inbox")
           ("Idea" ?i "** %?\n   %i\n   %a\n   %t" nil "New Ideas"))))
 
-;;; @ color-moccur 検索結果のリストアップ
+;;; @ color-moccur
 (when (require 'color-moccur nil t)
   (global-set-key (kbd "M-s") 'occur-by-moccur)
-  ;; スペース区切りでAND検索
   (setq moccur-split-word t)
-  ;; ディレクトリ検索のとき除外するファイル
   (add-to-list 'dmoccur-exclusion-mask "\\.DS_Store")
   (add-to-list 'dmoccur-exclusion-mask "^#.+#$")
-  ;; MMigemoを利用できる環境であればMigemoを使う
   (when (and (executable-find "cmigemo")
              (require 'migemo nil t ))
     (setq cmigemo-command "cmigemo") ; cmigemoを使う
     (setq moccur-use-migemo t)))
 
-;;; @ grep結果バッファでのカーソル移動でダイナミックにファイルを開いてくれる
+;;; @ color-grep
 (when (require 'color-grep nil t)
   (setq color-grep-sync-kill-buffer t)
-  ;; M-x grep-findでPerlのackコマンドを使うよう変更
   (setq grep-find-command "ack --nocolor --nogroup "))
 
-;;; @ undohist 編集履歴の記憶
+;;; @ undohist
 (when (require 'undohist nil t)
   (undohist-initialize))
 
-;;; @ undo-tree モードの設定
+;;; @ undo-tree
 (when (require 'undo-tree nil t)
   (global-undo-tree-mode))
 
-;;; @ screen-lines 物理行で移動
+;;; @ screen-lines
 (when (require 'screen-lines)
   (add-hook 'text-mode-hook 'turn-on-screen-lines-mode))
 
-;;; @ text-adjust 日本語の文章を整形する
+;;; @ text-adjust
 (require 'text-adjust nil t)
 
 ;;; @ multi-shell
@@ -108,13 +98,9 @@
 (when (require 'redo+ nil t)
   (global-set-key (kbd  "C-.") 'redo)
   (setq undo-no-redo t)
-  ;; undoする情報を保持する量
   (setq undo-limit 60000)
   (setq undo-strong-limit 90000))
 
-;; http://d.hatena.ne.jp/sandai/20120303/p1
-;; カーソル付近にあるEmacs Lispの関数や変数のヘルプをエコーエリアに表示
-;; http://www.emacswiki.org/emacs/eldoc-extension.el
 (when (require 'eldoc nil t)
   (require 'eldoc-extension nil t)
   (defun elisp-mode-hooks ()
@@ -130,7 +116,6 @@
   (add-hook 'emacs-lisp-mode-hook 'elisp-mode-hooks))
 
 ;;;  @ C-eldoc
-;; C言語の関数や変数のヘルプをエコーエリアに表示
 (when (require 'c-eldoc nil t)
   (add-hook 'c-mode-hook
             (lambda ()
@@ -141,7 +126,6 @@
 (require 'hideshow nil t)
 
 ;; @ e2wm
-;; http://d.hatena.ne.jp/kiwanami/20100528/1275038929
 (when (require 'e2wm nil t)
   (global-set-key (kbd "M-+") 'e2wm:start-management)
   (setq e2wm:c-code-recipe
@@ -163,17 +147,13 @@
 (when (and (executable-find "w3m")
            (require 'w3m nil t))
   (require 'w3m-load nil t)
-  (setq w3m-use-cookies t)              ;クッキーを使う
+  (setq w3m-use-cookies t)
   (setq browse-url-browser-function 'w3m-browse-url)
   (setq w3m-key-binding 'info)
                                         ;(global-set-key (kbd "C-x C-b") 'bs-show)
-  ;; URLらしき部分を選択してC-xmするとemacs-w3m起動
   (global-set-key "\C-xm" 'browse-url-at-point)
-  ;; 検索の設定 M-x w3m-search
   (autoload 'w3m-search "w3m-search" "Search QUERY using SEARCH-ENGINE." t)
-  ;; 検索をGoogle(日本語サイト)でおこなう
   (setq w3m-search-default-engine "google")
-  ;; C-csを押下するとどのBufferからでも検索を開始
   (global-set-key "\C-cs" 'w3m-search)
   (autoload 'w3m-weather "w3m-weather" "Display weather report." t)
   (autoload 'w3m-antenna "w3m-antenna" "Report chenge of WEB sites." t)
@@ -214,21 +194,17 @@
  (add-to-list 'load-path (concat rsense-home "/etc"))
  (add-hook 'ruby-mode-hook
            '(lambda ()
-              ;; .や::を入力直後から補完開始
-              (add-to-list 'ac-sources 'ac-source-rsense-method)
+  (add-to-list 'ac-sources 'ac-source-rsense-method)
               (add-to-list 'ac-sources 'ac-source-rsense-constant)
-              ;; C-x .で補完出来るようキーを設定
-              (define-key ruby-mode-map (kbd "C-x .") 'ac-complete-rsense)))
+  (define-key ruby-mode-map (kbd "C-x .") 'ac-complete-rsense)))
 
- ;; ruby-mode-hook用の関数を定義
  (defun ruby-mode-hooks ()
    (inf-ruby-keys)
    (ruby-electric-mode t)
    (ruby-block-mode t))
  (add-hook 'ruby-mode-hook 'ruby-mode-hooks) ; ruby-mode-hookに追加
 )
-;; 再帰的にgrep
-;; http://www.clear-code.com/blog/2011/2/16.html
+;; recursive grep
 (when (require 'grep nil t)
   (setq grep-command-before-query "grep -nH -r -e ")
   (defun grep-default-command ()
@@ -247,31 +223,24 @@
                            (+ (length grep-command-before-query) 1)))
 )
 
-;; diredを便利に
+;; userful dired
 (require 'dired-x nil t)
-;; diredから"r"でファイル名をインライン編集する
 (require 'wdired nil t)
 (define-key dired-mode-map "r" 'wdir3ed-change-to-wdired-mode)
 
-;; ファイル名が重複していたらディレクトリ名を追加
+;; unique filename
 (when (require 'uniquify nil t)
   (setq uniquify-buffer-name-style 'forward)
   (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
   (setq uniquify-ignore-buffers-re "*[^*]+*"))
 
 (when (require 'navi2ch nil t)
-  ;; レスをすべて表示する
-  (setq navi2ch-article-exist-message-range '(1 . 1000)) ;既存スレ
-  (setq navi2ch-article-new-message-range '(1000 . 1))   ;新スレ
-  ;; Boardモードのレス数欄にレスの増加数を表示する
+  (setq navi2ch-article-exist-message-range '(1 . 1000))
+  (setq navi2ch-article-new-message-range '(1000 . 1))
   (setq  navi-board-insert-subject-with-diff t)
-  ;; Boardモードのレス数欄にレスの未読数を表示する
   (setq navi2ch-board-insert-subject-with-unread t)
-  ;; 板一覧のカテゴリをデフォルトですべて開いて表示する
   (setq navi2ch-list-init-open-category nil)
-  ;; スレをexpire(削除)しない
   (setq navi2ch-board-expire-date nil)
-  ;; 履歴の行数を制限しない
   (setq navi2ch-history-max-line nil))
 
 ;; @ paredit.el
@@ -304,55 +273,14 @@
 ;; @ C/C++
 (add-hook 'c-mode-common-hook
           '(lambda ()
-             ;; センテンスの終了である ';' を入力したら、自動改行+インデント
              (c-toggle-auto-hungry-state 1)
-             ;; RET キーで自動改行+インデント
              (define-key c-mode-base-map "\C-m" 'newline-and-indent)))
 
-  ;; - リスト11 kill-lineで行が連結したときにインデントを減らす
 (defadvice kill-line (before kill-line-and-fixup activate)
   (when (and (not (bolp)) (eolp))
     (forward-char)
     (fixup-whitespace)
     (backward-char)))
-
-
-  ;; 日本語マニュアル
-(add-to-list 'Info-directory-list "~/.emacs.d/info")
-
-;; @ popwin
-(setq pop-up-windows t)
-(when (require 'popwin nil t)
-  (setq anything-samewindow nil)
-  (setq display-buffer-function 'popwin:display-buffer)
-  (setq popwin:popup-window-height 0.2)
-  (setq popwin:popup-window-position 'bottom)
-  ;; フレームのサイズに応じてpopwinの出現位置を決める
-  ;; http://qiita.com/items/7f9fe4abac5044025e0f
-(defun popwin-auto-set-popup-window-position ()
-  (interactive)
-  (let ((w (frame-width))
-        (h (frame-height)))
-    (setq popwin:popup-window-position
-          (if (and (< 200 w)         ; フレームの幅が200桁より大きくて
-                   (< h w))          ; 横長の時に
-              'right                 ; 右へ出す
-            'bottom))))              ; そうじゃないときは下へ出す
-;; popwin表示時にフレームサイズに応じた表示位置にする
-(defadvice  popwin:display-buffer (before popwin-auto-window-position activate)
-  (popwin-auto-set-popup-window-position))
-  (push '("anything" :regexp t :height 40) popwin:special-display-config ) ;anything
-  (push '("*Completions*" ) popwin:special-display-config )
-  (push '("*complilation*" :noselect t :stick t ) popwin:special-display-config )
-  (push '(dired-mode :position top) popwin:special-display-config ) ;dired
-  (push '("*Backtrace*" :noselect t) popwin:special-display-config )
-  (push '(fundamental-mode  :noselect t) popwin:special-display-config )
-  (push '(typeset-mode :noselect t) popwin:special-display-config )
-  (push '(" *auto-async-byte-compile*"  :position bottom :noselect t :height 0.3 :stick nil) popwin:special-display-config )
-  (push '("*YaTeX-typesetting*" :position bottom :noselect t) popwin:special-display-config )
-  (push '("*VC-log*" :position bottom) popwin:special-display-config )
-  (push '("\\*.*\\.po\\*"        :regexp t        :position bottom        :height 20)      popwin:special-display-config)
-  )
 
 ;; @ egg
 (when (executable-find "git")
@@ -428,14 +356,8 @@
     (holiday-fixed 12 23 "天皇誕生日")
 )))
 
-;; @ popwin:select-popup-window
-(when (require 'popup nil t )
-  (require 'popup-select-window nil t)
-  (global-set-key "\C-xo" 'popup-select-window)
-  (setq popup-select-window-popup-windows 2))
-
 (when (require 'git-gutter nil t))
 
 (when (require 'saveplace nil t)
- (setq-default save-place t) 
+ (setq-default save-place t)
  (setq save-place-file "~/.saved-places") )

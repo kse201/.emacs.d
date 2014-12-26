@@ -7,13 +7,4 @@
   (custom-set-variables
    '(google-translate-default-source-language "en")
    '(google-translate-default-target-language "ja"))
-
-  ;; popwin.el
-  (require 'popwin)
-  ;; おまじない（よく分かってない、、）
-  (setq display-buffer-function 'popwin:display-buffer)
-  ;; ポップアップを画面下に表示
-  (setq popwin:popup-window-position 'bottom)
-
-  ;; google-translate.elの翻訳バッファをポップアップで表示させる
-  (push '("*Google Translate*") popwin:special-display-config))
+  )
