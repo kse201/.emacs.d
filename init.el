@@ -445,3 +445,4 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 
 (add-to-list 'Info-directory-list "~/.emacs.d/info")
 
+(put 'set-goal-column 'disabled nil)

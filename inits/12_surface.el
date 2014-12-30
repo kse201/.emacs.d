@@ -112,3 +112,8 @@
 
 (when (require 'color-theme-molokai nil t)
   (color-theme-molokai))
+
+;;; @ powerline
+(when (require 'powerline nil t)
+  (powerline-default-theme)
+  )

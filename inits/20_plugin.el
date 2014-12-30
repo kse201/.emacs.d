@@ -3,11 +3,8 @@
 (require 'cl nil t)
 ;; @ package
 (when
-    (if (string-match "^23\." emacs-version)
-        (require 'package-23 nil t)
-      (require 'package-24 nil t))
-  
-  (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+    (require 'package-23 nil t)
+    (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
   (package-initialize))

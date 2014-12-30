@@ -3,5 +3,8 @@ eshell
 tramp
 undohist/*
 history
+recentf
+places
+ido.last
 ac-comphist.dat
 !**/.gitkeep
