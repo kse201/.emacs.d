@@ -42,7 +42,6 @@
                :features powerline)
         ))
 
-
 ;; auto install el-get.el
 (defvar my/el-get-packages
   '(

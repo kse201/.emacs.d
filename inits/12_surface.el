@@ -115,5 +115,5 @@
 
 ;;; @ powerline
 (when (require 'powerline nil t)
-  (powerline-default-theme)
+  ;; (powerline-default-theme)
   )
