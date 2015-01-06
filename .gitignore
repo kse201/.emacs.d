@@ -8,4 +8,5 @@ places
 ido.last
 ac-comphist.dat
 el-get
+local.el
 !**/.gitkeep

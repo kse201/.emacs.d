@@ -4,6 +4,11 @@
 (eval-when-compile (require 'cl))
 (require 'cl)
 
+;; local init.el
+(when (file-exists-p "~/.emacs.d/local.el")
+  (autoload 'local "~/.emacs.d/local.el")
+  )
+
 ;; Language.
 (set-language-environment 'Japanese)
 ;; Coding system.
