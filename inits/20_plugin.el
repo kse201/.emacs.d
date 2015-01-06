@@ -2,13 +2,14 @@
 (eval-when-compile (require 'cl nil t))
 (require 'cl nil t)
 ;; @ package
+(fset 'package-desc-vers 'package--ac-desc-version)
 (when
-    (require 'package-23 nil t)
-    (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+    (require 'package nil t)
+  (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
   (package-initialize))
-(require 'melpa)
+(require 'melpa nil t)
 (add-hook 'emacs-startup-hook
           (lambda ()
   ;;;; (auto-install-update-emacswiki-package-name t)
