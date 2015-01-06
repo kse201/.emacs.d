@@ -256,7 +256,11 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
                       (store-substring s 0 (downcase (string-to-char s))))))))
 ;;; ------------------------------------------------------------------
 
-(add-to-load-path "conf" "public_repos" "elpa" "elisp" "themes")
+(add-to-load-path "conf" "public_repos" "elpa" "elisp" "themes" "el-get")
+
+(when (require 'elscreen nil t)
+  (elscreen-start)) 
+
 ;;; @ auto-install
 (when (require 'auto-install nil t)
   (setq auto-install-directory "~/.emacs.d/elisp/")
