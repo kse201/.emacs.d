@@ -9,6 +9,7 @@
   
   (when (require 'anything-config nil t)
     (setq anything-su-or-sudo "sudo")
+    (anything-completion-mode)
     ;; key-bind
     (define-many-keys global-map
       '(( "M-y" . anything-show-kill-ring)
