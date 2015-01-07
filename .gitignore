@@ -9,4 +9,5 @@ ido.last
 ac-comphist.dat
 el-get
 local.el
+backups
 !**/.gitkeep
