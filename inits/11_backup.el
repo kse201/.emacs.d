@@ -4,14 +4,13 @@
 ;(require 'auto-save-buffers)
 ;(run-with-idle-timer 5 t 'auto-save-buffers)
 ;; http://d.hatena.ne.jp/tomoya/20110217/1297928222
-(when (require 'recentf nil t)
+(when (require 'recentf-ext nil t)
   (setq recentf-max-saved-items 100)
   (setq recentf-exclude '(".recentf"))
   (setq recentf-auto-cleanup 10)
   (setq recentf-auto-save-timer
         (run-with-idle-timer 30 t 'recentf-save-list))
-  (recentf-mode 1)
-  (require 'recentf-ext))
+  (recentf-mode 1))
 
 (setq make-backup-files nil)
 (setq auto-save-default nil)
