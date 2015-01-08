@@ -22,12 +22,12 @@
                :type github
                :pkgname "tarao/anything-git-files-el"
                :depends anything)
-        (:name popup ;; <- 追加
+        (:name popup
                :type github
                :website "https://github.com/auto-complete/popup-el"
                :description "[My Recipes] This section describes the basic data structures and operations of popups."
                :pkgname "auto-complete/popup-el")
-        (:name auto-complete ;; <- 追加
+        (:name auto-complete
                :type github
                :website "https://github.com/auto-complete/auto-complete"
                :description "[My Recipes] Auto Complete Mode renews an old completion interface and provides an environment that makes users could be more concentrate on their own works."
@@ -46,6 +46,7 @@
 (defvar my/el-get-packages
   '(
     open-github-from-here
+    auto-complete
     )
   "A list of packages to install from el-get at launch.")
 
