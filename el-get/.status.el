@@ -17,6 +17,10 @@
               ("site-lisp/apel" "site-lisp/emu")))
  (auto-complete status "installed" recipe
                 (:name auto-complete :type github :website "https://github.com/auto-complete/auto-complete" :description "[My Recipes] Auto Complete Mode renews an old completion interface and provides an environment that makes users could be more concentrate on their own works." :pkgname "auto-complete/auto-complete"))
+ (auto-complete-rst status "installed" recipe
+                    (:name auto-complete-rst :description "Auto-complete extension for ReST and Sphinx" :type github :pkgname "tkf/auto-complete-rst" :depends auto-complete :prepare
+                           (progn
+                             (autoload 'auto-complete-rst-init "auto-complete-rst"))))
  (cl-lib status "installed" recipe
          (:name cl-lib :builtin "24.3" :type elpa :description "Properly prefixed CL functions and macros" :url "http://elpa.gnu.org/packages/cl-lib.html"))
  (ddskk status "installed" recipe
@@ -52,6 +56,7 @@
            (:name elscreen :description "Screen Manager for Emacsen" :website "https://github.com/emacs-jp/elscreen" :depends apel :type github :pkgname "emacs-jp/elscreen"))
  (open-github-from-here status "installed" recipe
                         (:name open-github-from-here :type github :description "open github from here" :pkgname "shibayu36/emacs-open-github-from-here" :branch "development"))
+ (open-junk-file status "required" recipe nil)
  (popup status "installed" recipe
         (:name popup :type github :website "https://github.com/auto-complete/popup-el" :description "[My Recipes] This section describes the basic data structures and operations of popups." :pkgname "auto-complete/popup-el"))
  (powerline status "installed" recipe
