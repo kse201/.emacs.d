@@ -80,7 +80,7 @@
   (global-undo-tree-mode))
 
 ;;; @ screen-lines
-(when (require 'screen-lines)
+(when (require 'screen-lines nil t)
   (add-hook 'text-mode-hook 'turn-on-screen-lines-mode))
 
 ;;; @ text-adjust
@@ -89,10 +89,6 @@
 ;;; @ multi-shell
 (when (require 'multi-shell nil t)
   (setq multi-shell-command "/bin/zsh"))
-
-;; @ yasnippet
-(when (require 'yasnippet-config nil t)
-  (yas/setup "~/.emacs.d/elisp/yasnippet-0.6.1c"))
 
 ;; @ redo+
 (when (require 'redo+ nil t)
@@ -273,9 +269,9 @@
 (when (require 'git-gutter nil t))
 
 ;;; @ stripe-buffer
-(require 'stripe-buffer)
+(when (require 'stripe-buffer nil t)
 (add-hook 'dired-mode-hook 'stripe-listify-buffer)
-(add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
+(add-hook 'org-mode-hook 'turn-on-stripe-table-mode))
 ;; @ C/C++
 (add-hook 'c-mode-common-hook
           '(lambda ()
@@ -316,16 +312,6 @@
                css-mode-hook
                apples-mode-hook))
       (add-hook hook 'hs-minor-mode))))
-
-;; Evil  Vim layer
-
-(when(require 'evil nil t)
-  (add-to-load-path "~/.emacs.d/elisp/evil")
-  (evil-mode 0))
-
-;; shellenv  set $PATH
-;(require 'shellenv "~/.emacs.d/elisp/shellenv-el/shellenv")
-;(shellenv/setpath 'zsh)
 
 ;;@ smooth-scroll
 ;;; (when (require 'smooth-scroll nil t)

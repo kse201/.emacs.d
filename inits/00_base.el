@@ -54,10 +54,6 @@
   (loop for (key . cmd) in key-table
         do (define-key key-map (read-kbd-macro key) cmd)))
 
-(let ((default-directory "~/.emacs.d/elisp/"))
-  (setq load-path (cons default-directory load-path))
-  (normal-top-level-add-subdirs-to-load-path))
-
 ;; 良い感じにウィンドウ分割
 (defun good-split-window ()
   "良い感じにウィンドウ分割"
@@ -281,17 +277,6 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
      (eval-after-load ,lib
        '(progn
           ,@body))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; @ plugins 
-(add-to-load-path "inits" "elpa" "elisp")
-;;; @ auto-install
-(when (require 'auto-install nil t)
-  (setq auto-install-directory "~/.emacs.d/elisp/")
-  ;; set Compatibility with install-elisp.el
-  (auto-install-compatibility-setup)
-  ;; ediff関連のバッファを1つのフレームにまとめる
-  (setq ediff-window-setup-function 'ediff-setup-windows-plain))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; @ General conf

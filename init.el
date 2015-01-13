@@ -60,10 +60,6 @@
   (loop for (key . cmd) in key-table
         do (define-key key-map (read-kbd-macro key) cmd)))
 
-(let ((default-directory "~/.emacs.d/elisp/"))
-  (setq load-path (cons default-directory load-path))
-  (normal-top-level-add-subdirs-to-load-path))
-
 (defun jbr-init ()
   "Called from term-setup-hook after the default
   terminal setup is
@@ -256,20 +252,10 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
                       (store-substring s 0 (downcase (string-to-char s))))))))
 ;;; ------------------------------------------------------------------
 
-(add-to-load-path "conf" "public_repos" "elpa" "elisp" "themes")
-
-(when (require 'elscreen nil t)
-  (elscreen-start)) 
-
-;;; @ auto-install
-(when (require 'auto-install nil t)
-  (setq auto-install-directory "~/.emacs.d/elisp/")
-  ;; install-elisp.el compatible mode
-  (auto-install-compatibility-setup)
-  (setq ediff-window-setup-function 'ediff-setup-windows-plain))
+(add-to-load-path "conf" "public_repos" "elpa" "themes")
 
 ;;; @ init-loader
-(require 'init-loader "~/.emacs.d/elisp/init-loader")
+(require 'init-loader)
 (when (require 'init-loader nil t)
   (init-loader-load "~/.emacs.d/inits")
   (defun init-loader-re-load (re dir &optional sort)
