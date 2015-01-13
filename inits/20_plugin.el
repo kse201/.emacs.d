@@ -367,3 +367,27 @@
 (when (require 'saveplace nil t)
  (setq-default save-place t)
  (setq save-place-file "~/.saved-places") )
+
+;;; @SKK
+(when (require 'skk nil t)
+  (define-many-keys global-map
+    '(("C-x C-j" . skk-mode)
+      ("C-x j" . skk-auto-fill-mode)
+      ("C-x t" . skk-tutorial)
+      ))
+  ;; input Hankaku-Kana
+  (setq skk-use-jisx0201-input-method t)
+  ;; dont CR in Enter
+  (setq skk-egg-like-newline t)
+  ;; complete "「"
+  (setq skk-auto-insert-paren t)
+  ;; dot rule
+  (setq skk-kuten-touten-alist
+        '(
+          (jp . ("．" . "，" ))
+          (en . ("." . ","))
+          ))
+
+  (setq skk-henkan-strict-okuri-precedence t)
+  (setq skk-share-private-jisyo t)
+  )

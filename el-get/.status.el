@@ -56,7 +56,8 @@
            (:name elscreen :description "Screen Manager for Emacsen" :website "https://github.com/emacs-jp/elscreen" :depends apel :type github :pkgname "emacs-jp/elscreen"))
  (open-github-from-here status "installed" recipe
                         (:name open-github-from-here :type github :description "open github from here" :pkgname "shibayu36/emacs-open-github-from-here" :branch "development"))
- (open-junk-file status "required" recipe nil)
+ (open-junk-file status "installed" recipe
+                 (:name open-junk-file :description "Open a junk (memo) file to try-and-error" :type emacswiki :features "open-junk-file"))
  (popup status "installed" recipe
         (:name popup :type github :website "https://github.com/auto-complete/popup-el" :description "[My Recipes] This section describes the basic data structures and operations of popups." :pkgname "auto-complete/popup-el"))
  (powerline status "installed" recipe
