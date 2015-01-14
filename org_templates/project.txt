@@ -1,5 +1,5 @@
 * New [/] %^{Project Name} %^g
-  Entered on %U
+  - State "New" from "" %U
   :PROPERTIES:
   :Effort: %^{Effort}
   :END:

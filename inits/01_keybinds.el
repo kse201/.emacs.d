@@ -20,11 +20,15 @@
     ("M-y" . backward-kill-word )
     ("C-x o" . browse-url-at-point )
     ("C-x C-g" . goto-line )
+    ;; window-move
     ("C-x w h" . windmove-left)
     ("C-x w j" . windmove-down)
     ("C-x w k" . windmove-up)
     ("C-x w l" . windmove-right)
+    ;; window-split
     ("C-x SPC" . good-split-window)
+    ("C-x -" . split-window-vertically)
+    ("C-x |" . split-window-horizontally)
     ("C-c C-@" . move-to-mark)
     ("C-c C-e" . edit-init)
     ("C-x C-z" . nil)

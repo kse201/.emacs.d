@@ -32,24 +32,30 @@
   (setq org-log-done 'time)
   ;;; tags
   (setq org-tag-alist
-        '(("@OFFICE" . ?o)
+        '(
+          ("@OFFICE" . ?o)
           ("@HOME" . ?h)
           ("SHOPPING" . ?s)
           ("MAIL" . ?m)
-          ("PROJECT" . ?p)))
-;;; capture templates
-  (setq org-capture-templates
-        '(("n" "Note" entry( file+headline nil "Note") "%[~/.emacs.d/org_templates/note.txt]")
-          ("t" "Todo" entry( file+headline "~/org/todo.org" "Todo") "%[~/.emacs.d/org_templates/todo.txt]")
-          ("p" "Project" entry ( file+headline "~/org/todo.org" "Todo") "%[~/.emacs.d/org_templates/project.txt]")
-          ("d" "Daily Todo" entry( file+headline "~/org/daily.org" "Daily Todo") "%[~/.emacs.d/org_templates/todo.txt]")
-          ("b" "Bookmark" entry ( file+headline nil "Bookmark") "%[~/.emacs.d/org_templates/bookmark.txt]")
+          ("PROJECT" . ?p)
+          ("BOOKMARK" .?b)
           ))
-  ;; hoge
+;;; capture
+  ;; template
+  (setq org-capture-templates
+        '(
+          ("t" "Todo"       entry( file+headline "~/org/todo.org"  "Backlog")    "%[~/.emacs.d/org_templates/todo.txt]")
+          ("p" "Project"    entry( file+headline "~/org/todo.org"  "Backlog")    "%[~/.emacs.d/org_templates/project.txt]")
+          ("d" "Daily Todo" entry( file+headline "~/org/daily.org" "Daily Todo") "%[~/.emacs.d/org_templates/todo.txt]")
+          ("n" "Note"       entry( file+headline nil               "Note")       "%[~/.emacs.d/org_templates/note.txt]")
+          ("b" "Bookmark"   entry( file+headline nil               "Bookmark")   "%[~/.emacs.d/org_templates/bookmark.txt]")
+          ))
+  ;; refile destination
   (setq org-refile-targets
-        (quote (("dairy.org" :level . 1)
+        (quote (("daily.org" :level . 1)
                 ("todo.org" :level . 1)
                 )))
+  ;; #+ARCHIVE: todo_archive::
 ;;; time grid
   (setq org-agenda-time-grid
         '((daily today require-timed)
@@ -57,7 +63,8 @@
           (900 1000 1100 1200 1300 1400 1500 1600 1700)))
 ;;; custom commands
   (setq org-agenda-custom-commands
-        '(("x" "Unscheduled TODO" tags-todo "-SCHEDULED>=\"<now>\"" nil)
+        '(
+          ("x" "Unscheduled TODO" tags-todo "-SCHEDULED>=\"<now>\"" nil)
           ("D" "Daily Action List"
            ((agenda "" ((org-agenda-ndays 1)
                         (org-agenda-sorting-strategy

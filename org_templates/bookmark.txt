@@ -1,3 +1,2 @@
 * %?        :BOOKMARK:
-  Entered on %U
   %i
