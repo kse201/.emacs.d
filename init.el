@@ -377,10 +377,6 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 
 (auto-insert-mode t)
 
-;;; ido.el
-(ido-mode 1)
-(ido-everywhere 1)
-
 (setq eval-expression-print-length nil)
 
 (eval-when-compile

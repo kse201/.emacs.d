@@ -1,0 +1,7 @@
+* New [/] %^{Project Name} %^g
+  Entered on %U
+  :PROPERTIES:
+  :Effort: %^{Effort}
+  :END:
+  %i
+** New %?

@@ -1,8 +1,8 @@
 ;;; org
-(when (require 'org nil t)
+(when (require 'org-install nil t)
   (require 'org-capture nil t)
   (require 'org-habit nil t)
-  ;(org-remember-insinuate)
+                                        ;(org-remember-insinuate)
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
   (add-hook 'org-mode-hook 'turn-on-font-lock)
 
@@ -30,7 +30,7 @@
         '((sequence "New(n!)" "InProgress(i!)" "Review(r!)" "Pending(p!)" "|" "Closed(c!)" "Rejected(R!)")))
   ;; log DONE time
   (setq org-log-done 'time)
-;;; tags
+  ;;; tags
   (setq org-tag-alist
         '(("@OFFICE" . ?o)
           ("@HOME" . ?h)
@@ -39,11 +39,17 @@
           ("PROJECT" . ?p)))
 ;;; capture templates
   (setq org-capture-templates
-        '(("n" "Note" entry( file+headline nil "Note") "* %?\n  %u%i")
-          ("t" "Todo" entry( file+headline "~/org/todo.org" "Todo") "* New %?\n  %t%i")
-          ("p" "Project" entry ( file+headline "~/org/todo.org" "Todo") "* New [/] %?\n  %t%i\n** New sub todo1\n** New sub todo2")
+        '(("n" "Note" entry( file+headline nil "Note") "%[~/.emacs.d/org_templates/note.txt]")
+          ("t" "Todo" entry( file+headline "~/org/todo.org" "Todo") "%[~/.emacs.d/org_templates/todo.txt]")
+          ("p" "Project" entry ( file+headline "~/org/todo.org" "Todo") "%[~/.emacs.d/org_templates/project.txt]")
+          ("d" "Daily Todo" entry( file+headline "~/org/daily.org" "Daily Todo") "%[~/.emacs.d/org_templates/todo.txt]")
+          ("b" "Bookmark" entry ( file+headline nil "Bookmark") "%[~/.emacs.d/org_templates/bookmark.txt]")
           ))
-
+  ;; hoge
+  (setq org-refile-targets
+        (quote (("dairy.org" :level . 1)
+                ("todo.org" :level . 1)
+                )))
 ;;; time grid
   (setq org-agenda-time-grid
         '((daily today require-timed)
@@ -51,7 +57,14 @@
           (900 1000 1100 1200 1300 1400 1500 1600 1700)))
 ;;; custom commands
   (setq org-agenda-custom-commands
-        '(("x" "Unscheduled TODO" tags-todo "-SCHEDULED>=\"<now>\"" nil)))
+        '(("x" "Unscheduled TODO" tags-todo "-SCHEDULED>=\"<now>\"" nil)
+          ("D" "Daily Action List"
+           ((agenda "" ((org-agenda-ndays 1)
+                        (org-agenda-sorting-strategy
+                         (quote ((agenda time-up priority-down tag-up) )))
+                        (org-deadline-warning-days 0)
+                        ))))
+          ))
   (setq org-stuck-projects
         '("+PROJECT/-Closed-Rejected" ("TODO" "WAIT")))
 

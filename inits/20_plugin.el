@@ -33,8 +33,6 @@
 (setq auto-insert-directory "~/.emacs.d/templete")
 (define-auto-insert "\\.rb$" "template.rb")
 
-;; org-mode
-(require 'org-install nil t)
 ;;; @ minor-mode-hack
 (require 'minor-mode-hack nil t)
 
@@ -361,6 +359,7 @@
       ("C-x j" . skk-auto-fill-mode)
       ("C-x t" . skk-tutorial)
       ))
+  (setq skk-use-azik t)
   ;; input Hankaku-Kana
   (setq skk-use-jisx0201-input-method t)
   ;; dont CR in Enter
@@ -370,10 +369,16 @@
   ;; dot rule
   (setq skk-kuten-touten-alist
         '(
-          (jp . ("．" . "，" ))
+          (jp . ("。" . "、" ))
           (en . ("." . ","))
           ))
 
   (setq skk-henkan-strict-okuri-precedence t)
   (setq skk-share-private-jisyo t)
   )
+;;; @ ido
+(ido-mode 1)
+(ido-everywhere 1)
+
+;;; @ bs-show
+(global-set-key (kbd "C-x C-b") 'bs-show)

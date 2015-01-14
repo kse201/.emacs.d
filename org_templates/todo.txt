@@ -1,0 +1,3 @@
+* New %?
+  Entered on %U
+  %i

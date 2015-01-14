@@ -436,3 +436,5 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
     (progn
       (add-to-list 'exec-path (expand-file-name "~/bin"))
       (setenv "PATH" (mapconcat 'identity exec-path ":"))))
+;;; kill-ring
+(setq kill-ring-max 20)

@@ -31,7 +31,7 @@
 (show-paren-mode nil)
 (set-face-background 'show-paren-match-face nil)
 (set-face-underline-p 'show-paren-match-face "red")
-(setq show-paren-delay 0.125) ; 表示までの秒数 emacs24では0だと重い 1x http://suzukima.hatenablog.com/entry/2012/08/16/232210
+(setq show-paren-delay 0.125) ; 陦ｨ遉ｺ縺ｾ縺ｧ縺ｮ遘呈焚 emacs24縺ｧ縺ｯ0縺�縺ｨ驥阪＞ 1x http://suzukima.hatenablog.com/entry/2012/08/16/232210
 
 (defun count-lines-and-chars ()
   (if mark-active
@@ -86,7 +86,6 @@
 (make-face 'paren-mismatch)
 (set-face-foreground 'paren-mismatch "white")
 (set-face-background 'paren-mismatch "lightcoral")
-;; 正規表現見やすく
 (set-face-foreground 'font-lock-regexp-grouping-backslash "#66CC99")
 (set-face-foreground 'font-lock-regexp-grouping-construct "#9966CC")
 (setq show-paren-face  'paren-match)
@@ -115,5 +114,5 @@
 
 ;;; @ powerline
 (when (require 'powerline nil t)
-  ;; (powerline-default-theme)
+  (powerline-default-theme)
   )
