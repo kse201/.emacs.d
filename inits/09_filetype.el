@@ -71,7 +71,7 @@
              (setq tab-width 2)
              (setq ruby-indent-level tab-width)
              (setq ruby-deep-indent-paren-style nil)
-             (define-key ruby-mode-map [return] 'ruby-reindent-then-newline-and-indent)))
+             ))
 (when (require 'ruby-block nil t)
   (ruby-block-mode t)
   (setq ruby-block-highlight-toggle t))

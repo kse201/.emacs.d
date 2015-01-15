@@ -44,16 +44,16 @@
   ;; template
   (setq org-capture-templates
         '(
-          ("t" "Todo"       entry( file+headline "~/org/todo.org"  "Backlog")    "%[~/.emacs.d/org_templates/todo.txt]")
-          ("p" "Project"    entry( file+headline "~/org/todo.org"  "Backlog")    "%[~/.emacs.d/org_templates/project.txt]")
-          ("d" "Daily Todo" entry( file+headline "~/org/daily.org" "Daily Todo") "%[~/.emacs.d/org_templates/todo.txt]")
-          ("n" "Note"       entry( file+headline nil               "Note")       "%[~/.emacs.d/org_templates/note.txt]")
-          ("b" "Bookmark"   entry( file+headline nil               "Bookmark")   "%[~/.emacs.d/org_templates/bookmark.txt]")
+          ("t" "Todo"       entry( file+headline "~/org/inbox.org" "Todo Backlog") "%[~/.emacs.d/org_templates/todo.txt]")
+          ("p" "Project"    entry( file+headline "~/org/inbox.org" "Todo Backlog") "%[~/.emacs.d/org_templates/project.txt]")
+          ("d" "Daily Todo" entry( file+headline "~/org/daily.org" "Daily Todo")   "%[~/.emacs.d/org_templates/todo.txt]")
+          ("n" "Note"       entry( file+headline nil               "Note")         "%[~/.emacs.d/org_templates/note.txt]")
+          ("b" "Bookmark"   entry( file+headline nil               "Bookmark")     "%[~/.emacs.d/org_templates/bookmark.txt]")
           ))
   ;; refile destination
   (setq org-refile-targets
         (quote (("daily.org" :level . 1)
-                ("todo.org" :level . 1)
+                ("inbox.org" :level . 1)
                 )))
   ;; #+ARCHIVE: todo_archive::
 ;;; time grid

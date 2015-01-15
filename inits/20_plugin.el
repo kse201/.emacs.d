@@ -188,10 +188,10 @@
  (add-to-list 'load-path (concat rsense-home "/etc"))
  (add-hook 'ruby-mode-hook
            '(lambda ()
-  (add-to-list 'ac-sources 'ac-source-rsense-method)
+              (add-to-list 'ac-sources 'ac-source-rsense-method)
               (add-to-list 'ac-sources 'ac-source-rsense-constant)
-  (define-key ruby-mode-map (kbd "C-x .") 'ac-complete-rsense)))
-
+              (define-key ruby-mode-map (kbd "C-x .") 'ac-complete-rsense)))
+ 
  (defun ruby-mode-hooks ()
    (inf-ruby-keys)
    (ruby-electric-mode t)
@@ -311,10 +311,6 @@
                apples-mode-hook))
       (add-hook hook 'hs-minor-mode))))
 
-;;@ smooth-scroll
-;;; (when (require 'smooth-scroll nil t)
-  ;(smooth-scroll-mode 0))
-
 ;; @Emacsのcalendarで日本の祝日を表示する
 ;; http://qiita.com/aprikip@github/items/db350720bb32e244daea
 (when (require 'solar nil t)
@@ -382,3 +378,7 @@
 
 ;;; @ bs-show
 (global-set-key (kbd "C-x C-b") 'bs-show)
+
+;;; @ open-junk-file
+(when (require 'open-junk-file nil t)
+  )
