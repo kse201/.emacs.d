@@ -25,12 +25,17 @@
 ;;; underline in agenda
   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
   (setq hl-line-face 'underline)
+;;; ignroe DONE
+  (setq org-agenda-skip-deadline-if-done t)
+  (setq org-agenda-skip-scheduled-if-done t)
+;;; 
+  (setq org-deadline-warning-days 7)
 ;;; TODO
   (setq org-todo-keywords
         '((sequence "New(n!)" "InProgress(i!)" "Review(r!)" "Pending(p!)" "|" "Closed(c!)" "Rejected(R!)")))
   ;; log DONE time
   (setq org-log-done 'time)
-  ;;; tags
+  ;;; Tags
   (setq org-tag-alist
         '(
           ("@OFFICE" . ?o)
@@ -73,6 +78,10 @@
                         ))))
           ))
   (setq org-stuck-projects
-        '("+PROJECT/-Closed-Rejected" ("TODO" "WAIT")))
-
+        '("+PROJECT/-Closed-Rejected" ("New" "Pending")))
+  ;; review
+  (defun gtd ()
+    (interactive)
+    (find-file "~/org/inbox.org"))
+  (global-set-key (kbd "C-c g") 'gtd)
   )
