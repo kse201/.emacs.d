@@ -70,12 +70,20 @@
   (setq org-agenda-custom-commands
         '(
           ("x" "Unscheduled TODO" tags-todo "-SCHEDULED>=\"<now>\"" nil)
-          ("D" "Daily Action List"
+          ("d" "Daily Action List"
            ((agenda "" ((org-agenda-ndays 1)
                         (org-agenda-sorting-strategy
                          (quote ((agenda time-up priority-down tag-up) )))
                         (org-deadline-warning-days 0)
                         ))))
+          ("A" "Agenda and all TODO's"
+           ((agenda "" ((org-agenda-span 14)
+                        (org-agenda-show-log nil)
+                        (org-agenda-clockreport-mode nil)))
+            (agenda "" ((org-agenda-span 1)
+                        (org-agenda-show-log 'clockcheck)
+                        (org-agenda-clockreport-mode t)))
+            (alltodo "")))
           ))
   (setq org-stuck-projects
         '("+PROJECT/-Closed-Rejected" ("New" "Pending")))
@@ -84,4 +92,10 @@
     (interactive)
     (find-file "~/org/inbox.org"))
   (global-set-key (kbd "C-c g") 'gtd)
+    ;; daily list
+  (defun daily ()
+    (interactive)
+    (find-file "~/org/daily.org"))
+  (global-set-key (kbd "C-c C-d") 'daily)
+
   )

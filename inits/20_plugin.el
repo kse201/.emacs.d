@@ -217,11 +217,6 @@
                            (+ (length grep-command-before-query) 1)))
 )
 
-;; userful dired
-(require 'dired-x nil t)
-(require 'wdired nil t)
-(define-key dired-mode-map "r" 'wdir3ed-change-to-wdired-mode)
-
 ;; unique filename
 (when (require 'uniquify nil t)
   (setq uniquify-buffer-name-style 'forward)
@@ -382,3 +377,25 @@
 ;;; @ open-junk-file
 (when (require 'open-junk-file nil t)
   )
+
+;;; @ multiple-cursors
+
+(when (require 'multiple-cursors nil t)
+  
+  (global-set-key (kbd "C-M-c") 'mc/edit-lines)
+  (global-set-key (kbd "C-M-r") 'mc/mark-all-in-region)
+  
+  (define-many-keys global-map
+    '(("C-t C-t"      . mc/mark-next-like-this)
+      ("C-t n"        . mc/mark-next-like-this)
+      ("C-t p"        . mc/mark-previous-like-this)
+      ("C-t m"        . mc/mark-more-like-this-extended)
+      ("C-t u"        . mc/unmark-next-like-this)
+      ("C-t U"        . mc/unmark-previous-like-this)
+      ("C-t s"        . mc/skip-to-next-like-this)
+      ("C-t S"        . mc/skip-to-previous-like-this)
+      ("C-t *"        . mc/mark-all-like-this)
+      ("C-t d"        . mc/mark-all-like-this-dwim)
+      ("C-t i"        . mc/insert-numbers)
+      ("C-t o"        . mc/sort-regions)
+      ("C-t O"        . mc/reverse-regions))))

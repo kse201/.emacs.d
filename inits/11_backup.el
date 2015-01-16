@@ -5,7 +5,7 @@
 ;(run-with-idle-timer 5 t 'auto-save-buffers)
 ;; http://d.hatena.ne.jp/tomoya/20110217/1297928222
 (when (require 'recentf-ext nil t)
-  (setq recentf-max-saved-items 100)
+  (setq recentf-max-saved-items 500)
   (setq recentf-exclude '(".recentf"))
   (setq recentf-auto-cleanup 10)
   (setq recentf-auto-save-timer
