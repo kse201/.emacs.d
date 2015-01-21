@@ -254,6 +254,25 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 
 (add-to-load-path "conf" "public_repos" "elpa" "themes")
 
+(when (require 'elscreen nil t)
+  (if window-system
+      (define-key elscreen-map "\C-z" 'iconify-or-deiconify-frame)
+    (define-key elscreen-map "\C-z" 'suspend-emacs))
+
+  ;; ELScreen用キーバインド
+  (global-set-key "\M-t" 'elscreen-create)
+  (global-set-key "\M-T" 'elscreen-clone)
+  (global-set-key "\M-}" 'elscreen-next)
+  (global-set-key "\M-{" 'elscreen-previous)
+  (global-set-key [(C-tab)] 'elscreen-next)
+  (global-set-key [(C-S-tab)] 'elscreen-previous)
+
+  ;; バッファ切替
+  (global-set-key "\M-n" 'next-buffer)
+  (global-set-key "\M-p" 'previous-buffer)
+  (elscreen-start)
+  )
+
 ;;; @ init-loader
 (require 'init-loader)
 (when (require 'init-loader nil t)
