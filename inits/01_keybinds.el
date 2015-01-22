@@ -74,5 +74,6 @@
 (setq read-buffer-function 'iswitchb-read-buffer)
 (setq iswitchb-regexp nil)
 (setq iswitchb-prompt-newbuffer nil)
+;;; cua-mode
 (cua-mode t)
 (setq cua-enable-cua-keys nil)

@@ -8,7 +8,9 @@
 
 ;;; hide extra '*'
   (setq org-hide-leading-stars t)
-  (setq system-time-locale "C")
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (set (make-local-variable 'system-time-locale) "C")))
 ;;; org key-bind
   (define-many-keys global-map
     '(
@@ -20,16 +22,17 @@
       ))
 ;;; org dir/files
   (setq org-directory "~/org/")
+  (setq junk-org-directory "~/junk/")
   (setq org-default-notes-file "note.org")
-  (setq org-agenda-files (list org-directory))
+  (setq org-agenda-files (list org-directory junk-org-directory))
 ;;; underline in agenda
   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
   (setq hl-line-face 'underline)
 ;;; ignroe DONE
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-if-done t)
-;;; 
-  (setq org-deadline-warning-days 7)
+;;;
+  (setq org-deadline-warning-days 14)
 ;;; TODO
   (setq org-todo-keywords
         '((sequence "New(n!)" "InProgress(i!)" "Review(r!)" "Pending(p!)" "|" "Closed(c!)" "Rejected(R!)")))
@@ -57,8 +60,8 @@
           ))
   ;; refile destination
   (setq org-refile-targets
-        (quote (("daily.org" :level . 1)
-                ("inbox.org" :level . 1)
+        (quote (("daily.org" :maxlevel . 2)
+                ("inbox.org" :maxlevel . 2)
                 )))
   ;; #+ARCHIVE: todo_archive::
 ;;; time grid
@@ -97,5 +100,6 @@
     (interactive)
     (find-file "~/org/daily.org"))
   (global-set-key (kbd "C-c C-d") 'daily)
-
+  ;; src sytnax
+  (setq org-src-fontify-natively t)
   )
