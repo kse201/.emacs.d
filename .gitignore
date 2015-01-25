@@ -10,6 +10,9 @@ ac-comphist.dat
 el-get
 local.el
 backups
+elpa/archives
 
 !**/.gitkeep
 !.status.el
+!inits/*.elc
+!init.elc
