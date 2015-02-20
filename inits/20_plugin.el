@@ -376,6 +376,8 @@
 
 ;;; @ open-junk-file
 (when (require 'open-junk-file nil t)
+  (setq open-junk-file-format "~/howm/%Y/%m/%Y-%m-%d-%H%M%S.txt")
+  (global-set-key (kbd "C-x j") 'open-junk-file)
   )
 
 ;;; @ multiple-cursors

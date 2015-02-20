@@ -2,6 +2,9 @@
 (when (require 'org-install nil t)
   (require 'org-capture nil t)
   (require 'org-habit nil t)
+  (require 'ox-html nil t )
+  (require 'ox-md nil t)
+  (require 'ox-ascii nil t)
                                         ;(org-remember-insinuate)
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
   (add-hook 'org-mode-hook 'turn-on-font-lock)
@@ -21,10 +24,9 @@
       ("C-c b" . org-iswitchb)
       ))
 ;;; org dir/files
-  (setq org-directory "~/org/")
-  (setq junk-org-directory "~/junk/")
+  (setq org-directory "~/howm/")
   (setq org-default-notes-file "note.org")
-  (setq org-agenda-files (list org-directory junk-org-directory))
+  (setq org-agenda-files (list org-directory))
 ;;; underline in agenda
   (add-hook 'org-agenda-mode-hook '(lambda () (hl-line-mode 1)))
   (setq hl-line-face 'underline)
@@ -52,9 +54,9 @@
   ;; template
   (setq org-capture-templates
         '(
-          ("t" "Todo"       entry( file+headline "~/org/inbox.org" "Todo Backlog") "%[~/.emacs.d/org_templates/todo.txt]")
-          ("p" "Project"    entry( file+headline "~/org/inbox.org" "Todo Backlog") "%[~/.emacs.d/org_templates/project.txt]")
-          ("d" "Daily Todo" entry( file+headline "~/org/daily.org" "Daily Todo")   "%[~/.emacs.d/org_templates/todo.txt]")
+          ("t" "Todo"       entry( file+headline "~/howm/inbox.org" "Todo Backlog") "%[~/.emacs.d/org_templates/todo.txt]")
+          ("p" "Project"    entry( file+headline "~/howm/inbox.org" "Todo Backlog") "%[~/.emacs.d/org_templates/project.txt]")
+          ("d" "Daily Todo" entry( file+headline "~/howm/daily.org" "Daily Todo")   "%[~/.emacs.d/org_templates/todo.txt]")
           ("n" "Note"       entry( file+headline nil               "Note")         "%[~/.emacs.d/org_templates/note.txt]")
           ("b" "Bookmark"   entry( file+headline nil               "Bookmark")     "%[~/.emacs.d/org_templates/bookmark.txt]")
           ))
@@ -73,6 +75,7 @@
   (setq org-agenda-custom-commands
         '(
           ("x" "Unscheduled TODO" tags-todo "-SCHEDULED>=\"<now>\"" nil)
+          ("n" "Unwatch TODO" todo "New|Pending|Review" nil)
           ("d" "Daily Action List"
            ((agenda "" ((org-agenda-ndays 1)
                         (org-agenda-sorting-strategy
