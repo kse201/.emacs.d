@@ -1,6 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (eval-when-compile (require 'cl))
-(require 'cl)
 
 ;; Language.
 (set-language-environment 'Japanese)
@@ -438,3 +437,17 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
       (setenv "PATH" (mapconcat 'identity exec-path ":"))))
 ;;; kill-ring
 (setq kill-ring-max 20)
+
+;; Warning の抑制
+(setq byte-compile-warnings
+      '(not
+        free-vars
+        unresolved
+        callargs
+        redefine
+        ;; obsolete
+        noruntime
+        cl-functions
+        interactive-only
+        ;; make-local
+        ))

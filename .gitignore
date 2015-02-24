@@ -11,6 +11,7 @@ el-get
 local.el
 backups
 elpa/archives
+persp-confs
 
 !**/.gitkeep
 !.status.el

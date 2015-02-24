@@ -2,7 +2,6 @@
 ;;
 ;;;------------------------------
 (eval-when-compile (require 'cl))
-(require 'cl)
 
 ;; local init.el
 (when (file-exists-p "~/.emacs.d/local.el")
@@ -254,25 +253,6 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 
 (add-to-load-path "conf" "public_repos" "elpa" "themes")
 
-(when (require 'elscreen nil t)
-  (if window-system
-      (define-key elscreen-map "\C-z" 'iconify-or-deiconify-frame)
-    (define-key elscreen-map "\C-z" 'suspend-emacs))
-
-  ;; ELScreen用キーバインド
-  (global-set-key "\M-t" 'elscreen-create)
-  (global-set-key "\M-T" 'elscreen-clone)
-  (global-set-key "\M-}" 'elscreen-next)
-  (global-set-key "\M-{" 'elscreen-previous)
-  (global-set-key [(C-tab)] 'elscreen-next)
-  (global-set-key [(C-S-tab)] 'elscreen-previous)
-
-  ;; バッファ切替
-  (global-set-key "\M-n" 'next-buffer)
-  (global-set-key "\M-p" 'previous-buffer)
-  (elscreen-start)
-  )
-
 ;;; @ init-loader
 (require 'init-loader)
 (when (require 'init-loader nil t)
@@ -450,9 +430,20 @@ NOERROR が non-nil ならば、PACKAGENAME(or FEATURE) が存在しなかった
 (global-auto-revert-mode 1)
 
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(delete-by-moving-to-trash t)
+ '(send-mail-function (quote smtpmail-send-it))
  '(trash-directory "~/.Trash"))
 
 (add-to-list 'Info-directory-list "~/.emacs.d/info")
 
 (put 'set-goal-column 'disabled nil)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
