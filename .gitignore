@@ -12,8 +12,11 @@ local.el
 backups
 elpa/archives
 persp-confs
+elpa
 
 !**/.gitkeep
 !.status.el
-!inits/*.elc
-!init.elc
+inits/*.elc
+init.elc
+config/init.el
+projectile-bookmarks.eld

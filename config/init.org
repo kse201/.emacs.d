@@ -1,0 +1,684 @@
+#+TITLE: Emacs Config
+#+STARTUP: overview
+
+* Initialize
+#+BEGIN_SRC emacs-lisp
+  (eval-when-compile (require 'cl))
+  (require 'server)
+  (unless (server-running-p) (server-start))
+#+end_src
+** Use command as Meta in MacOS
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    ;;(setq mac-command-key-is-meta nil)
+    (setq mac-command-modifier 'meta)
+    (setq mac-option-modifier 'super)
+    ;;  (setq mac-command-modifier 'super)
+    (setq mac-pass-control-to-system t))
+#+end_src
+* FileFormat
+#+begin_src emacs-lisp
+  ;; Language.
+  (set-language-environment 'Japanese)
+  ;; Coding system.
+  (set-default-coding-systems 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-buffer-file-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+  ;; fileformant
+  (when (eq system-type 'darwin)
+    (require 'ucs-normalize)
+    (setq file-name-coding-system 'utf-8)
+    (setq locale-coding-system 'utf-8))
+  (when (eq system-type 'windows-nt)
+    (set-file-name-coding-system 'cp932)
+    (setq locale-coding-system 'cp932))
+#+end_src
+* Network
+*** Proxy
+#+begin_src emacs-lisp
+  (cond ((getenv "HTTP_PROXY")
+         (let* ((url_ (url-generic-parse-url (getenv "HTTP_PROXY")))
+                (auth_ (if (and (url-user url_) (url-password url_) )
+                           (base64-encode-string
+                            (format "%s:%s" (url-user url_) (url-password url_)))
+                         nil))
+                (host_ (format "%s:%s" (url-host url_) (url-portspec url_))))
+
+           (defvar url-proxy-services
+             (list (cons "no_proxy"  "^\\(localhost\\|10.*\\)")
+                   (cons "http" host_)))
+           (if auth_
+               (defvar url-http-proxy-basic-auth-storage
+                 (list (list host_ (cons "Proxy" auth_)))))
+           )))
+#+end_src
+* Function/Macros
+#+begin_src emacs-lisp
+  (defun edit-init ()
+    "edit .emacs.d"
+    (interactive)
+    (find-file "~/.emacs.d"))
+  ;;; open inits
+  (defun edit-init.el ()
+    "edit init.el"
+    (interactive)
+    (find-file "~/.emacs.d/init.el"))
+  ;;; open scratch
+  (defun edit-scratch ()
+    "edit *scratch*"
+    (interactive)
+    (switch-to-buffer "*scratch*"))
+
+  ;; easy key-bind registeration
+  (defun define-many-keys (key-map key-table)
+    "easy key-bind registeration"
+    (loop for (key . cmd) in key-table
+      do (define-key key-map (read-kbd-macro key) cmd)))
+
+  ;;; function for add load-path
+  (defun add-to-load-path (&rest paths)
+    "define the function which add load-path"
+    (let (path)
+      (dolist (path paths paths)
+    (let ((default-directory
+        (expand-file-name (concat user-emacs-directory path))))
+      (add-to-list 'load-path default-directory)
+      (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+          (normal-top-level-add-subdirs-to-load-path))))))
+
+  ;; nicely window splitting
+  (defun good-split-window ()
+    "nicely window splitting"
+    (interactive)
+    (if (< (window-width) (* (window-height) 1.5) )
+    (split-window-vertically)
+      (split-window-horizontally)))
+
+  (defun my-other-window ()
+    "Auto resize window when 'other-window"
+    (interactive)
+    (other-window 1)
+    (let (( max-width (truncate (* (screen-width) 0.5))))
+      (if (< (window-width) max-width)
+      (enlarge-window-horizontally (- max-width (window-width))))))
+
+  (defun move-to-mark ()
+    "move the marked place"
+    (interactive)
+    (let ((pos (point)))
+      (goto-char (mark))
+      (push-mark pos)))
+
+  ;; move real line-head
+  ;; http://e-arrows.sakura.ne.jp/2010/02/vim-to-emacs.html
+  (defun my-beginning-of-indented-line (current-point)
+    "move real line-head"
+    (interactive "d")
+    (if (string-match
+     "^[ \t]+$"
+     (save-excursion
+       (buffer-substring-no-properties
+        (progn (beginning-of-line) (point))
+        current-point)))
+    (beginning-of-line)
+      (back-to-indentation)))
+
+  ;;; http://d.hatena.ne.jp/yascentur/20110621/1308585547
+  (defun split-window-vertically-n (num_wins)
+    "vertical splitting the window N divide "
+    (interactive "p")
+    (if (= num_wins 2)
+    (split-window-vertically)
+      (progn
+    (split-window-vertically
+     (- (window-height) (/ (window-height) num_wins)))
+    (split-window-vertically-n (- num_wins 1)))))
+  (defun split-window-horizontally-n (num_wins)
+    "horizontal splitting the window N divide "
+    (interactive "p")
+    (if (= num_wins 2)
+    (split-window-horizontally)
+      (progn
+    (split-window-horizontally
+     (- (window-width) (/ (window-width) num_wins)))
+    (split-window-horizontally-n (- num_wins 1)))))
+
+  (defun other-window-or-split ()
+    (interactive)
+    (when (one-window-p)
+      (if (>= (window-body-width) 270)
+      (split-window-horizontally-n 3)
+    (split-window-horizontally)))
+    (other-window 1))
+
+  ;; http://qiita.com/items/61b8eeac2ebcf5993419
+  (global-set-key (kbd "M-u") 'camel-to-snake-backward-word)
+  (defun camel-to-snake-backward-word ()
+    (interactive)
+    (let ((case-fold-search nil)
+      (s (buffer-substring
+          (point) (save-excursion (forward-word -1) (point)))))
+      (delete-region (point) (progn (forward-word -1) (point)))
+      (insert (funcall (if (= (string-to-char s) (downcase (string-to-char s)))
+               'downcase 'upcase)
+               (replace-regexp-in-string
+            "\\([A-Z]\\)" "_\\1"
+            (store-substring s 0 (downcase (string-to-char s))))))))
+
+  (defun put-current-path-to-clipboard ()
+    "Get current path and put it to clipboard"
+    (interactive)
+    (let ((file-path buffer-file-name)
+      (dir-path default-directory))
+      (cond (file-path
+         (kill-new (expand-file-name file-path))
+         (message "This file path is on the clipboard!"))
+        (dir-path
+         (kill-new (expand-file-name dir-path))
+         (message "This directory path is on the clipboard!"))
+        (t
+         (error-message-string "Fail to get path name.")
+         ))))
+  (global-set-key (kbd "C-c C-c p") 'put-current-path-to-clipboard)
+
+  (defun spell-check ()
+    "Enable auto spell check"
+    (setq-default flyspell-mode t)
+    (setq ispell-dictionaryonary "american")
+    (setq ispell-program-name "aspell")
+    (setq truncate-lines nil)
+    (setq truncate-partial-width-windows nil))
+
+  ; http://ainame.hateblo.jp/entry/2013/11/04/015107
+  (defun newline-or-open-line ()
+    "newline-or-openline is a new command for merging C-m and C-o"
+    (interactive)
+    (let ((string-exists-before-cursor (string-match "[^\\\s\\\n\\\t]" (buffer-substring (point-at-bol) (point))))
+      (string-exists-after-cursor (string-match "[^\\\s\\\n\\\t]" (buffer-substring (point) (point-at-eol)))))
+      (cond ((or (eolp)
+         (not string-exists-after-cursor)
+         (and string-exists-before-cursor string-exists-after-cursor))
+         (progn (newline) (indent-according-to-mode)))
+        (t (progn (open-line 1) (indent-according-to-mode))))))
+
+  (define-key global-map (kbd "C-m") 'newline-or-open-line)
+#+end_src
+* UI
+  #+begin_src emacs-lisp
+  (setq scroll-preserve-screen-position nil)
+  (setq next-screen-context-lines 1)
+  ;; Scroll window on a line-by-line basis
+  (setq scroll-conservatively 1000)
+  (setq scroll-step 1)
+  (setq scroll-margin 0) ; default=0
+  (setq yank-excluded-properties t)
+  (transient-mark-mode 1)
+
+  (setq frame-title-format "%f")
+  (global-linum-mode 0)
+  (setq linum-format "%2d")
+  (setq linum-delay t)
+  (defadvice linum-schedule (around my-linum-schedule () activate)
+    (run-with-idle-timer 0.2 nil #'linum-update-current))
+  (setq-default tab-width 4)
+  (setq-default indent-tabs-mode nil)
+
+  ;(show-paren-mode nil)
+  ;(set-face-background 'show-paren-match-face nil)
+  ;(set-face-underline-p 'show-paren-match-face "red")
+  (setq show-paren-delay 0.125) ; 陦ｨ遉ｺ縺ｾ縺ｧ縺ｮ遘呈焚 emacs24縺ｧ縺ｯ0縺?縺ｨ驥阪＞ 1x http://suzukima.hatenablog.com/entry/2012/08/16/232210
+
+  (size-indication-mode t)
+
+  (setq-default show-trailing-whitespace t)
+  (set-face-background 'trailing-whitespace "#b14770")
+
+  (defface hlline-face
+    '((((class color)
+    (background dark))
+       (:background "dark slate gray"))
+      (((class color)
+    (background light))
+       (:background  "#98FB98"))
+      (t
+       ()))
+    "*Face used by hl-line.")
+  (setq hl-line-face 'hlline-face)
+
+  (display-time)
+  (column-number-mode t)
+  (line-number-mode t)
+  (setq inhibit-startup-echo-area-message -1)
+  (blink-cursor-mode 1)
+  (transient-mark-mode 1)
+  (set-scroll-bar-mode 'right); GUI emacs
+  (which-function-mode 1)
+
+  (auto-image-file-mode t)
+#+end_src
+** Font
+#+begin_src emacs-lisp
+  (let ((ws window-system))
+    (cond ((eq system-type 'windows-nt)
+           (set-face-attribute 'default nil
+                               :family "Cica"
+                               :height 140)
+           (set-fontset-font nil 'japanese-jisx0208 (font-spec :family "Cica" :size 18)))
+          ((eq system-type 'ns)
+           (set-face-attribute 'default nil
+                               :family "Cica"
+                               :height 100)
+           (set-fontset-font nil 'japanese-jisx0208 (font-spec :family "Cica")))
+          ( t
+            (set-face-attribute 'default nil
+                                :family "Cica"
+                                :height 140)
+            (set-fontset-font nil 'japanese-jisx0208 (font-spec :family "Cica")))))
+#+end_src
+** Backup
+#+begin_src emacs-lisp
+  ;; backup autosave
+  ;(require 'auto-save-buffers)
+  ;(run-with-idle-timer 5 t 'auto-save-buffers)
+  ;; http://d.hatena.ne.jp/tomoya/20110217/1297928222
+  (when (require 'recentf-ext nil t)
+    (setq recentf-max-saved-items 500)
+    (setq recentf-exclude '(".recentf"))
+    (setq recentf-auto-cleanup 10)
+    (setq recentf-auto-save-timer
+      (run-with-idle-timer 30 t 'recentf-save-list))
+    (recentf-mode 1))
+
+  (setq make-backup-files nil)
+  (setq auto-save-default nil)
+  (add-to-list 'backup-directory-alist
+           (cons "." "~/.emacs.d/backups/"))
+  (setq auto-save-file-name-transforms
+    `((".*" , (expand-file-name "~/.emacs.d/backups/") t)))
+  (setq version-control t)
+  (setq auto-save-list-file-name nil)
+  (setq auto-save-list-file-prefix nil)
+
+  (setq kept-old-versions 1)
+  (setq kept-new-versions 2)
+  (setq delete-old-versions t)
+  (setq bookmark-save-flag 1)
+  (setq bookmark-sort-flag nil)
+  (defun bookmark-arrange-latest-top ()
+    (let ((latest (bookmark-get-bookmark bookmark)))
+      (setq bookmark-alist (cons latest (delq latest bookmark-alist))))
+    (bookmark-save))
+  (add-hook 'bookmark-after-jump-hook 'bookmark-arrange-latest-top)
+#+end_src
+* Keybinds
+#+begin_src emacs-lisp
+  (define-many-keys global-map
+    '(("C-h" . delete-backward-char)
+      ("<f1>" . help-for-help)
+      ("C-c i" . indent-region )
+      ("C-c C-i" . dabbrev-expand )
+      ("C-c );" . comment-region )
+      ("C-c :" . uncomment-region )
+      ("C-\\" . nil )
+      ("C-m" . newline-and-indent)
+      ("C-c l" . toggle-truncate-lines)
+      ("C-t" . nil)
+      ;;    ("C-x C-o" . my-other-window)
+      ("M-y" . backward-kill-word )
+      ("C-x o" . browse-url-at-point )
+      ("C-x C-g" . goto-line )
+      ;; window-move
+      ("C-x w h" . windmove-left)
+      ("C-x w j" . windmove-down)
+      ("C-x w k" . windmove-up)
+      ("C-x w l" . windmove-right)
+      ;; window-split
+      ("C-x SPC" . good-split-window)
+      ("C-x -" . split-window-vertically)
+      ("C-x |" . split-window-horizontally)
+      ("C-c C-@" . move-to-mark)
+      ("C-c C-e" . edit-init)
+      ("C-x C-z" . nil)
+      ("C-a" . my-beginning-of-indented-line)
+      ("M-p" . scroll-down)
+      ("M-n" . scroll-up)
+      ("M-g" . goto-line)
+      ("C-M-h" . delete-horizontal-space)
+      ("M-f" . forward-word)
+      ))
+#+end_src
+* Scratch
+#+begin_src emacs-lisp
+  (defun my-make-scratch (&optional arg)
+    "DONT delete *scratch* buffer"
+    (interactive)
+    (progn
+      (set-buffer (get-buffer-create "*scratch*"))
+      (funcall initial-major-mode)
+      (erase-buffer)
+      (when (and initial-scratch-message (not inhibit-startup-message))
+        (insert initial-scratch-message))
+      (or arg (progn (setq arg 0)
+                     (switch-to-buffer "*scratch*")))
+      (cond ((= arg 0) (message "*scratch* is cleared up."))
+            ((= arg 1) (message "another *scratch* is created")))))
+  (add-hook 'kill-buffer-query-functions
+            (lambda ()
+              (if (string= "*scratch*" (buffer-name))
+                  (progn (my-make-scratch 0) nil)
+                t)))
+
+  (add-hook 'after-save-hook
+            (lambda ()
+              (unless (member (get-buffer "*scratch*") (buffer-list))
+                (my-make-scratch 1))))
+
+#+END_SRC
+* Plugin
+** use-package
+#+begin_src emacs-lisp
+  (require 'package)
+
+  (package-initialize)
+  (setq package-archives
+        '(("gnu" . "https://elpa.gnu.org/packages/")
+          ("melpa" . "https://melpa.org/packages/")
+          ("org" . "https://orgmode.org/elpa/")))
+  (unless package-archive-contents (package-refresh-contents))
+  (when (not (package-installed-p 'use-package))
+    (package-install 'use-package))
+  (unless (require 'use-package nil t)
+    (defmacro use-package (&rest args)))
+#+end_src
+** helm
+#+BEGIN_SRC emacs-lisp
+(use-package helm
+  :ensure t
+
+  :bind (("M-x" . helm-M-x)
+         ("M-<f5>" . helm-find-files)
+         ([f10] . helm-buffers-list)
+         ([S-f10] . helm-recentf)))
+
+#+END_SRC
+
+** others
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-complete
+    :ensure t
+    :config
+    (progn (require 'auto-complete-config)
+           (global-auto-complete-mode t)))
+  (use-package markdown-mode
+    :ensure t
+    :mode (("\\.md\\'". markdown-mode)))
+
+  (use-package markdown-preview-mode
+    :ensure t
+    :mode (("\\.md\\'". markdown-preview-mode)))
+
+  (use-package rainbow-delimiters
+    :ensure t)
+
+  (use-package yaml-mode
+    :ensure t
+    :mode (("\\.ya?ml\\'". yaml-mode)))
+
+  (use-package powerline
+    :ensure t
+    :config
+    (powerline-center-theme))
+
+  (use-package hlinum
+    :ensure t)
+
+  (use-package git-gutter+
+    :ensure t)
+
+  (use-package color-identifiers-mode
+    :ensure t)
+
+  (use-package molokai-theme
+    :ensure t)
+
+  (use-package which-key
+    :diminish which-key-mode
+    :hook (after-init . which-key-mode))
+
+  (use-package projectile
+    :ensure t
+    :config
+    (projectile-mode t)
+    (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (setq projectile-completion-system 'helm))
+
+  (use-package helm-projectile
+    :ensure t
+    :config
+    (helm-projectile-on))
+
+  (use-package hl-todo
+    :ensure t
+    :config
+    (progn
+      (setq hl-todo-activate-in-modes '(prog-mode markdown-mode))
+      (global-hl-todo-mode 1)))
+
+  (use-package editorconfig
+    :ensure t)
+
+  (use-package magit
+    :ensure t
+    :config (global-set-key (kbd "C-x g") 'magit-status))
+
+#+END_SRC
+* Org-mode
+#+BEGIN_SRC emacs-lisp
+(setq org-structure-template-alist
+  '(("l" "#+begin_src emacs-lisp\n?\n#+end_src" "<src lang=\"emacs-lisp\">\n?\n</src>")))
+#+end_src
+* Etc
+*** dont user dialog box
+#+begin_src emacs-lisp
+  (setq use-dialog-box nil)
+  (defalias 'message-box 'message)
+#+end_src
+*** sec showing keystrokes
+#+begin_src emacs-lisp
+    (setq echo-keystrokes 0.1)
+    (setq large-file-worning-threshold (* 25 1024 1024))
+    ;; ミニバッファで入力を取り消しても履歴に残す
+    ;; 誤って取り消して入力が失われるのを防ぐため
+    (defadvice abort-recursive-edit (before minibuffer-save activate)
+      (when (eq (selected-window) (active-minibuffer-window))
+        (add-to-history minibuffer-history-variable (minibuffer-contents))))
+
+    (setq max-specpdl-size 6000)
+    (setq max-lisp-eval-depth 1000)
+    ;; save mini-buffer history
+    (savehist-mode 1)
+#+end_src
+*** Auto-Insert File
+#+begin_src emacs-lisp
+    (auto-insert-mode t)
+#+end_src
+*** ido.el
+#+begin_src emacs-lisp
+    ;;; ido.el
+    (ido-mode 1)                            ; コマンドがidoのものに置き換わる
+    (ido-everywhere 1)                      ; バッファ名・ファイル名入力全てがidoに置き換わる
+#+end_src
+*** output a result of eval
+#+begin_src emacs-lisp
+    (setq eval-expression-print-length nil)
+#+end_src
+*** C-x C-u/C-l upper / lower
+#+begin_src emacs-lisp
+  (put 'upcase-region 'disabled nil)
+  (put 'downcase-region 'disabled nil)
+#+end_src
+*** search by selected word
+#+begin_src emacs-lisp
+    (defadvice isearch-mode
+      (around isearch-mode-default-string
+          (forward &optional regexp op-fun recursive-edit word-p) activate)
+      (if (and transient-mark-mode mark-active (not (eq (mark) (point))))
+      (progn
+        (isearch-update-ring (buffer-substring-no-properties (mark) (point)))
+        (deactivate-mark)
+        ad-do-it
+        (if (not forward)
+            (isearch-repeat-backward)
+          (goto-char (mark))
+          (isearch-repeat-forward)))
+        ad-do-it))
+#+end_src
+*** ignore case in completion
+#+begin_src emacs-lisp
+(setq completion-ignore-case t)
+(setq read-file-name-completion-ignore-case t)
+#+end_src
+*** 略語展開・補完を行うコマンドをまとめる
+#+begin_src emacs-lisp
+  (setq hippie-expand-try-functions-list
+        '(try-complete-file-name-partially ;ファイル名の一部
+          try-complete-file-name          ;ファイル名全体
+          try-expand-all-abbrevs          ; 静的略語展開
+          try-expand-dabbrev              ; 動的略語展開(カレントバッファ)
+          try-expand-dabbrev-all-buffers  ; 動的略語展開 (全バッファ)
+          try-expand-dabbrev-from-kill    ; 動的略語展開(キルリング : M-w / C-w の履歴
+          try-complete-lisp-symbol-partially ; Lisp シンボル名の一部
+          try-complete-lisp-symbol        ; Lispシンボル名全体
+          ))
+#+end_src
+
+#+begin_src emacs-lisp
+    (setq delete-auto-save-files t)
+
+    (global-auto-revert-mode 1)
+
+    (defalias 'yes-or-no-p 'y-or-n-p)
+    (tool-bar-mode 0)
+    (scroll-bar-mode 1)
+    (menu-bar-mode 1)
+    (set-locale-environment nil)
+    (show-paren-mode 1)
+
+  ;; 部分一致の補間機能を使う
+  (if (string-match "^23\." emacs-version)
+      (partial-completion-mode t))
+  ;; ファイルを開いた時に以前編集していた場所に移動
+  (load "saveplace")
+  (setq-default save-place t)
+
+  ;; ignore byte-complie warnings
+  (setq byte-compile-warnings '(not nresolved
+                    free-vars
+                    callargs
+                    redefine
+                    obsolete
+                    noruntime
+                    cl-funcitons
+                    interactive-only))
+
+  ;; window移動
+  ;; http://d.hatena.ne.jp/tomoya/20120512/1336832436
+  (windmove-default-keybindings 'super)
+  ;;Mac用
+  ;; (windmove-default-keybindings 'meta)
+  ;; (Windmove-default-keybindings) 引数なしの場合はShift
+
+  ;; ウィンドウ操作の履歴をundo/redo
+  ;; C-c <left> / C-c <right>
+  (when (fboundp 'winner-mode)
+    (winner-mode t))
+
+  (setq ring-bell-function 'my-bell-function)
+  (setq ring-bell-function 'ignore)
+
+  ;; http://qiita.com/items/f0db094fde6640143f42
+  (if (file-directory-p (expand-file-name "~/bin"))
+      (progn
+    (add-to-list 'exec-path (expand-file-name "~/bin"))
+    (setenv "PATH" (mapconcat 'identity exec-path ":"))))
+  ;;; kill-ring
+  (setq kill-ring-max 20)
+
+  (setq cursor-in-non-selected-windows nil)
+  (setq-default indicate-empty-lines t)
+  (setq isearch-lazy-highlight-initial-delay 0)
+  (setq initial-scratch-message "Scratch\n========\n\n")
+
+  ;; line-space
+  (setq-default line-spacing 1)
+  (global-set-key [f12] 'speedbar)
+
+  (defface my-hl-line-face
+    '((((class clolor) (background dark))
+       (:background "NavyBlue" t))
+      (((class color) (background light))
+       (:background "LightGoldenrodYellow" t))
+      (t (:bold t)))
+    "hl-line's my face")
+  (setq hl-line-face 'my-hl-line-face)
+  (global-hl-line-mode t)
+
+  (windmove-default-keybindings)
+  (define-key mode-specific-map "c" 'compile)
+
+  ;;http://dev.ariel-networks.com/wp/documents/aritcles/emacs/part16
+  (defadvice kill-region (around kill-word-or-kill-region activate)
+    (if (and (interactive-p) transient-mark-mode (not mark-active))
+    (backward-kill-word 1)
+      ad-do-it))
+
+  ;; minibuffer
+  (define-key minibuffer-local-completion-map (kbd "C-w") 'backward-kill-word)
+
+  (setq kill-whole-line t)
+ #+end_src
+*** iswitchb
+#+begin_src emacs-lisp
+  (iswitchb-mode 1)
+  (if (string-match "^23\." emacs-version)
+      (iswitchb-default-keybindings))
+  (setq read-buffer-function 'iswitchb-read-buffer)
+  (setq iswitchb-regexp nil)
+  (setq iswitchb-prompt-newbuffer nil)
+#+end_src
+*** cua-mode
+#+begin_src emacs-lisp
+  ;;; cua-mode
+  (cua-mode t)
+  (setq cua-enable-cua-keys nil)
+#+end_src
+*** supress Warning
+#+begin_src emacs-lisp
+
+  (setq byte-compile-warnings
+        '(not
+          free-vars
+          unresolved
+          callargs
+          redefine
+          ;; obsolete
+          noruntime
+          cl-functions
+          interactive-only
+          ;; make-local
+          ))
+#+end_src
+** Turnig
+#+begin_src emacs-lisp
+  ;; GC size
+  (setq gc-cons-threshold (* 5242880 2))
+  ;; log size
+  (setq message-log-max 1000)
+  ;; history
+  (setq history-length 1000)
+
+  (setq enable-recursice-minibuffers t)
+#+end_src
