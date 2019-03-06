@@ -207,56 +207,55 @@
 #+end_src
 * UI
   #+begin_src emacs-lisp
-  (setq scroll-preserve-screen-position nil)
-  (setq next-screen-context-lines 1)
-  ;; Scroll window on a line-by-line basis
-  (setq scroll-conservatively 1000)
-  (setq scroll-step 1)
-  (setq scroll-margin 0) ; default=0
-  (setq yank-excluded-properties t)
-  (transient-mark-mode 1)
+      (setq scroll-preserve-screen-position nil)
+      (setq next-screen-context-lines 1)
+      ;; Scroll window on a line-by-line basis
+      (setq scroll-conservatively 1000)
+      (setq scroll-step 1)
+      (setq scroll-margin 0) ; default=0
+      (setq yank-excluded-properties t)
+      (transient-mark-mode 1)
 
-  (setq frame-title-format "%f")
-  (global-linum-mode 0)
-  (setq linum-format "%2d")
-  (setq linum-delay t)
-  (defadvice linum-schedule (around my-linum-schedule () activate)
-    (run-with-idle-timer 0.2 nil #'linum-update-current))
-  (setq-default tab-width 4)
-  (setq-default indent-tabs-mode nil)
+      (setq frame-title-format "%f")
+      (global-linum-mode 0)
+      (setq linum-format "%2d")
+      (setq linum-delay t)
+      (defadvice linum-schedule (around my-linum-schedule () activate)
+        (run-with-idle-timer 0.2 nil #'linum-update-current))
+      (setq-default tab-width 4)
+      (setq-default indent-tabs-mode nil)
 
-  ;(show-paren-mode nil)
-  ;(set-face-background 'show-paren-match-face nil)
-  ;(set-face-underline-p 'show-paren-match-face "red")
-  (setq show-paren-delay 0.125) ; 陦ｨ遉ｺ縺ｾ縺ｧ縺ｮ遘呈焚 emacs24縺ｧ縺ｯ0縺?縺ｨ驥阪＞ 1x http://suzukima.hatenablog.com/entry/2012/08/16/232210
+      ;(show-paren-mode nil)
+      ;(set-face-background 'show-paren-match-face nil)
+      ;(set-face-underline-p 'show-paren-match-face "red")
+      (setq show-paren-delay 0.125) ; 陦ｨ遉ｺ縺ｾ縺ｧ縺ｮ遘呈焚 emacs24縺ｧ縺ｯ0縺?縺ｨ驥阪＞ 1x http://suzukima.hatenablog.com/entry/2012/08/16/232210
 
-  (size-indication-mode t)
+      (size-indication-mode t)
 
-  (setq-default show-trailing-whitespace t)
-  (set-face-background 'trailing-whitespace "#b14770")
+      (setq-default show-trailing-whitespace t)
+      (set-face-background 'trailing-whitespace "#b14770")
 
-  (defface hlline-face
-    '((((class color)
-    (background dark))
-       (:background "dark slate gray"))
-      (((class color)
-    (background light))
-       (:background  "#98FB98"))
-      (t
-       ()))
-    "*Face used by hl-line.")
-  (setq hl-line-face 'hlline-face)
+      (defface hlline-face
+        '((((class color)
+        (background dark))
+           (:background "dark slate gray"))
+          (((class color)
+        (background light))
+           (:background  "#98FB98"))
+          (t
+           ()))
+        "*Face used by hl-line.")
+      (setq hl-line-face 'hlline-face)
 
-  (display-time)
-  (column-number-mode t)
-  (line-number-mode t)
-  (setq inhibit-startup-echo-area-message -1)
-  (blink-cursor-mode 1)
-  (transient-mark-mode 1)
-  (set-scroll-bar-mode 'right); GUI emacs
-  (which-function-mode 1)
+      (display-time)
+      (column-number-mode t)
+      (line-number-mode t)
+      (blink-cursor-mode 1)
+      (transient-mark-mode 1)
+      (set-scroll-bar-mode 'right); GUI emacs
+      (which-function-mode 1)
 
-  (auto-image-file-mode t)
+      (auto-image-file-mode t)
 #+end_src
 ** Font
 #+begin_src emacs-lisp
@@ -351,29 +350,30 @@
 #+end_src
 * Scratch
 #+begin_src emacs-lisp
-  (defun my-make-scratch (&optional arg)
-    "DONT delete *scratch* buffer"
-    (interactive)
-    (progn
-      (set-buffer (get-buffer-create "*scratch*"))
-      (funcall initial-major-mode)
-      (erase-buffer)
-      (when (and initial-scratch-message (not inhibit-startup-message))
-        (insert initial-scratch-message))
-      (or arg (progn (setq arg 0)
-                     (switch-to-buffer "*scratch*")))
-      (cond ((= arg 0) (message "*scratch* is cleared up."))
-            ((= arg 1) (message "another *scratch* is created")))))
-  (add-hook 'kill-buffer-query-functions
-            (lambda ()
-              (if (string= "*scratch*" (buffer-name))
-                  (progn (my-make-scratch 0) nil)
-                t)))
+  (setq inhibit-startup-message nil)
+    (defun my-make-scratch (&optional arg)
+      "DONT delete *scratch* buffer"
+      (interactive)
+      (progn
+        (set-buffer (get-buffer-create "*scratch*"))
+        (funcall initial-major-mode)
+        (erase-buffer)
+        (when (and initial-scratch-message (not inhibit-startup-message))
+          (insert initial-scratch-message))
+        (or arg (progn (setq arg 0)
+                       (switch-to-buffer "*scratch*")))
+        (cond ((= arg 0) (message "*scratch* is cleared up."))
+              ((= arg 1) (message "another *scratch* is created")))))
+    (add-hook 'kill-buffer-query-functions
+              (lambda ()
+                (if (string= "*scratch*" (buffer-name))
+                    (progn (my-make-scratch 0) nil)
+                  t)))
 
-  (add-hook 'after-save-hook
-            (lambda ()
-              (unless (member (get-buffer "*scratch*") (buffer-list))
-                (my-make-scratch 1))))
+    (add-hook 'after-save-hook
+              (lambda ()
+                (unless (member (get-buffer "*scratch*") (buffer-list))
+                  (my-make-scratch 1))))
 
 #+END_SRC
 * Plugin
@@ -444,8 +444,7 @@
     :ensure t)
 
   (use-package which-key
-    :diminish which-key-mode
-    :hook (after-init . which-key-mode))
+    :ensure t)
 
   (use-package projectile
     :ensure t
@@ -640,15 +639,6 @@
 
   (setq kill-whole-line t)
  #+end_src
-*** iswitchb
-#+begin_src emacs-lisp
-  (iswitchb-mode 1)
-  (if (string-match "^23\." emacs-version)
-      (iswitchb-default-keybindings))
-  (setq read-buffer-function 'iswitchb-read-buffer)
-  (setq iswitchb-regexp nil)
-  (setq iswitchb-prompt-newbuffer nil)
-#+end_src
 *** cua-mode
 #+begin_src emacs-lisp
   ;;; cua-mode
