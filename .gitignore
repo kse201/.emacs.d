@@ -13,7 +13,10 @@ backups
 elpa/archives
 persp-confs
 elpa
-
+**/#*
+server
+transient
+auto-save-list
 !**/.gitkeep
 !.status.el
 inits/*.elc
