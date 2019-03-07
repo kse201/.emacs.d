@@ -48,23 +48,28 @@
 
            (defvar url-proxy-services
              (list (cons "no_proxy"  "^\\(localhost\\|10.*\\)")
-                   (cons "http" host_)))
+                   (cons "http" host_)
+                   (cons "https" host_)))
            (if auth_
                (defvar url-http-proxy-basic-auth-storage
                  (list (list host_ (cons "Proxy" auth_)))))
            )))
 #+end_src
 * Function/Macros
+** for emacs configuration func
 #+begin_src emacs-lisp
-  (defun edit-init ()
-    "edit .emacs.d"
+  (defun edit-config ()
+    "edit my config"
     (interactive)
-    (find-file "~/.emacs.d"))
-  ;;; open inits
-  (defun edit-init.el ()
-    "edit init.el"
+    (find-file "~/.emacs.d/config/init.org"))
+
+  (defun reload-config ()
+    "reload init.el"
     (interactive)
-    (find-file "~/.emacs.d/init.el"))
+    (load-file "~/.emacs.d/init.el"))
+#+end_src
+** others
+#+begin_src emacs-lisp
   ;;; open scratch
   (defun edit-scratch ()
     "edit *scratch*"
@@ -205,7 +210,30 @@
 
   (define-key global-map (kbd "C-m") 'newline-or-open-line)
 #+end_src
+* use-package
+#+begin_src emacs-lisp
+  (require 'package)
+
+  (package-initialize)
+  (setq package-archives
+        '(("gnu" . "http://elpa.gnu.org/packages/")
+          ("melpa" . "http://melpa.org/packages/")
+          ("org" . "http://orgmode.org/elpa/")))
+  (unless package-archive-contents (package-refresh-contents))
+  (when (not (package-installed-p 'use-package))
+    (package-install 'use-package))
+  (unless (require 'use-package nil t)
+    (defmacro use-package (&rest args)))
+#+end_src
 * UI
+** Tab
+#+begin_src emacs-lisp
+  (use-package tabbar
+    :ensure t
+    :config
+    (tabbar-mode))
+#+end_src
+** others
   #+begin_src emacs-lisp
       (setq scroll-preserve-screen-position nil)
       (setq next-screen-context-lines 1)
@@ -377,21 +405,6 @@
 
 #+END_SRC
 * Plugin
-** use-package
-#+begin_src emacs-lisp
-  (require 'package)
-
-  (package-initialize)
-  (setq package-archives
-        '(("gnu" . "http://elpa.gnu.org/packages/")
-          ("melpa" . "http://melpa.org/packages/")
-          ("org" . "http://orgmode.org/elpa/")))
-  (unless package-archive-contents (package-refresh-contents))
-  (when (not (package-installed-p 'use-package))
-    (package-install 'use-package))
-  (unless (require 'use-package nil t)
-    (defmacro use-package (&rest args)))
-#+end_src
 ** helm
 #+BEGIN_SRC emacs-lisp
 (use-package helm
@@ -480,6 +493,34 @@
   '(("l" "#+begin_src emacs-lisp\n?\n#+end_src" "<src lang=\"emacs-lisp\">\n?\n</src>")))
 #+end_src
 * Etc
+** Pomodoro
+#+begin_src emacs-lisp
+  (use-package org-pomodoro
+    :ensure t
+    :after org-agenda
+    :bind (:map org-agenda-mode-map
+                ("p" . org-pomodoro)))
+#+end_src
+** recentf
+#+begin_src emacs-lisp
+  (setq recentf-max-saved-items 100)
+  (setq recentf-exclude
+        '(
+          "/recentf"
+          "COMMIT_EDITMSG"
+          "/.?TAGS" "^/sudo:"
+          "/\\.emacs\\.d/games/*-scores"
+          "/\\.emacs\\.d/\\.cask/"))
+  (setq recentf-auto-save-timer (run-with-idle-timer 30 t 'recentf-save-list))
+
+  (recentf-mode 1)
+  (bind-key "C-c っ" 'helm-recentf)
+  (bind-key "C-c r" 'helm-recentf)
+#+end_src
+*** all cache will be cleared when opening remove file in offline
+#+begin_src emacs-lisp
+  (setq recentf-auto-cleanup 'never)
+#+end_src
 *** dont user dialog box
 #+begin_src emacs-lisp
   (setq use-dialog-box nil)
