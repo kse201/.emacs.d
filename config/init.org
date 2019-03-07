@@ -486,7 +486,19 @@
     :ensure t
     :config (global-set-key (kbd "C-x g") 'magit-status))
 
+  (use-package helm-ghq
+    :ensure t
+    :bind
+    ("C-c C-g" . helm-ghq))
 #+END_SRC
+** resolve PATH in GUI
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)))
+#+end_src
 * Org-mode
 #+BEGIN_SRC emacs-lisp
 (setq org-structure-template-alist
