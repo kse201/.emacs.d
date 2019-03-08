@@ -574,6 +574,10 @@
 #+begin_src emacs-lisp
 (setq org-agenda-files '("~/org/todo.org"))
 #+end_src
+** others
+#+begin_src emacs-lisp
+  (setq org-hide-leading-stars t)
+#+end_src
 * LSP
 #+begin_src emacs-lisp
   (use-package lsp-mode :ensure t
