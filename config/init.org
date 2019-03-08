@@ -277,8 +277,24 @@
     :commands (neotree-show neotree-hide neotree-dir neotree-find)
     :custom
     (neo-theme 'nerd2)
+    (projectile-switch-project-action 'neotree-projectile-action)
+    :init
+    (defun neotree-project-dir ()
+      "Open NeoTree using the git root."
+      (interactive)
+      (let ((project-dir (projectile-project-root))
+            (file-name (buffer-file-name)))
+        (neotree-toggle)
+        (if project-dir
+            (if (neo-global--window-exists-p)
+                (progn
+                  (neotree-dir project-dir)
+                  (neotree-find file-name)))
+          (message "Could not find git project root."))))
     :bind
-    ("<f10>" . neotree-projectile-action))
+    ("<f10>" . neotree-projectile-action)
+    ("C-c C-p" . neotree-project-dir)
+    )
 #+end_src
 ** rainbow indent
 #+begin_src emacs-lisp
@@ -321,18 +337,18 @@
 #+end_src
 ** minimap
 #+begin_src emacs-lisp
-    (use-package minimap :ensure t
-      :commands
-      (minimap-bufname minimap-create minimap-kill)
-      :custom
-      (minimap-major-modes '(prog-mode))
+  (use-package minimap :ensure t
+    :commands
+    (minimap-bufname minimap-create minimap-kill)
+    :custom
+    (minimap-major-modes '(prog-mode))
 
-      (minimap-window-location 'right)
-      (minimap-update-delay 0.2)
-      (minimap-minimum-width 20)
-      :bind
-      ("C-c m" . ladicle/toggle-minimap)
-      )
+    (minimap-window-location 'right)
+    (minimap-update-delay 0.2)
+    (minimap-minimum-width 20)
+    :bind
+    ("C-c m" . ladicle/toggle-minimap)
+    )
 #+end_src
 ** others
 *** show limit line
@@ -874,7 +890,7 @@ others
   (setq cursor-in-non-selected-windows nil)
   (setq-default indicate-empty-lines t)
   (setq isearch-lazy-highlight-initial-delay 0)
-  (setq initial-scratch-message "Scratch\n========\n\n")
+  (setq initial-scratch-message "; Scratch\n; ========\n\n")
 
   ;; line-space
   (setq-default line-spacing 1)
