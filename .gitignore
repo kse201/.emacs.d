@@ -23,3 +23,6 @@ inits/*.elc
 init.elc
 config/init.el
 projectile-bookmarks.eld
+projectile.cache
+bookmarks
+.lsp-session-v1

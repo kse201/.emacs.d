@@ -249,7 +249,19 @@
     :config
     (tabbar-mode))
 #+end_src
-** IDE Like
+** Window
+#+begin_src emacs-lisp
+  (use-package hydra :ensure t)
+  (use-package ace-window :ensure hydra
+    :functions hydra-frame-window/body
+    :bind
+    ("C-M-o" . hydra-frame-window/body)
+    :custom
+    (aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p))
+    :custom-face
+    (aw-leading-char-face ((t (:height 4.0 :foreground "#f1fa8c")))))
+#+end_src
+** IDE Like Tag list
 #+begin_src emacs-lisp
   (use-package imenu-list :ensure t)
 #+end_src
@@ -860,6 +872,6 @@
 #+end_src
 * local configration
 #+begin_src emacs-lisp
-(when (file-exists-p "~/.emacs.d/local.el")
-  (autoload 'local "~/.emacs.d/local.el"))
+  (when (file-exists-p "~/.emacs.d/local.el")
+    (load-file  "~/.emacs.d/local.el"))
 #+end_src
