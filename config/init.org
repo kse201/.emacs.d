@@ -230,11 +230,37 @@
     (package-install 'use-package))
   (unless (require 'use-package nil t)
     (defmacro use-package (&rest args)))
+  (use-package use-package-ensure-system-package
+    :ensure t)
+#+end_src
+
+default : install
+
+#+begin_src emacs-lisp
+  (use-package use-package-ensure
+    :custom
+    (use-package-always-ensure t))
+#+end_src
+
+Auto update package
+
+#+begin_src emacs-lisp
+  (use-package auto-package-update
+    :disabled
+    :custom
+    (auto-package-update-delete-old-versions t)
+    (auto-package-update-hide-results t)
+    :config
+    (auto-package-update-maybe))
 #+end_src
 * UI
+** Theme
+#+begin_src emacs-lisp
+  (use-package molokai-theme)
+#+end_src
 ** dashboard
 #+begin_src emacs-lisp
-  (use-package dashboard :ensure t
+  (use-package dashboard
       :diminish
       (dashboard-mode page-break-lines-mode)
       :custom
@@ -251,13 +277,12 @@
 ** Tab
 #+begin_src emacs-lisp
   (use-package tabbar
-    :ensure t
     :config
     (tabbar-mode))
 #+end_src
 ** Window
 #+begin_src emacs-lisp
-  (use-package hydra :ensure t)
+  (use-package hydra)
   (use-package ace-window :ensure hydra
     :functions hydra-frame-window/body
     :bind
@@ -269,7 +294,7 @@
 #+end_src
 ** IDE Like Tag list
 #+begin_src emacs-lisp
-    (use-package imenu-list :ensure t
+    (use-package imenu-list
       :bind
       ("<f11>" . imenu-list-smart-toggle)
       :custom
@@ -304,7 +329,7 @@
 #+end_src
 ** rainbow indent
 #+begin_src emacs-lisp
-  (use-package highlight-indent-guides :ensure t
+  (use-package highlight-indent-guides
     :config
     :hook
       ((prog-mode yaml-mode) . highlight-indent-guides-mode)
@@ -316,7 +341,7 @@
 ** paren
 *** rainbow delimiters
  #+begin_src emacs-lisp
-   (use-package rainbow-delimiters :ensure t
+   (use-package rainbow-delimiters
      :hook
      (prog-mode . rainbow-delimiters-mode))
  #+end_src
@@ -335,11 +360,17 @@
 
 #+end_src
 ** modeline
+*** powerline
+#+begin_src emacs-lisp
+  (use-package powerline
+    :config
+    (powerline-center-theme))
+#+end_src
 *** dont show unneccesary window
 #+begin_src emacs-lisp
-  (use-package hide-mode-line :ensure t
+  (use-package hide-mode-line
     :hook
-    ((imenu-list-minor-mode) . hide-mode-line-mode))
+    ((imenu-list-minor-mode minimap-mode) . hide-mode-line-mode))
 #+end_src
 ** minimap
 #+begin_src emacs-lisp
@@ -359,7 +390,7 @@
 ** others
 *** show limit line
 #+begin_src emacs-lisp
-  (use-package fill-column-indicator :ensure t
+  (use-package fill-column-indicator
     :hook
     ((markdown-mode
       python-mode
@@ -418,11 +449,22 @@ others
 #+end_src
 *** beacon
 #+begin_src emacs-lisp
- (use-package beacon :ensure t
+ (use-package beacon
     :custom
     (beacon-color "yellow")
     :config
     (beacon-mode 1))
+#+end_src
+*** etc
+#+begin_src emacs-lisp
+  (tool-bar-mode 0)
+  (scroll-bar-mode 1)
+  (menu-bar-mode 1)
+#+end_src
+
+show line number
+#+begin_src emacs-lisp
+(use-package hlinum)
 #+end_src
 ** Font
 #+begin_src emacs-lisp
@@ -495,27 +537,36 @@ others
       ("M-y" . backward-kill-word )
       ("C-x o" . browse-url-at-point )
       ("C-x C-g" . goto-line )
-      ;; window-move
-      ("C-x w h" . windmove-left)
-      ("C-x w j" . windmove-down)
-      ("C-x w k" . windmove-up)
-      ("C-x w l" . windmove-right)
-      ;; window-split
-      ("C-x SPC" . good-split-window)
-      ("C-x -" . split-window-vertically)
-      ("C-x |" . split-window-horizontally)
       ("C-c C-@" . move-to-mark)
       ("C-c C-e" . edit-init)
       ("C-x C-z" . nil)
       ("C-a" . my-beginning-of-indented-line)
-      ("M-p" . scroll-down)
-      ("M-n" . scroll-up)
-      ("M-g" . goto-line)
       ("C-M-h" . delete-horizontal-space)
       ("M-f" . forward-word)
       ))
 
   (define-key minibuffer-local-map (kbd "C-w") 'backward-kill-word)
+#+end_src
+
+** for scroll settings
+#+begin_src emacs-lisp
+  (define-many-keys global-map
+    '(("C-d" . scroll-down)
+      ("C-u" . scroll-up)
+      ("M-g" . goto-line)))
+#+end_src
+** movinng window
+#+begin_src emacs-lisp
+  (define-many-keys global-map
+      '(("C-x w h" . windmove-left)
+        ("C-x w j" . windmove-down)
+        ("C-x w k" . windmove-up)
+        ("C-x w l" . windmove-right)
+        ;; window-split
+        ("C-x SPC" . good-split-window)
+        ("C-x -" . split-window-vertically)
+        ("C-x |" . split-window-horizontally)
+        ))
 #+end_src
 * Scratch
 #+begin_src emacs-lisp
@@ -549,7 +600,6 @@ others
 ** helm
 #+BEGIN_SRC emacs-lisp
   (use-package helm
-    :ensure t
 
     :bind (("M-x" . helm-M-x)
            ("C-;" . helm-M-x)
@@ -581,7 +631,7 @@ others
 ** auto-complete
 
 #+BEGIN_SRC emacs-lisp
-  (use-package auto-complete :ensure t
+  (use-package auto-complete
     :config
     (require 'auto-complete-config)
     (global-auto-complete-mode t)
@@ -601,37 +651,25 @@ others
     (projectile-completion-system 'helm)
     (projectile-git-submodule-command nil))
 
-  (use-package helm-projectile :ensure t
+  (use-package helm-projectile
     :after (helm projectile)
     :config
     (helm-projectile-on))
 #+end_src
+** markdown
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :mode (("\\.md\\'". markdown-mode)))
+
+  (use-package markdown-preview-mode :ensure markdown-mode
+    :mode (("\\.md\\'". markdown-preview-mode)))
+#+end_src
 ** others
 #+begin_src emacs-lisp
-    (use-package markdown-mode
-      :ensure t
-      :mode (("\\.md\\'". markdown-mode)))
-
-    (use-package markdown-preview-mode
-      :ensure t
-      :mode (("\\.md\\'". markdown-preview-mode)))
-
-    (use-package rainbow-delimiters
-      :ensure t)
-
     (use-package yaml-mode
-      :ensure t
       :mode (("\\.ya?ml\\'". yaml-mode)))
 
-    (use-package powerline
-      :ensure t
-      :config
-      (powerline-center-theme))
-
-    (use-package hlinum
-      :ensure t)
-
-  (use-package git-gutter+ :ensure t
+  (use-package git-gutter+
     :custom
     (git-gutte+r:modified-sign "~")
     (git-gutter+:added-sign    "+")
@@ -639,41 +677,32 @@ others
     :config
     (global-git-gutter+-mode +1))
 
-    (use-package color-identifiers-mode
-      :ensure t)
-
-    (use-package molokai-theme
-      :ensure t)
+    (use-package color-identifiers-mode)
 
     (use-package which-key
-      :ensure t
       :hook (after-init . which-key-mode))
 
     (use-package hl-todo
-      :ensure t
       :config
       (progn
         (setq hl-todo-activate-in-modes '(prog-mode markdown-mode))
         (global-hl-todo-mode 1)))
 
-    (use-package editorconfig
-      :ensure t)
+    (use-package editorconfig)
 
     (use-package magit
-      :ensure t
       :config (global-set-key (kbd "C-x g") 'magit-status))
+    (use-package ghq)
 
-    (use-package helm-ghq
-      :ensure t
+    (use-package helm-ghq :ensure ghq
       :bind
       ("C-c C-g" . helm-ghq))
 
-  (use-package ag :ensure t)
+  (use-package ag)
 #+END_SRC
 ** resolve PATH in GUI
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell
-    :ensure t
     :config
     (when (memq window-system '(mac ns x))
       (exec-path-from-shell-initialize)))
@@ -710,7 +739,7 @@ others
 #+end_src
 ** org-bullets
 #+begin_src emacs-lisp
-  (use-package org-bullets :ensure t
+  (use-package org-bullets
     :hook (org-mode . org-bullets-mode))
 #+end_src
 ** others
@@ -719,26 +748,26 @@ others
 #+end_src
 * LSP
 #+begin_src emacs-lisp
-  (use-package lsp-mode :ensure t
+  (use-package lsp-mode
     :commands lsp)
 
-  (use-package company-lsp :ensure t)
-  (use-package lsp-ui :ensure t
+  (use-package company-lsp)
+  (use-package lsp-ui
     :config
     (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
-  (use-package company :ensure t
+  (use-package company
     :config
     (global-company-mode)
     (push 'company-lsp company-backends))
 #+end_src
 ** for python lsp
 #+begin_src emacs-lisp
-  (use-package python-mode :ensure t
+  (use-package python-mode
     :config
     (add-hook 'python-mode-hook #'lsp))
 
-  (use-package conda :ensure t
+  (use-package conda
     :init
     (custom-set-variables '(conda-anaconda-home "~/miniconda3")))
 #+end_src
@@ -746,7 +775,6 @@ others
 ** Pomodoro
 #+begin_src emacs-lisp
   (use-package org-pomodoro
-    :ensure t
     :after org-agenda
     :bind (:map org-agenda-mode-map
                 ("p" . org-pomodoro)))
@@ -767,6 +795,7 @@ others
   (bind-key "C-c っ" 'helm-recentf)
   (bind-key "C-c r" 'helm-recentf)
 #+end_src
+** etc
 *** all cache will be cleared when opening remove file in offline
 #+begin_src emacs-lisp
   (setq recentf-auto-cleanup 'never)
@@ -851,9 +880,6 @@ others
     (global-auto-revert-mode 1)
 
     (defalias 'yes-or-no-p 'y-or-n-p)
-    (tool-bar-mode 0)
-    (scroll-bar-mode 1)
-    (menu-bar-mode 1)
     (set-locale-environment nil)
 
   ;; 部分一致の補間機能を使う
