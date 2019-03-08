@@ -451,13 +451,20 @@
 #+begin_src emacs-lisp
 ;  (setq helm-delete-minibuffer-contents-from-point t)
 #+end_src
-** others
+** auto-complete
+
 #+BEGIN_SRC emacs-lisp
-    (use-package auto-complete
-      :ensure t
-      :config
-      (progn (require 'auto-complete-config)
-             (global-auto-complete-mode t)))
+  (use-package auto-complete :ensure t
+    :config
+    (require 'auto-complete-config)
+    (global-auto-complete-mode t)
+    (setq ac-use-menu-map t)
+    (setq ac-use-fuzzy t)
+    )
+#+end_src
+
+** others
+#+begin_src emacs-lisp
     (use-package markdown-mode
       :ensure t
       :mode (("\\.md\\'". markdown-mode)))
@@ -812,4 +819,9 @@
   (setq history-length 1000)
 
   (setq enable-recursice-minibuffers t)
+#+end_src
+* local configration
+#+begin_src emacs-lisp
+(when (file-exists-p "~/.emacs.d/local.el")
+  (autoload 'local "~/.emacs.d/local.el"))
 #+end_src
