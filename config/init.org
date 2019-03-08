@@ -407,16 +407,31 @@
 * Plugin
 ** helm
 #+BEGIN_SRC emacs-lisp
-(use-package helm
-  :ensure t
+  (use-package helm
+    :ensure t
 
-  :bind (("M-x" . helm-M-x)
-         ("M-<f5>" . helm-find-files)
-         ([f10] . helm-buffers-list)
-         ([S-f10] . helm-recentf)))
+    :bind (("M-x" . helm-M-x)
+           ("C-x C-f" . helm-find-files)
+           ("C-x C-r" . helm-recentf)
+           ("C-x  b". helm-buffers-list)
+           ("M-y" . helm-show-kill-ring))
+    :config
+    ;; enable C-h as delete in helm-minibuffer
+    (define-key helm-map (kbd "C-h") 'delete-backward-char)
+    ;; Emulate `kill-line' in helm minibuffer
+    (setq helm-delete-minibuffer-contents-from-point t)
+    )
 
 #+END_SRC
-
+** enable C-h as delete in helm-minibuffer
+#+begin_src emacs-lisp
+ ; (define-key helm-map (kbd "C-h") 'delete-backward-char)
+;  (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
+#+end_src
+** Emulate `kill-line' in helm minibuffer
+#+begin_src emacs-lisp
+;  (setq helm-delete-minibuffer-contents-from-point t)
+#+end_src
 ** others
 #+BEGIN_SRC emacs-lisp
   (use-package auto-complete
@@ -465,10 +480,12 @@
     (projectile-mode t)
     (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-    (setq projectile-completion-system 'helm))
+    (setq projectile-completion-system 'helm)
+    (setq projectile-git-submodule-command nil))
 
   (use-package helm-projectile
     :ensure t
+    :after (helm projectile)
     :config
     (helm-projectile-on))
 
@@ -500,9 +517,34 @@
       (exec-path-from-shell-initialize)))
 #+end_src
 * Org-mode
+** keybind
+#+begin_src emacs-lisp
+  (define-key global-map "\C-cc" 'org-capture)
+  (define-key global-map "\C-ca" 'org-agenda)
+#+end_src
+** file path
+#+begin_src emacs-lisp
+  (setq org-agenda-files '("~/org"))
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+#+end_src
+** snippet
 #+BEGIN_SRC emacs-lisp
 (setq org-structure-template-alist
   '(("l" "#+begin_src emacs-lisp\n?\n#+end_src" "<src lang=\"emacs-lisp\">\n?\n</src>")))
+#+end_src
+** org templates
+#+begin_src emacs-lisp
+  (setq org-capture-templates
+        '(("t" "New TODO" entry
+           (file+headline "~/org/todo.org" "TODO")
+           "* TODO %?\n\n")
+          ("m" "Memo" entry
+           (file+headline "~/org/memo.org" "MEMO")
+           "* %U%?\n%i\n%a")))
+#+end_src
+** show todo in agenda
+#+begin_src emacs-lisp
+(setq org-agenda-files '("~/org/todo.org"))
 #+end_src
 * Etc
 ** Pomodoro
