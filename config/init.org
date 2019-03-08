@@ -319,6 +319,21 @@
     :hook
     ((imenu-list-minor-mode) . hide-mode-line-mode))
 #+end_src
+** minimap
+#+begin_src emacs-lisp
+    (use-package minimap :ensure t
+      :commands
+      (minimap-bufname minimap-create minimap-kill)
+      :custom
+      (minimap-major-modes '(prog-mode))
+
+      (minimap-window-location 'right)
+      (minimap-update-delay 0.2)
+      (minimap-minimum-width 20)
+      :bind
+      ("C-c m" . ladicle/toggle-minimap)
+      )
+#+end_src
 ** others
 *** show limit line
 #+begin_src emacs-lisp
