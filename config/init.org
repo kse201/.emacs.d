@@ -226,6 +226,22 @@
     (defmacro use-package (&rest args)))
 #+end_src
 * UI
+** dashboard
+#+begin_src emacs-lisp
+  (use-package dashboard :ensure t
+      :diminish
+      (dashboard-mode page-break-lines-mode)
+      :custom
+      (dashboard-startup-banner 3)
+      (dashboard-items '((recents . 15)
+		 (projects . 5)
+		 (bookmarks . 5)
+		 (agenda)))
+      :hook
+      (after-init . dashboard-setup-startup-hook)
+      :config
+      (setq inhibit-startup-screen t))
+#+end_src
 ** Tab
 #+begin_src emacs-lisp
   (use-package tabbar
