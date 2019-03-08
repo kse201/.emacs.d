@@ -546,6 +546,31 @@
 #+begin_src emacs-lisp
 (setq org-agenda-files '("~/org/todo.org"))
 #+end_src
+* LSP
+#+begin_src emacs-lisp
+  (use-package lsp-mode :ensure t
+    :commands lsp)
+
+  (use-package company-lsp :ensure t)
+  (use-package lsp-ui :ensure t
+    :config
+    (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+  (use-package company :ensure t
+    :config
+    (global-company-mode)
+    (push 'company-lsp company-backends))
+#+end_src
+** for python lsp
+#+begin_src emacs-lisp
+  (use-package python-mode :ensure t
+    :config
+    (add-hook 'python-mode-hook #'lsp))
+
+  (use-package conda :ensure t
+    :init
+    (custom-set-variables '(conda-anaconda-home "~/miniconda3")))
+#+end_src
 * Etc
 ** Pomodoro
 #+begin_src emacs-lisp
