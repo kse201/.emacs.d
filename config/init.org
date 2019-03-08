@@ -233,6 +233,21 @@
     :config
     (tabbar-mode))
 #+end_src
+** IDE Like
+#+begin_src emacs-lisp
+  (use-package imenu-list :ensure t)
+#+end_src
+** rainbow indent
+#+begin_src emacs-lisp
+  (use-package highlight-indent-guides :ensure t
+    :config
+    :hook
+      ((prog-mode yaml-mode) . highlight-indent-guides-mode)
+      :custom
+      (highlight-indent-guides-auto-enabled t)
+      (highlight-indent-guides-responsive t)
+      (highlight-indent-guides-method 'character))
+#+end_src
 ** others
   #+begin_src emacs-lisp
       (setq scroll-preserve-screen-position nil)
@@ -284,6 +299,10 @@
       (which-function-mode 1)
 
       (auto-image-file-mode t)
+#+end_src
+*** show line mode
+#+begin_src emacs-lisp
+  (global-linum-mode t)
 #+end_src
 ** Font
 #+begin_src emacs-lisp
@@ -434,79 +453,81 @@
 #+end_src
 ** others
 #+BEGIN_SRC emacs-lisp
-  (use-package auto-complete
-    :ensure t
-    :config
-    (progn (require 'auto-complete-config)
-           (global-auto-complete-mode t)))
-  (use-package markdown-mode
-    :ensure t
-    :mode (("\\.md\\'". markdown-mode)))
+    (use-package auto-complete
+      :ensure t
+      :config
+      (progn (require 'auto-complete-config)
+             (global-auto-complete-mode t)))
+    (use-package markdown-mode
+      :ensure t
+      :mode (("\\.md\\'". markdown-mode)))
 
-  (use-package markdown-preview-mode
-    :ensure t
-    :mode (("\\.md\\'". markdown-preview-mode)))
+    (use-package markdown-preview-mode
+      :ensure t
+      :mode (("\\.md\\'". markdown-preview-mode)))
 
-  (use-package rainbow-delimiters
-    :ensure t)
+    (use-package rainbow-delimiters
+      :ensure t)
 
-  (use-package yaml-mode
-    :ensure t
-    :mode (("\\.ya?ml\\'". yaml-mode)))
+    (use-package yaml-mode
+      :ensure t
+      :mode (("\\.ya?ml\\'". yaml-mode)))
 
-  (use-package powerline
-    :ensure t
-    :config
-    (powerline-center-theme))
+    (use-package powerline
+      :ensure t
+      :config
+      (powerline-center-theme))
 
-  (use-package hlinum
-    :ensure t)
+    (use-package hlinum
+      :ensure t)
 
-  (use-package git-gutter+
-    :ensure t)
+    (use-package git-gutter+
+      :ensure t)
 
-  (use-package color-identifiers-mode
-    :ensure t)
+    (use-package color-identifiers-mode
+      :ensure t)
 
-  (use-package molokai-theme
-    :ensure t)
+    (use-package molokai-theme
+      :ensure t)
 
-  (use-package which-key
-    :ensure t)
+    (use-package which-key
+      :ensure t)
 
-  (use-package projectile
-    :ensure t
-    :config
-    (projectile-mode t)
-    (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-    (setq projectile-completion-system 'helm)
-    (setq projectile-git-submodule-command nil))
+    (use-package projectile
+      :ensure t
+      :config
+      (projectile-mode t)
+      (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+      (setq projectile-completion-system 'helm)
+      (setq projectile-git-submodule-command nil))
 
-  (use-package helm-projectile
-    :ensure t
-    :after (helm projectile)
-    :config
-    (helm-projectile-on))
+    (use-package helm-projectile
+      :ensure t
+      :after (helm projectile)
+      :config
+      (helm-projectile-on))
 
-  (use-package hl-todo
-    :ensure t
-    :config
-    (progn
-      (setq hl-todo-activate-in-modes '(prog-mode markdown-mode))
-      (global-hl-todo-mode 1)))
+    (use-package hl-todo
+      :ensure t
+      :config
+      (progn
+        (setq hl-todo-activate-in-modes '(prog-mode markdown-mode))
+        (global-hl-todo-mode 1)))
 
-  (use-package editorconfig
-    :ensure t)
+    (use-package editorconfig
+      :ensure t)
 
-  (use-package magit
-    :ensure t
-    :config (global-set-key (kbd "C-x g") 'magit-status))
+    (use-package magit
+      :ensure t
+      :config (global-set-key (kbd "C-x g") 'magit-status))
 
-  (use-package helm-ghq
-    :ensure t
-    :bind
-    ("C-c C-g" . helm-ghq))
+    (use-package helm-ghq
+      :ensure t
+      :bind
+      ("C-c C-g" . helm-ghq))
+
+  (use-package ag :ensure t)
 #+END_SRC
 ** resolve PATH in GUI
 #+begin_src emacs-lisp
