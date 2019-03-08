@@ -58,12 +58,12 @@
 * Function/Macros
 ** for emacs configuration func
 #+begin_src emacs-lisp
-  (defun edit-config ()
+  (defun init-edit ()
     "edit my config"
     (interactive)
     (find-file "~/.emacs.d/config/init.org"))
 
-  (defun reload-config ()
+  (defun init-reload ()
     "reload init.el"
     (interactive)
     (load-file "~/.emacs.d/init.el"))
@@ -248,6 +248,13 @@
       (highlight-indent-guides-responsive t)
       (highlight-indent-guides-method 'character))
 #+end_src
+** modeline
+*** dont show unneccesary window
+#+begin_src emacs-lisp
+  (use-package hide-mode-line :ensure t
+    :hook
+    ((imenu-list-minor-mode) . hide-mode-line-mode))
+#+end_src
 ** others
   #+begin_src emacs-lisp
       (setq scroll-preserve-screen-position nil)
@@ -394,6 +401,8 @@
       ("C-M-h" . delete-horizontal-space)
       ("M-f" . forward-word)
       ))
+
+  (define-key minibuffer-local-map (kbd "C-w") 'backward-kill-word)
 #+end_src
 * Scratch
 #+begin_src emacs-lisp
@@ -430,15 +439,18 @@
     :ensure t
 
     :bind (("M-x" . helm-M-x)
+           ("C-;" . helm-M-x)
            ("C-x C-f" . helm-find-files)
            ("C-x C-r" . helm-recentf)
            ("C-x  b". helm-buffers-list)
+           ("C-c  b". helm-buffers-list)
            ("M-y" . helm-show-kill-ring))
     :config
     ;; enable C-h as delete in helm-minibuffer
     (define-key helm-map (kbd "C-h") 'delete-backward-char)
     ;; Emulate `kill-line' in helm minibuffer
     (setq helm-delete-minibuffer-contents-from-point t)
+    (define-key helm-map (kbd "C-w") 'backward-kill-word)
     )
 
 #+END_SRC
@@ -498,7 +510,8 @@
       :ensure t)
 
     (use-package which-key
-      :ensure t)
+      :ensure t
+      :hook (after-init . which-key-mode))
 
     (use-package projectile
       :ensure t
@@ -573,6 +586,11 @@
 ** show todo in agenda
 #+begin_src emacs-lisp
 (setq org-agenda-files '("~/org/todo.org"))
+#+end_src
+** org-bullets
+#+begin_src emacs-lisp
+  (use-package org-bullets :ensure t
+    :hook (org-mode . org-bullets-mode))
 #+end_src
 ** others
 #+begin_src emacs-lisp
