@@ -27,3 +27,4 @@ bookmarks
 .lsp-session-v1
 
 local.el.d
+conf.org.d/*.el

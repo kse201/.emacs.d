@@ -67,7 +67,7 @@
   (defun init-edit ()
     "edit my config"
     (interactive)
-    (find-file "~/.emacs.d/config/init.org"))
+    (find-file (expand-file-name "init.org" my-config-dir)))
 
   (defun init-reload ()
     "reload init.el"
@@ -256,7 +256,7 @@ Auto update package
 * UI
 ** Theme
 #+begin_src emacs-lisp
-  (use-package molokai-theme)
+  (use-package molokai-theme :disabled)
 #+end_src
 ** dashboard
 #+begin_src emacs-lisp
