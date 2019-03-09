@@ -368,11 +368,24 @@ Auto update package
 
 #+end_src
 ** modeline
-*** powerline
+*** modeline customize
 #+begin_src emacs-lisp
-  (use-package powerline
+  (use-package powerline :disabled
     :config
     (powerline-center-theme))
+
+  (use-package telephone-line
+    :config
+    (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
+        telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+        telephone-line-primary-right-separator 'telephone-line-cubed-right
+        telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
+  (setq telephone-line-height 24
+        telephone-line-evil-use-short-tag t)
+    (telephone-line-mode 1)
+  
+
+    )
 #+end_src
 *** dont show unneccesary window
 #+begin_src emacs-lisp
