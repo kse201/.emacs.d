@@ -395,6 +395,13 @@ Auto update package
     ("C-c m" . ladicle/toggle-minimap)
     )
 #+end_src
+** ido (Interactive Do)
+#+begin_src emacs-lisp
+  (ido-mode 1)
+  (ido-everywhere 1)
+  (ido-ubiquitous-mode 1)
+#+end_src
+
 ** others
 *** show limit line
 #+begin_src emacs-lisp
@@ -499,14 +506,6 @@ show line number
   ;(require 'auto-save-buffers)
   ;(run-with-idle-timer 5 t 'auto-save-buffers)
   ;; http://d.hatena.ne.jp/tomoya/20110217/1297928222
-  (when (require 'recentf-ext nil t)
-    (setq recentf-max-saved-items 500)
-    (setq recentf-exclude '(".recentf"))
-    (setq recentf-auto-cleanup 10)
-    (setq recentf-auto-save-timer
-      (run-with-idle-timer 30 t 'recentf-save-list))
-    (recentf-mode 1))
-
   (setq make-backup-files nil)
   (setq auto-save-default nil)
   (add-to-list 'backup-directory-alist
@@ -639,13 +638,13 @@ show line number
 ** auto-complete
 
 #+BEGIN_SRC emacs-lisp
-  (use-package auto-complete
-    :config
-    (require 'auto-complete-config)
-    (global-auto-complete-mode t)
-    (setq ac-use-menu-map t)
-    (setq ac-use-fuzzy t)
-    )
+    (use-package auto-complete
+      :config
+      (global-auto-complete-mode t)
+      :custom
+      (ac-use-menu-map t)
+      (ac-use-fuzzy t)
+      (ac-comphist-file (my-emacs-var-dir "ac-comphist.dat")))
 #+end_src
 
 ** projectile
@@ -792,16 +791,15 @@ show line number
   (setq recentf-max-saved-items 100)
   (setq recentf-exclude
         '(
-          "/recentf"
+          "ido.last",
+          "recentf"
           "COMMIT_EDITMSG"
           "/.?TAGS" "^/sudo:"
-          "/\\.emacs\\.d/games/*-scores"
-          "/\\.emacs\\.d/\\.cask/"))
+          "/\\.emacs\\.d/games/*-scores"))
   (setq recentf-auto-save-timer (run-with-idle-timer 30 t 'recentf-save-list))
-
-  (recentf-mode 1)
-  (bind-key "C-c っ" 'helm-recentf)
+  (setq recentf-save-file (my-emacs-var-dir "recentf"))
   (bind-key "C-c r" 'helm-recentf)
+  (recentf-mode 1)
 #+end_src
 ** etc
 *** all cache will be cleared when opening remove file in offline
@@ -829,12 +827,6 @@ show line number
 *** Auto-Insert File
 #+begin_src emacs-lisp
     (auto-insert-mode t)
-#+end_src
-*** ido.el
-#+begin_src emacs-lisp
-    ;;; ido.el
-    (ido-mode 1)                            ; コマンドがidoのものに置き換わる
-    (ido-everywhere 1)                      ; バッファ名・ファイル名入力全てがidoに置き換わる
 #+end_src
 *** output a result of eval
 #+begin_src emacs-lisp
@@ -988,6 +980,11 @@ show line number
           interactive-only
           ;; make-local
           ))
+#+end_src
+
+#+begin_src emacs-lisp
+  ;; tramp
+  (setq tramp-persistency-file-name (my-emacs-var-dir "tramp"))
 #+end_src
 ** Turnig
 #+begin_src emacs-lisp
