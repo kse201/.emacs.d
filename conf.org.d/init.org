@@ -216,6 +216,14 @@
 
   (define-key global-map (kbd "C-m") 'newline-or-open-line)
 #+end_src
+
+** get fullpath
+#+begin_src emacs-lisp
+  (defvar my-emacs-var-dir (expand-file-name "var/" user-emacs-directory))
+  (defun my-emacs-var-dir (&rest args)
+    (concat my-emacs-var-dir (mapconcat 'identity args "/")))
+  (if (not (file-directory-p my-emacs-var-dir)) (make-directory my-emacs-var-dir))
+#+end_src
 * use-package
 #+begin_src emacs-lisp
   (require 'package)
@@ -817,8 +825,6 @@ show line number
 
     (setq max-specpdl-size 6000)
     (setq max-lisp-eval-depth 1000)
-    ;; save mini-buffer history
-    (savehist-mode 1)
 #+end_src
 *** Auto-Insert File
 #+begin_src emacs-lisp
@@ -961,6 +967,12 @@ show line number
   (cua-mode t)
   (setq cua-enable-cua-keys nil)
 #+end_src
+*** history
+#+begin_src emacs-lisp
+  (savehist-mode 1)
+  (setq savehist-file (my-emacs-var-dir "history"))
+  (setq history-length 1000)
+#+end_src
 *** supress Warning
 #+begin_src emacs-lisp
 
@@ -983,8 +995,6 @@ show line number
   (setq gc-cons-threshold (* 5242880 2))
   ;; log size
   (setq message-log-max 1000)
-  ;; history
-  (setq history-length 1000)
 
   (setq enable-recursice-minibuffers t)
 #+end_src
