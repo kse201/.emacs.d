@@ -8,7 +8,6 @@ places
 ido.last
 ac-comphist.dat
 el-get
-local.el
 backups
 elpa/archives
 persp-confs
@@ -26,3 +25,5 @@ projectile-bookmarks.eld
 projectile.cache
 bookmarks
 .lsp-session-v1
+
+local.el.d
