@@ -737,8 +737,9 @@ show line number
 #+end_src
 ** snippet
 #+BEGIN_SRC emacs-lisp
-(setq org-structure-template-alist
-  '(("l" "#+begin_src emacs-lisp\n?\n#+end_src" "<src lang=\"emacs-lisp\">\n?\n</src>")))
+  (setq org-structure-template-alist
+        '(("l" "#+begin_src emacs-lisp\n?\n#+end_src" "<src lang=\"emacs-lisp\">\n?\n</src>")
+          ("q" "#+begin_quote\n?\n#+end_quote")))
 #+end_src
 ** org templates
 #+begin_src emacs-lisp
