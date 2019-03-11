@@ -620,13 +620,11 @@ show line number
 ** helm
 #+BEGIN_SRC emacs-lisp
   (use-package helm
-
     :bind (("M-x" . helm-M-x)
            ("C-;" . helm-M-x)
            ("C-x C-f" . helm-find-files)
+           ("C-x C-b" . helm-buffers-list)
            ("C-x C-r" . helm-recentf)
-           ("C-x  b". helm-buffers-list)
-           ("C-c  b". helm-buffers-list)
            ("M-y" . helm-show-kill-ring)
            :map helm-map
            ;; enable C-h as delete in helm-minibuffer
@@ -735,7 +733,6 @@ show line number
 #+end_src
 ** file path
 #+begin_src emacs-lisp
-  (setq org-agenda-files '("~/org"))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
 #+end_src
 ** snippet
@@ -747,15 +744,15 @@ show line number
 #+begin_src emacs-lisp
   (setq org-capture-templates
         '(("t" "New TODO" entry
-           (file+headline "~/org/todo.org" "TODO")
+           (file+headline (expand-file-name "todo.org" org-directory) "TODO")
            "* TODO %?\n\n")
           ("m" "Memo" entry
-           (file+headline "~/org/memo.org" "MEMO")
+           (file+headline (expand-file-name "memo.org" org-directory) "MEMO")
            "* %U%?\n%i\n%a")))
 #+end_src
 ** show todo in agenda
 #+begin_src emacs-lisp
-(setq org-agenda-files '("~/org/todo.org"))
+  (setq org-agenda-files '((expand-file-name "todo.org" org-directory)"))
 #+end_src
 ** org-bullets
 #+begin_src emacs-lisp
