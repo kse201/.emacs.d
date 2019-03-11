@@ -21,19 +21,20 @@
   ;; Language.
   (set-language-environment 'Japanese)
   ;; Coding system.
-  (set-default-coding-systems 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-buffer-file-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8-unix)
+  (set-keyboard-coding-system 'utf-8-unix)
+  (prefer-coding-system 'utf-8-unix)
+  (set-terminal-coding-system 'utf-8-unix)
+  (set-buffer-file-coding-system 'utf-8-unix)
+  (prefer-coding-system 'utf-8-unix)
   ;; fileformant
   (when (eq system-type 'darwin)
     (require 'ucs-normalize)
-    (setq file-name-coding-system 'utf-8)
-    (setq locale-coding-system 'utf-8))
-  (when (eq system-type 'windows-nt)
-    (set-file-name-coding-system 'cp932)
-    (setq locale-coding-system 'cp932))
+    (setq file-name-coding-system 'utf-8-unix)
+    (setq locale-coding-system 'utf-8-unix))
+   (when (eq system-type 'windows-nt)
+     (set-file-name-coding-system 'cp932)
+     (setq locale-coding-system 'utf-8-unix))
 #+end_src
 ** show encodings
 #+begin_src emacs-lisp
