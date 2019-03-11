@@ -571,8 +571,8 @@ show line number
 ** for scroll settings
 #+begin_src emacs-lisp
   (define-many-keys global-map
-    '(("C-d" . scroll-down)
-      ("C-u" . scroll-up)
+    '(("C-d" . scroll-up)
+      ("C-u" . scroll-down)
       ("M-g" . goto-line)))
 #+end_src
 ** movinng window
