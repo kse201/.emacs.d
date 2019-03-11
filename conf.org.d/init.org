@@ -1011,5 +1011,8 @@ show line number
 #+end_src
 * local configration
 #+begin_src emacs-lisp
-  (add-to-load-path  "local.el.d")
+  (when (file-exists-p (expand-file-name "local.el.d" user-emacs-directory))
+    (use-package "init-loader"
+      :config
+      (init-loader-load (expand-file-name "local.el.d" user-emacs-directory))))
 #+end_src
