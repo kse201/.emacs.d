@@ -808,7 +808,8 @@ show line number
           "recentf"
           "COMMIT_EDITMSG"
           "/.?TAGS" "^/sudo:"
-          "/\\.emacs\\.d/games/*-scores"))
+          "/\\.emacs\\.d/games/*-scores"
+          "/\\.emacs\\.d/elpa/**/*.el"))
   (setq recentf-auto-save-timer (run-with-idle-timer 30 t 'recentf-save-list))
   (setq recentf-save-file (my-emacs-var-dir "recentf"))
   (bind-key "C-c r" 'helm-recentf)
