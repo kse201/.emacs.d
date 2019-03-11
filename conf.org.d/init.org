@@ -413,7 +413,6 @@ Auto update package
 #+begin_src emacs-lisp
   (ido-mode 1)
   (ido-everywhere 1)
-  (ido-ubiquitous-mode 1)
 #+end_src
 
 ** others
