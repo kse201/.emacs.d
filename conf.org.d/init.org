@@ -753,7 +753,7 @@ show line number
 #+end_src
 ** show todo in agenda
 #+begin_src emacs-lisp
-  (setq org-agenda-files '((expand-file-name "todo.org" org-directory)"))
+  (setq org-agenda-files '((expand-file-name "todo.org" org-directory)))
 #+end_src
 ** org-bullets
 #+begin_src emacs-lisp
