@@ -238,10 +238,15 @@
   (require 'package)
 
   (package-initialize)
-  (setq package-archives
-        '(("gnu" . "http://elpa.gnu.org/packages/")
-          ("melpa" . "http://melpa.org/packages/")
-          ("org" . "http://orgmode.org/elpa/")))
+  (cond ((getenv "HTTP_PROXY")
+	 (setq package-archives
+	       '(("gnu" . "http://elpa.gnu.org/packages/")
+		 ("melpa" . "http://melpa.org/packages/"))))
+	(t
+	 (setq package-archives
+	       '(("gnu" . "http://elpa.gnu.org/packages/")
+		 ("melpa" . "http://melpa.org/packages/")
+		 ("org" . "http://orgmode.org/elpa/")))))
   (unless package-archive-contents (package-refresh-contents))
   (when (not (package-installed-p 'use-package))
     (package-install 'use-package))
