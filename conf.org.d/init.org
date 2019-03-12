@@ -312,7 +312,7 @@ Auto update package
 #+end_src
 ** IDE Like File Tree
 #+begin_src emacs-lisp
-  (use-package neotree :ensure projectile
+  (use-package neotree
     :after projectile
     :commands (neotree-show neotree-hide neotree-dir neotree-find)
     :custom
@@ -710,7 +710,9 @@ show line number
 
     (use-package magit
       :config (global-set-key (kbd "C-x g") 'magit-status))
-    (use-package ghq)
+
+  (use-package ghq
+    :if (executable-find  "ghq"))
 
     (use-package helm-ghq :ensure ghq
       :bind
@@ -758,6 +760,7 @@ show line number
 ** org-bullets
 #+begin_src emacs-lisp
   (use-package org-bullets
+    :unless (eq system-type 'windows-nt)
     :hook (org-mode . org-bullets-mode))
 #+end_src
 ** others
