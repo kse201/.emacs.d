@@ -755,7 +755,8 @@ show line number
 #+end_src
 ** show todo in agenda
 #+begin_src emacs-lisp
-  (setq org-agenda-files '((expand-file-name "todo.org" org-directory)))
+  (setq org-agenda-files '((expand-file-name "todo.org" org-directory)
+                           (expand-file-name "schedule.org" org-directory)))
 #+end_src
 ** org-bullets
 #+begin_src emacs-lisp
@@ -764,8 +765,17 @@ show line number
     :hook (org-mode . org-bullets-mode))
 #+end_src
 ** others
+
+*** todo keywords
+
+#+begin_src emacs-lisp
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "InProgress(p)" "|" "DONE(d)" "SOMEDAY(s)")))
+#+end_src
+
 #+begin_src emacs-lisp
   (setq org-hide-leading-stars t)
+  (setq org-pretty-entities t)
 #+end_src
 * LSP
 #+begin_src emacs-lisp
