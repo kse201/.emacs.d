@@ -557,7 +557,6 @@ make backup files
       ("C-c :" . uncomment-region )
       ("C-\\" . nil )
       ("C-m" . newline-and-indent)
-      ("C-c l" . toggle-truncate-lines)
       ("C-t" . nil)
       ;;    ("C-x C-o" . my-other-window)
       ("M-y" . backward-kill-word )
