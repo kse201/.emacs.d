@@ -19,7 +19,8 @@
 * FileFormat
 #+begin_src emacs-lisp
   ;; Language.
-  (set-language-environment 'Japanese)
+  (set-language-environment 'utf-8)
+
   ;; Coding system.
   (set-default-coding-systems 'utf-8-unix)
   (set-keyboard-coding-system 'utf-8-unix)
@@ -27,14 +28,21 @@
   (set-terminal-coding-system 'utf-8-unix)
   (set-buffer-file-coding-system 'utf-8-unix)
   (prefer-coding-system 'utf-8-unix)
+
+  (unless (eq system-type 'windows-nt)
+    (set-selection-coding-system 'utf-8))
+
+  ;;disable CJK coding/encoding (Chinese/Japanese/Korean characters)
+  (setq utf-translate-cjk-mode nil)
+
   ;; fileformant
   (when (eq system-type 'darwin)
     (require 'ucs-normalize)
-    (setq file-name-coding-system 'utf-8-unix)
+    (setq file-name-coding-system 'utf-38-unix)
     (setq locale-coding-system 'utf-8-unix))
-   (when (eq system-type 'windows-nt)
-     (set-file-name-coding-system 'cp932)
-     (setq locale-coding-system 'utf-8-unix))
+  (when (eq system-type 'windows-nt)
+    (set-file-name-coding-system 'cp932)
+    (setq locale-coding-system 'utf-8-unix))
 #+end_src
 ** show encodings
 #+begin_src emacs-lisp
