@@ -1,0 +1,104 @@
+* Org-mode
+** keybind
+   :PROPERTIES:
+   :ID:       9929a5d9-dd8f-4423-a505-00c9e3a5a17c
+   :END:
+#+begin_src emacs-lisp
+  (define-key global-map "\C-cc" 'org-capture)
+  (define-key global-map "\C-ca" 'org-agenda)
+  (define-key global-map "\C-cl" 'org-store-link)
+#+end_src
+** file path
+#+begin_src emacs-lisp
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+#+end_src
+** snippet
+#+BEGIN_SRC emacs-lisp
+  (setq org-structure-template-alist
+        '(("l" "#+begin_src emacs-lisp\n?\n#+end_src" "<src lang=\"emacs-lisp\">\n?\n</src>")
+          ("s" "#+begin_src\n?\n#+end_src" "<src>\n?\n</src>")
+          ("q" "#+begin_quote\n?\n#+end_quote")))
+#+end_src
+** org templates
+#+begin_src emacs-lisp
+  (setq org-capture-templates
+        '(("t"
+           "New TODO"
+           entry
+           (file+headline (expand-file-name "todo.org" org-directory) "TODO")
+           "* TODO %?\n\n")
+          ("m"
+           "Memo"
+           entry
+           (file+headline (expand-file-name "memo.org" org-directory) "MEMO")
+           "* %U%?\n%i\n%a"
+           )
+          ("k"
+           "Knowledge base"
+           entry
+           (file+headline (expand-file-name "knowledge.org" org-directory) "Knowledge base")
+           "* %U%?\n%i\n%a"
+           )
+          )
+        )
+
+#+end_src
+** show todo in agenda
+#+begin_src emacs-lisp
+  (setq org-agenda-files (list (expand-file-name "todo.org" org-directory)
+                               (expand-file-name "schedule.org" org-directory)))
+#+end_src
+** org-bullets
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :unless (eq system-type 'windows-nt)
+    :hook (org-mode . org-bullets-mode))
+#+end_src
+** Open diary file
+#+begin_src emacs-lisp
+  (defun new-memo nil
+    "Open diary file"
+    (interactive)
+    (setq today-diary (expand-file-name (format-time-string "../%Y/%m/%Y-%m-%d-diary.org" (current-time)) org-directory))
+    (find-file today-diary))
+#+end_src
+** report table format
+#+begin_src emacs-lisp
+(defun my-org-clocktable-indent-string (level)
+  (if (= level 1) ""
+    (let ((str " "))
+      (while (> level 2)
+        (setq level (1- level)
+              str (concat str "--")))
+      (concat str "-> "))))
+
+(advice-add 'org-clocktable-indent-string :override #'my-org-clocktable-indent-string)
+#+end_src
+
+** tag list
+   #+begin_src emacs-lisp
+     (setq org-tag-alist '(("meeting" . ?m)
+                           ("develop" . ?o)
+                           ("document" . ?d)))
+
+   #+end_src
+** others
+*** show DONE timestamp
+#+begin_src
+  (setq org-log-done 'time)
+#+end_src
+*** todo keywords
+
+#+begin_src emacs-lisp
+  (setq org-todo-keywords
+        '((sequence "TODO(t)"
+                    "InProgress(p)"
+                    "|"
+                    "DONE(d)"
+                    "SOMEDAY(s)")))
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq org-hide-leading-stars t)
+  (setq org-pretty-entities t)
+#+end_src

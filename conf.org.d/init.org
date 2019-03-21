@@ -746,54 +746,22 @@ make backup files
       (exec-path-from-shell-initialize)))
 #+end_src
 * Org-mode
-** keybind
 #+begin_src emacs-lisp
-  (define-key global-map "\C-cc" 'org-capture)
-  (define-key global-map "\C-ca" 'org-agenda)
+(org-babel-load-file (expand-file-name "org.org" my-config-dir))
 #+end_src
-** file path
+* Plantuml
 #+begin_src emacs-lisp
-  (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
-#+end_src
-** snippet
-#+BEGIN_SRC emacs-lisp
-  (setq org-structure-template-alist
-        '(("l" "#+begin_src emacs-lisp\n?\n#+end_src" "<src lang=\"emacs-lisp\">\n?\n</src>")
-          ("q" "#+begin_quote\n?\n#+end_quote")))
-#+end_src
-** org templates
-#+begin_src emacs-lisp
-  (setq org-capture-templates
-        '(("t" "New TODO" entry
-           (file+headline (expand-file-name "todo.org" org-directory) "TODO")
-           "* TODO %?\n\n")
-          ("m" "Memo" entry
-           (file+headline (expand-file-name "memo.org" org-directory) "MEMO")
-           "* %U%?\n%i\n%a")))
-#+end_src
-** show todo in agenda
-#+begin_src emacs-lisp
-  (setq org-agenda-files '((expand-file-name "todo.org" org-directory)
-                           (expand-file-name "schedule.org" org-directory)))
-#+end_src
-** org-bullets
-#+begin_src emacs-lisp
-  (use-package org-bullets
-    :unless (eq system-type 'windows-nt)
-    :hook (org-mode . org-bullets-mode))
-#+end_src
-** others
+  (use-package plantuml-mode
+    :mode (("\\.pu\\'". plantuml-mode))
+    :config
+    (setq plantuml-jar-path (getenv "PLANTUML_JAR_PATH"))
+    (setq plantuml-java-options "-DPLANTUML_LIMIT_SIZE=8192 -Xmx1024m")
+    (setq plantuml-options "-charset UTF-8")
 
-*** todo keywords
+    (setq org-plantuml-jar-path (getenv "PLANTUML_JAR_PATH"))
+    )
 
-#+begin_src emacs-lisp
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "InProgress(p)" "|" "DONE(d)" "SOMEDAY(s)")))
-#+end_src
 
-#+begin_src emacs-lisp
-  (setq org-hide-leading-stars t)
-  (setq org-pretty-entities t)
 #+end_src
 * LSP
 #+begin_src emacs-lisp
@@ -1038,10 +1006,17 @@ make backup files
 
   (setq enable-recursice-minibuffers t)
 #+end_src
+
+** org-capture bind
+   どこかでbind潰されるので再更新
+#+begin_src emacs-lisp
+  (define-key global-map "\C-cc" 'org-capture)
+#+end_src
 * local configration
 #+begin_src emacs-lisp
   (when (file-exists-p (expand-file-name "local.el.d" user-emacs-directory))
     (use-package "init-loader"
       :config
       (init-loader-load (expand-file-name "local.el.d" user-emacs-directory))))
+(set-default-coding-systems 'utf-8-unix)
 #+end_src
