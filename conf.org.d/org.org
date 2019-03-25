@@ -39,6 +39,12 @@
            (file+headline (expand-file-name "knowledge.org" org-directory) "Knowledge base")
            "* %U%?\n%i\n%a"
            )
+          ("s"
+           "New Schedule"
+           entry
+           (file+headline (expand-file-name "schedule.org" org-directory) "Schedule")
+           "* %U%?\n%i\n%a"
+           )
           )
         )
 
@@ -82,6 +88,10 @@
                            ("document" . ?d)))
 
    #+end_src
+** color customize
+#+begin_src emacs-lisp
+ (setq org-agenda-current-time-string "← now")
+#+end_src
 ** others
 *** show DONE timestamp
 #+begin_src

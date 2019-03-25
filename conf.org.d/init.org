@@ -278,7 +278,11 @@ Auto update package
 * UI
 ** Theme
 #+begin_src emacs-lisp
-  (use-package molokai-theme :disabled)
+  (use-package molokai-theme :disabled
+    :config
+    (load-theme 'molokai t))
+
+  (use-package dracula-theme)
 #+end_src
 ** dashboard
 #+begin_src emacs-lisp
