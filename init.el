@@ -1,2 +1,2 @@
-(defvar my-config-dir (concat user-emacs-directory "conf.org.d"))
+(defvar my-config-dir (concat user-emacs-directory "conf"))
 (org-babel-load-file (expand-file-name "init.org" my-config-dir))
