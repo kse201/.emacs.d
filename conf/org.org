@@ -3,9 +3,6 @@
 
 * Org-mode
 ** keybind
-   :PROPERTIES:
-   :ID:       9929a5d9-dd8f-4423-a505-00c9e3a5a17c
-   :END:
 #+begin_src emacs-lisp
   (define-key global-map "\C-cc" 'org-capture)
   (define-key global-map "\C-ca" 'org-agenda)
@@ -29,6 +26,22 @@
           ("h" . "export html")
           ("v" . "verse")))
 #+end_src
+** org-agenda command
+#+begin_src emacs-lisp
+  (setq org-agenda-custom-commands
+        '(
+          ("m"
+           "All memo entry"
+           (;;
+            (todo "MEMO")
+            ))
+          ("k"
+           "Knowledge Base"
+           (;;
+            (todo "KB")
+            ))
+          ))
+#+end_src
 ** org templates
 #+begin_src emacs-lisp
   (setq org-capture-templates
@@ -37,15 +50,15 @@
            entry
            (file+headline
             (lambda ()(expand-file-name "todo.org" org-directory))
-            "TODO")
-           "* TODO %?\n\n")
+            "Todo")
+           "* NEW %?\n\n")
           ("m"
            "Memo"
            entry
            (file+headline
             (lambda () (expand-file-name "memo.org" org-directory))
-            "MEMO")
-           "* %U%?\n%i\n%a"
+            "Memo")
+           "* MEMO %U%?\n%i\n%a"
            )
           ("k"
            "Knowledge base"
@@ -53,7 +66,7 @@
            (file+headline
             (lambda () (expand-file-name "knowledge.org" org-directory))
             "Knowledge base")
-           "* %U%?\n%i\n%a"
+           "* MEMO %U%?\n%i\n%a"
            )
           ("s"
            "New Schedule"
@@ -118,11 +131,13 @@
 
 #+begin_src emacs-lisp
   (setq org-todo-keywords
-        '((sequence "TODO(t)"
+        '((sequence "NEW(n)"
                     "InProgress(p)"
                     "|"
                     "DONE(d)"
-                    "SOMEDAY(s)")))
+                    "SOMEDAY(s)")
+          (type "MEMO(m)")
+          (type "KB(k)")))
 #+end_src
 
 #+begin_src emacs-lisp

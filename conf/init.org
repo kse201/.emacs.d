@@ -289,7 +289,7 @@ enable auto saving
     :config
     (setq auto-save-buffers-enhanced-interval 5)
     (setq auto-save-buffers-enhanced-quiet-save-p t)
-    (auto-save-buffers-enhanced t)) 
+    (auto-save-buffers-enhanced t))
 #+end_src
 
 make backup files
@@ -560,22 +560,50 @@ make backup files
           "/.?TAGS" "^/sudo:"
           "/\\.emacs\\.d/games/*-scores"
           "/\\.emacs\\.d/elpa/**/*.el"))
-  (setq recentf-auto-save-timer (run-with-idle-timer 30 t 'recentf-save-list))
   (setq recentf-save-file (my-emacs-var-dir "recentf"))
   (bind-key "C-c r" 'helm-recentf)
   (recentf-mode 1)
 #+end_src
-** etc
-*** all cache will be cleared when opening remove file in offline
+*** auto save ( with suppressing )
+
+#+begin_src emacs-lisp
+  (defmacro with-suppressed-message (&rest body)
+    "Suppress new messages temporarily in the echo area and the `*Messages*' buffer while BODY is evaluated."
+    (declare (indent 0))
+    (let ((message-log-max nil))
+      `(with-temp-message (or (current-message) "") ,@body)))
+  (setq recentf-auto-save-timer
+        (run-with-idle-timer 30 t
+                             '(with-suppressed-message (recentf-save-list))))
+#+end_src
+
+** 行末の空白削除(markdown除く)
+#+begin_src emacs-lisp
+  (defvar my:delete-trailing-whitespace-exclude-suffix
+    (list "\\.rd$" "\\.md$" "\\.rbt$" "\\.rab$"))
+  (defun my:delete-trailing-whitespace ()
+    (interactive)
+    (cond
+     ((equal nil
+             (cl-loop for pattern in my:delete-trailing-whitespace-exclude-suffix
+                      thereis (string-match pattern buffer-file-name)))
+      (delete-trailing-whitespace))))
+  (add-hook 'before-save-hook 'my:delete-trailing-whitespace)
+#+end_src
+** 起動時間の計測
+#+begin_src emacs-lisp
+  (use-package esup)
+#+end_src
+** all cache will be cleared when opening remove file in offline
 #+begin_src emacs-lisp
   (setq recentf-auto-cleanup 'never)
 #+end_src
-*** dont user dialog box
+** dont user dialog box
 #+begin_src emacs-lisp
   (setq use-dialog-box nil)
   (defalias 'message-box 'message)
 #+end_src
-*** sec showing keystrokes
+** sec showing keystrokes
 #+begin_src emacs-lisp
     (setq echo-keystrokes 0.1)
     (setq large-file-worning-threshold (* 25 1024 1024))
@@ -588,20 +616,20 @@ make backup files
     (setq max-specpdl-size 6000)
     (setq max-lisp-eval-depth 1000)
 #+end_src
-*** Auto-Insert File
+** Auto-Insert File
 #+begin_src emacs-lisp
     (auto-insert-mode t)
 #+end_src
-*** output a result of eval
+** output a result of eval
 #+begin_src emacs-lisp
     (setq eval-expression-print-length nil)
 #+end_src
-*** C-x C-u/C-l upper / lower
+** C-x C-u/C-l upper / lower
 #+begin_src emacs-lisp
   (put 'upcase-region 'disabled nil)
   (put 'downcase-region 'disabled nil)
 #+end_src
-*** search by selected word
+** search by selected word
 #+begin_src emacs-lisp
     (defadvice isearch-mode
       (around isearch-mode-default-string
@@ -617,12 +645,12 @@ make backup files
           (isearch-repeat-forward)))
         ad-do-it))
 #+end_src
-*** ignore case in completion
+** ignore case in completion
 #+begin_src emacs-lisp
 (setq completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
 #+end_src
-*** 略語展開・補完を行うコマンドをまとめる
+** 略語展開・補完を行うコマンドをまとめる
 #+begin_src emacs-lisp
   (setq hippie-expand-try-functions-list
         '(try-complete-file-name-partially ;ファイル名の一部
@@ -717,19 +745,19 @@ make backup files
 
   (setq kill-whole-line t)
  #+end_src
-*** cua-mode
+** cua-mode
 #+begin_src emacs-lisp
   ;;; cua-mode
   (cua-mode t)
   (setq cua-enable-cua-keys nil)
 #+end_src
-*** history
+** history
 #+begin_src emacs-lisp
   (savehist-mode 1)
   (setq savehist-file (my-emacs-var-dir "history"))
   (setq history-length 1000)
 #+end_src
-*** supress Warning
+** supress Warning
 #+begin_src emacs-lisp
 
   (setq byte-compile-warnings
