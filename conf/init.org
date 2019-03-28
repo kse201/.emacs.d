@@ -1,5 +1,5 @@
 #+TITLE: Emacs Config
-#+STARTUP: overview
+#+STARTUP: content
 
 * Initialize
 #+BEGIN_SRC emacs-lisp
@@ -764,6 +764,18 @@ make backup files
    どこかでbind潰されるので再更新
 #+begin_src emacs-lisp
   (define-key global-map "\C-cc" 'org-capture)
+#+end_src
+** emoji
+#+begin_src emacs-lisp
+  (use-package ac-emoji
+    :hook
+    (text-mode . ac-emoji-setup)
+    (markdown-mode . ac-emoji-setup)
+    (org-mode . ac-emoji-setup)
+    :config
+    (add-to-list 'ac-modes 'text-mode)
+    (add-to-list 'ac-modes 'markdown-mode)
+    (add-to-list 'ac-modes 'org-mode))
 #+end_src
 * local configration
 #+begin_src emacs-lisp

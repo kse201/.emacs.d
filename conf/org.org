@@ -1,3 +1,6 @@
+#+TITLE: org config
+#+STARTUP: content
+
 * Org-mode
 ** keybind
    :PROPERTIES:
@@ -58,7 +61,7 @@
            (file+headline
             (lambda () (expand-file-name "schedule.org" org-directory))
             "Schedule")
-           "* %U%?\n%i\n%a"
+           "* %?\n  SCHEDULERED: %(org-insert-time-stamp (org-read-date nil t) nil nil nil nil)"
            )
           )
         )
@@ -76,7 +79,7 @@
 #+end_src
 ** Open diary file
 #+begin_src emacs-lisp
-  (defun new-memo nil
+  (defun today-diary nil
     "Open diary file"
     (interactive)
     (setq today-diary (expand-file-name (format-time-string "../%Y/%m/%Y-%m-%d-diary.org" (current-time)) org-directory))
@@ -125,4 +128,9 @@
 #+begin_src emacs-lisp
   (setq org-hide-leading-stars t)
   (setq org-pretty-entities t)
+#+end_src
+
+*** use Github Flaver Markdown
+#+begin_src emacs-lisp
+  (use-package ox-gfm)
 #+end_src
