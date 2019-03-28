@@ -15,9 +15,16 @@
 ** snippet
 #+BEGIN_SRC emacs-lisp
   (setq org-structure-template-alist
-        '(("l" "#+begin_src emacs-lisp\n?\n#+end_src" "<src lang=\"emacs-lisp\">\n?\n</src>")
-          ("s" "#+begin_src\n?\n#+end_src" "<src>\n?\n</src>")
-          ("q" "#+begin_quote\n?\n#+end_quote")))
+        '(("l" . "src emacs-lisp")
+          ("s" . "src")
+          ("q" . "quote")
+          ("a" . "export ascii")
+          ("c" . "center")
+          ("C" . "comment")
+          ("e" . "example")
+          ("E" . "export")
+          ("h" . "export html")
+          ("v" . "verse")))
 #+end_src
 ** org templates
 #+begin_src emacs-lisp
@@ -25,29 +32,36 @@
         '(("t"
            "New TODO"
            entry
-           (file+headline (expand-file-name "todo.org" org-directory) "TODO")
+           (file+headline
+            (lambda ()(expand-file-name "todo.org" org-directory))
+            "TODO")
            "* TODO %?\n\n")
           ("m"
            "Memo"
            entry
-           (file+headline (expand-file-name "memo.org" org-directory) "MEMO")
+           (file+headline
+            (lambda () (expand-file-name "memo.org" org-directory))
+            "MEMO")
            "* %U%?\n%i\n%a"
            )
           ("k"
            "Knowledge base"
            entry
-           (file+headline (expand-file-name "knowledge.org" org-directory) "Knowledge base")
+           (file+headline
+            (lambda () (expand-file-name "knowledge.org" org-directory))
+            "Knowledge base")
            "* %U%?\n%i\n%a"
            )
           ("s"
            "New Schedule"
            entry
-           (file+headline (expand-file-name "schedule.org" org-directory) "Schedule")
+           (file+headline
+            (lambda () (expand-file-name "schedule.org" org-directory))
+            "Schedule")
            "* %U%?\n%i\n%a"
            )
           )
         )
-
 #+end_src
 ** show todo in agenda
 #+begin_src emacs-lisp
