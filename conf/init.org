@@ -572,9 +572,9 @@ make backup files
     (declare (indent 0))
     (let ((message-log-max nil))
       `(with-temp-message (or (current-message) "") ,@body)))
-  (setq recentf-auto-save-timer
-        (run-with-idle-timer 30 t
-                             '(with-suppressed-message (recentf-save-list))))
+
+  (run-with-idle-timer 30 t '(lambda ()
+                       (with-suppressed-message (recentf-save-list))))
 #+end_src
 
 ** 行末の空白削除(markdown除く)
