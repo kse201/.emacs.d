@@ -7,6 +7,17 @@
   (define-key global-map "\C-cc" 'org-capture)
   (define-key global-map "\C-ca" 'org-agenda)
   (define-key global-map "\C-cl" 'org-store-link)
+  (define-key global-map "\C-ci" 'my:org-goto-inbox)
+
+  (defun open-org ()
+    "open org-directory"
+    (interactive)
+    (find-file org-directory))
+
+  (defun my:org-goto-inbox ()
+    "open inbox.org"
+    (interactive)
+    (find-file (concat org-directory "/inbox.org")))
 #+end_src
 ** file path
 #+begin_src emacs-lisp
@@ -30,6 +41,11 @@
 #+begin_src emacs-lisp
   (setq org-agenda-custom-commands
         '(
+          ("I"
+           "Inbox"
+           (;;
+            (todo "NEW")
+            ))
           ("m"
            "All memo entry"
            (;;
@@ -45,12 +61,19 @@
 ** org templates
 #+begin_src emacs-lisp
   (setq org-capture-templates
-        '(("t"
-           "New TODO"
+        '(("i"
+           "Inbox"
+           entry
+           (file+headline
+            (lambda ()(expand-file-name "inbox.org" org-directory))
+            "Inbox")
+           "* NEW %?")
+          ("t"
+           "New Task"
            entry
            (file+headline
             (lambda ()(expand-file-name "todo.org" org-directory))
-            "Todo")
+            "Tasks")
            "* NEW %?\n\n")
           ("m"
            "Memo"
@@ -81,8 +104,7 @@
 #+end_src
 ** show todo in agenda
 #+begin_src emacs-lisp
-  (setq org-agenda-files (list (expand-file-name "todo.org" org-directory)
-                               (expand-file-name "schedule.org" org-directory)))
+  (setq org-agenda-files (list org-directory))
 #+end_src
 ** org-bullets
 #+begin_src emacs-lisp
@@ -134,6 +156,7 @@
         '((sequence "NEW(n)"
                     "InProgress(p)"
                     "|"
+                    "Wait(w)"
                     "DONE(d)"
                     "SOMEDAY(s)")
           (type "MEMO(m)")
