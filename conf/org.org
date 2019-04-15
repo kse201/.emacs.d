@@ -52,7 +52,7 @@
             (todo "MEMO")
             ))
           ("k"
-           "Knowledge Base"
+           "\uf05a Knowledge Base"
            (;;
             (todo "KB")
             ))
@@ -97,7 +97,7 @@
            (file+headline
             (lambda () (expand-file-name "schedule.org" org-directory))
             "Schedule")
-           "* %?\n  SCHEDULERED: %(org-insert-time-stamp (org-read-date nil t) nil nil nil nil)"
+           "* %?\n  SCHEDULED: %(org-insert-time-stamp (org-read-date nil t) nil nil nil nil)"
            )
           )
         )

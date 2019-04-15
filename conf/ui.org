@@ -21,7 +21,7 @@
 #+end_src
 ** Tab
 #+begin_src emacs-lisp
-  (use-package tabbar
+  (use-package tabbar :disabled
     :config
     (tabbar-mode))
 #+end_src
@@ -68,7 +68,7 @@
                   (neotree-find file-name)))
           (message "Could not find git project root."))))
     :bind
-    ("<f10>" . neotree-projectile-action)
+    ("<f10>" . neotree-toggle)
     ("C-c C-p" . neotree-project-dir)
     )
 #+end_src
@@ -160,50 +160,52 @@
 #+end_src
 others
   #+begin_src emacs-lisp
-      (setq scroll-preserve-screen-position nil)
-      (setq next-screen-context-lines 1)
-      ;; Scroll window on a line-by-line basis
-      (setq scroll-conservatively 1000)
-      (setq scroll-step 1)
-      (setq scroll-margin 0) ; default=0
-      (setq yank-excluded-properties t)
-      (transient-mark-mode 1)
+    (setq scroll-preserve-screen-position nil)
+    (setq next-screen-context-lines 1)
+    ;; Scroll window on a line-by-line basis
+    (setq scroll-conservatively 1000)
+    (setq scroll-step 1)
+    (setq scroll-margin 0) ; default=0
+    (setq yank-excluded-properties t)
+    (transient-mark-mode 1)
 
-      (setq frame-title-format "%f")
-      (global-linum-mode 0)
-      (setq linum-format "%2d")
-      (setq linum-delay t)
-      (defadvice linum-schedule (around my-linum-schedule () activate)
-        (run-with-idle-timer 0.2 nil #'linum-update-current))
-      (setq-default tab-width 4)
-      (setq-default indent-tabs-mode nil)
+    (setq frame-title-format "%f")
+    (global-linum-mode 0)
+    (setq linum-format "%2d")
+    (setq linum-delay t)
+    (defadvice linum-schedule (around my-linum-schedule () activate)
+      (run-with-idle-timer 0.2 nil #'linum-update-current))
+    (setq-default tab-width 4)
+    (setq-default indent-tabs-mode nil)
 
-      (size-indication-mode t)
+    (size-indication-mode t)
 
-      (setq-default show-trailing-whitespace t)
-      (set-face-background 'trailing-whitespace "#b14770")
+    (setq-default show-trailing-whitespace t)
+    (set-face-background 'trailing-whitespace "#b14770")
 
-      (defface hlline-face
-        '((((class color)
-        (background dark))
-           (:background "dark slate gray"))
-          (((class color)
-        (background light))
-           (:background  "#98FB98"))
-          (t
-           ()))
-        "*Face used by hl-line.")
-      (setq hl-line-face 'hlline-face)
+    (defface hlline-face
+      '((((class color)
+      (background dark))
+         (:background "dark slate gray"))
+        (((class color)
+      (background light))
+         (:background  "#98FB98"))
+        (t
+         ()))
+      "*Face used by hl-line.")
+    (setq hl-line-face 'hlline-face)
 
-      (display-time)
-      (column-number-mode t)
-      (line-number-mode t)
-      (blink-cursor-mode 1)
-      (transient-mark-mode 1)
-      (set-scroll-bar-mode 'right); GUI emacs
-      (which-function-mode 1)
+    (display-time)
+    (column-number-mode t)
+    (line-number-mode t)
+    (setq-default indicate-empty-lines t)
+    (setq-default indicate-buffer-boundaries 'left)
+    (blink-cursor-mode 1)
+    (transient-mark-mode 1)
+    (set-scroll-bar-mode 'right); GUI emacs
+    (which-function-mode 1)
 
-      (auto-image-file-mode t)
+    (auto-image-file-mode t)
 #+end_src
 *** show line mode
 #+begin_src emacs-lisp

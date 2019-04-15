@@ -512,9 +512,10 @@ make backup files
     (setq plantuml-options "-charset UTF-8")
 
     (setq org-plantuml-jar-path (getenv "PLANTUML_JAR_PATH"))
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((plantuml . t)))
     )
-
-
 #+end_src
 * LSP
 #+begin_src emacs-lisp
