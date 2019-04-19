@@ -237,7 +237,9 @@ show line number
            (set-face-attribute 'default nil
                                :family "Cica"
                                :height 120)
-           (set-fontset-font nil 'japanese-jisx0208 (font-spec :family "Cica" :size 18)))
+           (set-fontset-font nil 'japanese-jisx0208 (font-spec :family "Cica"))
+           (setq face-font-rescale-alist '(("Cica" . 1.04)))
+           )
           ((eq system-type 'ns)
            (set-face-attribute 'default nil
                                :family "Cica"

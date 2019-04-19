@@ -144,6 +144,41 @@
 #+begin_src emacs-lisp
  (setq org-agenda-current-time-string "← now")
 #+end_src
+** org-babel
+
+#+begin_src emacs-lisp
+  (org-babel-do-load-languages
+  'org-babel-load-languages
+  '((emacs-lisp . t)
+    (org . t)
+    (js . t)
+    ))
+#+end_src
+
+** org-jounal config
+
+   前回書いた日記を見るには ~C-c C-b~ 、検索は ~C-c C-s~。
+   ~calenter~ 上で ~C-j~ でその日のjounal を開ける。
+   ~org-capture~ と連携させてentry を追加する。
+
+    #+begin_src emacs-lisp
+      (use-package org-journal
+        :custom
+        (org-journal-dir (expand-file-name "jounal" org-directory))
+        (org-journal-file-format "%Y/%m/%Y-%m-%d-diary.org")
+        (org-journal-date-format "%Y/%m/%d")
+        :config
+
+        (defun org-journal-find-location ()
+          (org-journal-new-entry t)
+          (goto-char (point-min)))
+
+        (add-to-list 'org-capture-templates
+                     '("j" "Journal entry" entry
+                       (function org-journal-find-location)
+                       "* %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
+    #+end_src
+
 ** others
 *** show DONE timestamp
 #+begin_src
