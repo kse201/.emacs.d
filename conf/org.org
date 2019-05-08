@@ -65,7 +65,7 @@
            "Inbox"
            entry
            (file+headline
-            (lambda ()(expand-file-name "inbox.org" org-directory))
+            (lambda ()(expand-file-name "inbox.org" org-directory  ))
             "Inbox")
            "* NEW %?")
           ("t"
@@ -97,7 +97,8 @@
            (file+headline
             (lambda () (expand-file-name "schedule.org" org-directory))
             "Schedule")
-           "* %?\n  SCHEDULED: %(org-insert-time-stamp (org-read-date nil t) nil nil nil nil)"
+  ;         "* %?\n  SCHEDULED: %(org-insert-time-stamp (org-read-date nil t) nil nil nil nil)"
+                    "* %?\n "
            )
           )
         )

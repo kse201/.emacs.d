@@ -394,7 +394,7 @@ make backup files
     :bind (("M-x" . helm-M-x)
            ("C-;" . helm-M-x)
            ("C-x C-f" . helm-find-files)
-           ("C-x C-b" . helm-buffers-list)
+           ("C-x b" . helm-mini)
            ("C-x C-r" . helm-recentf)
            ("M-y" . helm-show-kill-ring)
            :map helm-map
@@ -448,10 +448,19 @@ make backup files
 ** markdown
 #+begin_src emacs-lisp
   (use-package markdown-mode
-    :mode (("\\.md\\'". markdown-mode)))
+    :mode (("\\.md\\'". markdown-mode))
+    :custom-face
+     ;; custom-set-faces was added by Custom.
+     ;; If you edit it by hand, you could mess it up, so be careful.
+     ;; Your init file should contain only one such instance.
+     ;; If there is more than one, they won't work right.
+     (markdown-code-face ((t (:inherit default :background "#6e8fa1"))))
+     (markdown-pre-face ((t (:inherit font-lock-constant-face)))))
 
   (use-package markdown-preview-mode :ensure markdown-mode
     :mode (("\\.md\\'". markdown-preview-mode)))
+
+  (use-package markdown-toc)
 #+end_src
 ** others
 #+begin_src emacs-lisp
