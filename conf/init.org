@@ -338,7 +338,6 @@ make backup files
       ("C-x o" . browse-url-at-point )
       ("C-x C-g" . goto-line )
       ("C-c C-@" . move-to-mark)
-      ("C-c C-e" . edit-init)
       ("C-x C-z" . nil)
       ("C-a" . my-beginning-of-indented-line)
       ("C-M-h" . delete-horizontal-space)
@@ -401,7 +400,6 @@ make backup files
 #+BEGIN_SRC emacs-lisp
   (use-package helm
     :bind (("M-x" . helm-M-x)
-           ("C-;" . helm-M-x)
            ("C-x C-f" . helm-find-files)
            ("C-x b" . helm-mini)
            ("C-x C-r" . helm-recentf)
@@ -417,25 +415,16 @@ make backup files
     )
 
 #+END_SRC
-** enable C-h as delete in helm-minibuffer
-#+begin_src emacs-lisp
- ; (define-key helm-map (kbd "C-h") 'delete-backward-char)
-;  (define-key helm-find-files-map (kbd "C-h") 'delete-backward-char)
-#+end_src
-** Emulate `kill-line' in helm minibuffer
-#+begin_src emacs-lisp
-;  (setq helm-delete-minibuffer-contents-from-point t)
-#+end_src
 ** auto-complete
 
 #+BEGIN_SRC emacs-lisp
-    (use-package auto-complete
-      :config
-      (global-auto-complete-mode t)
-      :custom
-      (ac-use-menu-map t)
-      (ac-use-fuzzy t)
-      (ac-comphist-file (my-emacs-var-dir "ac-comphist.dat")))
+  (use-package auto-complete
+    :config
+    (global-auto-complete-mode t)
+    :custom
+    (ac-use-menu-map t)
+    (ac-use-fuzzy t)
+    (ac-comphist-file (my-emacs-var-dir "ac-comphist.dat")))
 #+end_src
 
 ** projectile
@@ -503,9 +492,11 @@ make backup files
   (use-package ghq
     :if (executable-find  "ghq"))
 
-    (use-package helm-ghq :ensure ghq
-      :bind
-      ("C-c C-g" . helm-ghq))
+  (use-package helm-ghq
+    :ensure ghq
+    :if (executable-find  "ghq")
+    :bind
+    ("C-c C-g" . helm-ghq))
 
   (use-package ag)
 #+END_SRC
