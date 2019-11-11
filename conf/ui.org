@@ -19,12 +19,6 @@
       :config
       (setq inhibit-startup-screen t))
 #+end_src
-** Tab
-#+begin_src emacs-lisp
-  (use-package tabbar :disabled
-    :config
-    (tabbar-mode))
-#+end_src
 ** Window
 #+begin_src emacs-lisp
   (use-package hydra)
@@ -48,7 +42,7 @@
 #+end_src
 ** IDE Like File Tree
 #+begin_src emacs-lisp
-  (use-package neotree
+  (use-package neotree :disabled
     :after projectile
     :commands (neotree-show neotree-hide neotree-dir neotree-find)
     :custom
@@ -127,21 +121,6 @@
   (use-package hide-mode-line
     :hook
     ((imenu-list-minor-mode minimap-mode) . hide-mode-line-mode))
-#+end_src
-** minimap
-#+begin_src emacs-lisp
-  (use-package minimap :disabled t
-    :commands
-    (minimap-bufname minimap-create minimap-kill)
-    :custom
-    (minimap-major-modes '(prog-mode))
-
-    (minimap-window-location 'right)
-    (minimap-update-delay 0.2)
-    (minimap-minimum-width 20)
-    :bind
-    ("C-c m" . ladicle/toggle-minimap)
-    )
 #+end_src
 ** ido (Interactive Do)
 #+begin_src emacs-lisp
