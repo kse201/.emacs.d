@@ -19,18 +19,6 @@
       :config
       (setq inhibit-startup-screen t))
 #+end_src
-** Window
-#+begin_src emacs-lisp
-  (use-package hydra)
-  (use-package ace-window :ensure hydra
-    :functions hydra-frame-window/body
-    :bind
-    ("C-M-o" . hydra-frame-window/body)
-    :custom
-    (aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p))
-    :custom-face
-    (aw-leading-char-face ((t (:height 4.0 :foreground "#f1fa8c")))))
-#+end_src
 ** IDE Like Tag list
 #+begin_src emacs-lisp
     (use-package imenu-list
@@ -40,38 +28,12 @@
       (imenu-list-focus-after-activation t)
       (imenu-list-auto-resize nil))
 #+end_src
-** IDE Like File Tree
-#+begin_src emacs-lisp
-  (use-package neotree :disabled
-    :after projectile
-    :commands (neotree-show neotree-hide neotree-dir neotree-find)
-    :custom
-    (neo-theme 'nerd2)
-    (projectile-switch-project-action 'neotree-projectile-action)
-    :init
-    (defun neotree-project-dir ()
-      "Open NeoTree using the git root."
-      (interactive)
-      (let ((project-dir (projectile-project-root))
-            (file-name (buffer-file-name)))
-        (neotree-toggle)
-        (if project-dir
-            (if (neo-global--window-exists-p)
-                (progn
-                  (neotree-dir project-dir)
-                  (neotree-find file-name)))
-          (message "Could not find git project root."))))
-    :bind
-    ("<f10>" . neotree-toggle)
-    ("C-c C-p" . neotree-project-dir)
-    )
-#+end_src
 ** rainbow indent
 #+begin_src emacs-lisp
   (use-package highlight-indent-guides
     :config
     :hook
-      ((prog-mode yaml-mode) . highlight-indent-guides-mode)
+      ((prog-mode yaml-mode markdown-mode) . highlight-indent-guides-mode)
       :custom
       (highlight-indent-guides-auto-enabled t)
       (highlight-indent-guides-responsive t)
@@ -101,20 +63,15 @@
 ** modeline
 *** modeline customize
 #+begin_src emacs-lisp
-  (use-package powerline :disabled
-    :config
-    (powerline-center-theme))
-
   (use-package telephone-line
     :config
     (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
-        telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
-        telephone-line-primary-right-separator 'telephone-line-cubed-right
-        telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
-  (setq telephone-line-height 24
-        telephone-line-evil-use-short-tag t)
-    (telephone-line-mode 1)
-    )
+          telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+          telephone-line-primary-right-separator 'telephone-line-cubed-right
+          telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
+    (setq telephone-line-height 24
+          telephone-line-evil-use-short-tag t)
+    (telephone-line-mode 1))
 #+end_src
 *** dont show unneccesary window
 #+begin_src emacs-lisp
