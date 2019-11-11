@@ -7,6 +7,15 @@
   (require 'server)
   (unless (server-running-p) (server-start))
 #+end_src
+
+** Demon
+#+begin_src emacs-lisp
+  (when window-system
+    (require 'server)
+    (unless (eq (server-running-p) 't)
+      (server-start))
+  )
+#+end_src
 ** Use command as Meta in MacOS
 #+begin_src emacs-lisp
   (when (eq system-type 'darwin)
