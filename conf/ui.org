@@ -1,7 +1,7 @@
 * UI
 ** Theme
 #+begin_src emacs-lisp
-  (use-package dracula-theme)
+  (use-package molokai-theme)
 #+end_src
 ** dashboard
 #+begin_src emacs-lisp
