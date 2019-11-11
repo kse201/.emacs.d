@@ -4,11 +4,9 @@
 * Initialize
 #+BEGIN_SRC emacs-lisp
   (eval-when-compile (require 'cl))
-  (require 'server)
-  (unless (server-running-p) (server-start))
 #+end_src
 
-** Demon
+** Daemon
 #+begin_src emacs-lisp
   (when window-system
     (require 'server)
@@ -459,6 +457,15 @@ make backup files
     :mode (("\\.md\\'". markdown-preview-mode)))
 
   (use-package markdown-toc)
+#+end_src
+** SKK
+#+BEGIN_SRC emacs-lisp
+  (use-package skk
+    :ensure t
+    :defer t
+    :bind (("C-j" . skk-auto-fill-mode))
+    :config
+    (setq default-input-method "japanese-skk"))
 #+end_src
 ** others
 #+begin_src emacs-lisp
