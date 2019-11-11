@@ -241,6 +241,10 @@
   (if (not (file-directory-p my-emacs-var-dir)) (make-directory my-emacs-var-dir))
 #+end_src
 * use-package
+
+  [[https://github.com/jwiegley/use-package][use-package.el]] は可読性の高いinit.el を書くことが出来るパッケージ管理プラグインです。
+  use-package.el 自体は package.el でインストールします。
+
 #+begin_src emacs-lisp
   (require 'package)
 
@@ -263,7 +267,8 @@
     :ensure t)
 #+end_src
 
-default : install
+use-package を使って定義したプラグインは基本的にインストールするようにします。
+インストールさせない場合は、 ~:disable~ を指定します。
 
 #+begin_src emacs-lisp
   (use-package use-package-ensure
@@ -271,7 +276,8 @@ default : install
     (use-package-always-ensure t))
 #+end_src
 
-Auto update package
+auto-package-update は自動パッケージ更新するためのプラグインですが、
+起動毎に更新しては不便なので意図的に無効化しています。
 
 #+begin_src emacs-lisp
   (use-package auto-package-update
@@ -282,10 +288,15 @@ Auto update package
     :config
     (auto-package-update-maybe))
 #+end_src
+
 * UI
+
+UI 関連の設定は ~ui.org~ で定義します。
+
 #+begin_src emacs-lisp
 (org-babel-load-file (expand-file-name "ui.org" my-config-dir))
 #+end_src
+
 * Backup
 
 enable auto saving
@@ -459,18 +470,50 @@ make backup files
   (use-package markdown-toc)
 #+end_src
 ** SKK
+
+   SKK は独自の日本語入力IME。
+
 #+BEGIN_SRC emacs-lisp
-  (use-package skk
-    :ensure t
-    :defer t
-    :bind (("C-j" . skk-auto-fill-mode))
-    :config
-    (setq default-input-method "japanese-skk"))
+  (when (require 'skk nil t)
+    (global-set-key (kbd "C-x j") 'skk-auto-fill-mode)
+    (setq default-input-method "japanese-skk")
+    (require 'skk-study))
 #+end_src
+** Git 関連
+
+magit はEmacs 上でGit操作を提供するプラグインです。
+
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :config (global-set-key (kbd "C-x g") 'magit-status))
+#+END_SRC
+
+git-gutter+ は差分を可視化します。
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter+
+    :custom
+    (git-gutte+r:modified-sign "~")
+    (git-gutter+:added-sign    "+")
+    (git-gutter+:deleted-sign  "-")
+    :config
+    (global-git-gutter+-mode +1))
+#+END_SRC
+
+** EditorConfig
+
+[[https://editorconfig.org/][editrorcofnig]] はエディタ間の設定を統一するための仕様です。
+
+#+BEGIN_SRC emacs-lisp
+  (use-package editorconfig
+    :config
+    (editorconfig-mode 1))
+#+END_SRC
+
 ** others
 #+begin_src emacs-lisp
-    (use-package yaml-mode
-      :mode (("\\.ya?ml\\'". yaml-mode)))
+  (use-package yaml-mode
+    :mode (("\\.ya?ml\\'". yaml-mode)))
 
   (use-package git-gutter+
     :custom
@@ -480,21 +523,16 @@ make backup files
     :config
     (global-git-gutter+-mode +1))
 
-    (use-package color-identifiers-mode)
+  (use-package color-identifiers-mode)
 
-    (use-package which-key
-      :hook (after-init . which-key-mode))
+  (use-package which-key
+    :hook (after-init . which-key-mode))
 
-    (use-package hl-todo
-      :config
-      (progn
-        (setq hl-todo-activate-in-modes '(prog-mode markdown-mode))
-        (global-hl-todo-mode 1)))
-
-    (use-package editorconfig)
-
-    (use-package magit
-      :config (global-set-key (kbd "C-x g") 'magit-status))
+  (use-package hl-todo
+    :config
+    (progn
+      (setq hl-todo-activate-in-modes '(prog-mode markdown-mode))
+      (global-hl-todo-mode 1)))
 
   (use-package ghq
     :if (executable-find  "ghq"))
