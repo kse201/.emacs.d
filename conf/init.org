@@ -455,7 +455,6 @@ windows の場合、
         ad-do-it))
 #+end_src
 
-
 * Scratch
 
 #+begin_src emacs-lisp
@@ -485,10 +484,50 @@ windows の場合、
                   (my-make-scratch 1))))
 #+END_SRC
 
-* Plugin
+* 補完インタフェース
+** ivy
+ 補完インタフェースは ~Helm~ から ~ivy, counsel, swiper~ に移行する。
+ ※ counsel の依存関係でivy, swiper もinstall される。
+
+ Helm とは違って minibuffer 内で完結している点が好ましい。
+
+ #+begin_src emacs-lisp
+   (use-package ivy
+     :config
+     (ivy-mode 1))
+
+   (use-package counsel
+     :ensure ivy
+     :config
+     (counsel-mode 1)
+     :bind
+     (("C-x b" . ivy-switch-buffer)
+      ))
+ #+end_src
+
+以下設定でアイコン付きで見やすくなるはず。
+Windows 環境で確認できていないため保留。
+
+#+begin_src emacs-lisp
+  (use-package all-the-icons
+    :disabled)
+  (use-package all-the-icons-ivy
+    :disabled
+    :config
+    (add-to-list 'all-the-icons-ivy-buffer-commands
+                 'counsel-projectile-switch-project)
+    (add-to-list 'all-the-icons-ivy-buffer-commands
+                 'counsel-ibuffer)
+    (all-the-icons-ivy-setup))
+#+end_src
+
 ** helm
+
+Helm に関する設定は一応残しておく。
+
 #+BEGIN_SRC emacs-lisp
   (use-package helm
+    :disabled
     :bind (("M-x" . helm-M-x)
            ("C-x C-f" . helm-find-files)
            ("C-x b" . helm-mini)
@@ -505,6 +544,8 @@ windows の場合、
     )
 
 #+END_SRC
+
+* Plugin
 ** completation
 
 補完機能は ~company~ を使う。 ~auto-complete~ に比べて早くて開発が盛んらしい。
