@@ -16,3 +16,6 @@ bookmarks
 local.el.d
 conf/*.el
 var
+etc
+server
+recentf
