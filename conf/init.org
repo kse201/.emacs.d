@@ -728,6 +728,29 @@ Org-mode関連は別ファイルにて定義する。
 (org-babel-load-file (expand-file-name "org.org" my-config-dir))
 #+end_src
 
+* Text Linter
+
+textlint はMarkdownなどのテキストのlinter
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :config
+    (flycheck-define-checker textlint
+      "A linter for prose."
+      :command ("textlint" "--format" "unix" source-inplace)
+      :error-patterns
+      ((warning line-start (file-name) ":" line ":" column ": "
+                (id (one-or-more (not (any " "))))
+                (message (one-or-more not-newline)
+                         (zero-or-more "\n" (any " ") (one-or-more not-newline)))
+                line-end))
+      :modes (text-mode markdown-mode))
+
+    (add-to-list 'flycheck-checkers 'textlint)
+
+    (add-hook 'markdown-mode-hook 'flycheck-mode))
+#+end_src
+
 * Developments
 
 プログラム開発用の設定郡など

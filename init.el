@@ -42,7 +42,7 @@
  '(org-journal-file-format "%Y/%m/%Y-%m-%d-diary.org")
  '(package-selected-packages
    (quote
-    (all-the-icons-ivy all-the-icons migemo json-mode use-package-ensure ox-gfm skk ssk ac-emoji org yaml-mode which-key use-package-ensure-system-package telephone-line tabbar rainbow-delimiters python-mode plantuml-mode org-pomodoro org-bullets neotree molokai-theme magit lsp-ui init-loader imenu-list hydra hlinum hl-todo highlight-indent-guides hide-mode-line helm-projectile git-gutter+ fill-column-indicator exec-path-from-shell editorconfig dracula-theme ddskk dashboard conda company-lsp color-identifiers-mode beacon auto-save-buffers-enhanced auto-complete)))
+    (flycheck all-the-icons-ivy all-the-icons migemo json-mode use-package-ensure ox-gfm skk ssk ac-emoji org yaml-mode which-key use-package-ensure-system-package telephone-line tabbar rainbow-delimiters python-mode plantuml-mode org-pomodoro org-bullets neotree molokai-theme magit lsp-ui init-loader imenu-list hydra hlinum hl-todo highlight-indent-guides hide-mode-line helm-projectile git-gutter+ fill-column-indicator exec-path-from-shell editorconfig dracula-theme ddskk dashboard conda company-lsp color-identifiers-mode beacon auto-save-buffers-enhanced auto-complete)))
  '(projectile-completion-system (quote helm))
  '(projectile-git-submodule-command nil)
  '(show-paren-style (quote mixed))
