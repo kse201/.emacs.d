@@ -376,6 +376,27 @@ make backup files
         ("C-x |" . split-window-horizontally)
         ))
 #+end_src
+* Search
+
+日本語検索するために ~migemo~ を使う。
+
+#+begin_src emacs-lisp
+  (use-package migemo
+    :init
+    (setq migemo-coding-system 'utf-8-unix)
+    (setq migemo-dictionary (expand-file-name "etc/cmigemo/dict/utf-8/migemo-dict" user-emacs-directory))
+    (setq migemo-command "cmigemo")
+    (setq migemo-options '("-q" "--emacs" "-i" "\a"))
+    (setq migemo-user-dictionary nil)
+    (setq migemo-regex-dictionary nil)
+    (load-library "migemo")
+    (migemo-init))
+#+end_src
+
+windows の場合、
+- cmigemo をダウンロードする https://www.kaoriya.net/software/cmigemo/
+- ~.emacs.d/etc/migemo~ として配置する。
+
 * Scratch
 #+begin_src emacs-lisp
   (setq inhibit-startup-message nil)
