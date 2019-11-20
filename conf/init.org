@@ -551,13 +551,53 @@ Helm に関する設定は一応残しておく。
 補完機能は ~company~ を使う。 ~auto-complete~ に比べて早くて開発が盛んらしい。
 
 #+begin_src emacs-lisp
-    (use-package company
-      :config
-      (global-company-mode)
-      (push 'company-lsp company-backends))
+  (use-package company
+    :config
+    (global-company-mode)
+    (setq company-idle-delay 0) ; default 0.5
+    (setq company-minimum-prefix-length 2) ; default 4
+    (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+    (define-many-keys company-active-map
+      '(("M-n". nil)
+        ("M-p" nil)
+        ("C-n". company-select-next)
+        ("C-p" company-select-previous)
+        ("<tab>" . company-complete-common2)
+        ("C-i" . company-complete-common2))
+      ))
 #+end_src
 
-使い慣れてきたらカスタマイズする予定。
+TABをいい感じにする。 [[https://qiita.com/sune2/items/b73037f9e85962f5afb7][Qiita]] を参考した。
+
+まず，候補が１つの場合はそれを選択する．
+候補が複数の場合，挿入可能なprefixがあれば挿入し，なければcompany-select-nextするはず．
+
+#+begin_src emacs-lisp
+  (defun company--insert-candidate2 (candidate)
+    (when (> (length candidate) 0)
+      (setq candidate (substring-no-properties candidate))
+      (if (eq (company-call-backend 'ignore-case) 'keep-prefix)
+          (insert (company-strip-prefix candidate))
+        (if (equal company-prefix candidate)
+            (company-select-next)
+            (delete-region (- (point) (length company-prefix)) (point))
+          (insert candidate))
+        )))
+
+  (defun company-complete-common2 ()
+    (interactive)
+    (when (company-manual-begin)
+      (if (and (not (cdr company-candidates))
+               (equal company-common (car company-candidates)))
+          (company-complete-selection)
+        (company--insert-candidate2 company-common))))
+#+end_src
+
+company と LSPを連携させる。(LSP関連の設定は後述)
+
+#+begin_src emacs-lisp
+  (push 'company-lsp company-backends)
+#+end_src
 
 ** projectile
 #+begin_src emacs-lisp
