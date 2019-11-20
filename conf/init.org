@@ -6,7 +6,10 @@
   (eval-when-compile (require 'cl))
 #+end_src
 
-** Daemon
+** COMMENT Daemon
+
+emacsをデーモン起動しておく。
+
 #+begin_src emacs-lisp
   (when window-system
     (require 'server)
@@ -14,7 +17,17 @@
       (server-start))
   )
 #+end_src
+
+2回目以降は、 ~emacsclient~ でデーモンにつなげる。
+
+#+begin_src shell
+  emacsclient
+#+end_src
+
 ** Use command as Meta in MacOS
+
+Mac では ~command~ キーを ~Meta~ キー代わりに使う。
+
 #+begin_src emacs-lisp
   (when (eq system-type 'darwin)
     ;;(setq mac-command-key-is-meta nil)
@@ -23,6 +36,7 @@
     ;;  (setq mac-command-modifier 'super)
     (setq mac-pass-control-to-system t))
 #+end_src
+
 * FileFormat
 #+begin_src emacs-lisp
   ;; Language.
@@ -78,7 +92,10 @@
            )))
 #+end_src
 * Function/Macros
-** for emacs configuration func
+** init.el 更新/変更 ショートカット
+
+設定ファイルはよく編集するためショートカットで開く。
+
 #+begin_src emacs-lisp
   (defun init-edit ()
     "edit my config"
@@ -90,6 +107,18 @@
     (interactive)
     (load-file "~/.emacs.d/init.el"))
 #+end_src
+
+** easy key-bind registeration
+
+まとめてkey-bindするマクロ。
+
+#+begin_src emacs-lisp
+  (defun define-many-keys (key-map key-table)
+    "easy key-bind registeration"
+    (loop for (key . cmd) in key-table
+          do (define-key key-map (read-kbd-macro key) cmd)))
+#+end_src
+
 ** others
 #+begin_src emacs-lisp
   ;;; open scratch
@@ -97,12 +126,6 @@
     "edit *scratch*"
     (interactive)
     (switch-to-buffer "*scratch*"))
-
-  ;; easy key-bind registeration
-  (defun define-many-keys (key-map key-table)
-    "easy key-bind registeration"
-    (loop for (key . cmd) in key-table
-      do (define-key key-map (read-kbd-macro key) cmd)))
 
   ;;; function for add load-path
   (defun add-to-load-path (&rest paths)
@@ -114,14 +137,6 @@
       (add-to-list 'load-path default-directory)
       (if (fboundp 'normal-top-level-add-subdirs-to-load-path)
           (normal-top-level-add-subdirs-to-load-path))))))
-
-  ;; nicely window splitting
-  (defun good-split-window ()
-    "nicely window splitting"
-    (interactive)
-    (if (< (window-width) (* (window-height) 1.5) )
-    (split-window-vertically)
-      (split-window-horizontally)))
 
   (defun my-other-window ()
     "Auto resize window when 'other-window"
@@ -151,26 +166,6 @@
         current-point)))
     (beginning-of-line)
       (back-to-indentation)))
-
-  ;;; http://d.hatena.ne.jp/yascentur/20110621/1308585547
-  (defun split-window-vertically-n (num_wins)
-    "vertical splitting the window N divide "
-    (interactive "p")
-    (if (= num_wins 2)
-    (split-window-vertically)
-      (progn
-    (split-window-vertically
-     (- (window-height) (/ (window-height) num_wins)))
-    (split-window-vertically-n (- num_wins 1)))))
-  (defun split-window-horizontally-n (num_wins)
-    "horizontal splitting the window N divide "
-    (interactive "p")
-    (if (= num_wins 2)
-    (split-window-horizontally)
-      (progn
-    (split-window-horizontally
-     (- (window-width) (/ (window-width) num_wins)))
-    (split-window-horizontally-n (- num_wins 1)))))
 
   (defun other-window-or-split ()
     (interactive)
@@ -210,14 +205,6 @@
          ))))
   (global-set-key (kbd "C-c C-c p") 'put-current-path-to-clipboard)
 
-  (defun spell-check ()
-    "Enable auto spell check"
-    (setq-default flyspell-mode t)
-    (setq ispell-dictionaryonary "american")
-    (setq ispell-program-name "aspell")
-    (setq truncate-lines nil)
-    (setq truncate-partial-width-windows nil))
-
   ; http://ainame.hateblo.jp/entry/2013/11/04/015107
   (defun newline-or-open-line ()
     "newline-or-openline is a new command for merging C-m and C-o"
@@ -240,6 +227,7 @@
     (concat my-emacs-var-dir (mapconcat 'identity args "/")))
   (if (not (file-directory-p my-emacs-var-dir)) (make-directory my-emacs-var-dir))
 #+end_src
+
 * use-package
 
   [[https://github.com/jwiegley/use-package][use-package.el]] は可読性の高いinit.el を書くことが出来るパッケージ管理プラグインです。
@@ -331,6 +319,9 @@ make backup files
   (add-hook 'bookmark-after-jump-hook 'bookmark-arrange-latest-top)
 #+end_src
 * Keybinds
+
+キーバインドは [[easy keybind-registration][まとめて登録するマクロ]] で一括で登録する。
+
 #+begin_src emacs-lisp
   (define-many-keys global-map
     '(("C-h" . delete-backward-char)
@@ -357,25 +348,75 @@ make backup files
 #+end_src
 
 ** for scroll settings
+
+Vim like に ~C-u (Up), C-d (Down)~ でスクロールする。
+
 #+begin_src emacs-lisp
   (define-many-keys global-map
     '(("C-d" . scroll-up)
       ("C-u" . scroll-down)
       ("M-g" . goto-line)))
 #+end_src
-** movinng window
+
+** moving window
+
+~C-x w(Window)~ をprefixとしてウインドウ移動する。
+prefix後のキーはVim like に割当て。
+
 #+begin_src emacs-lisp
   (define-many-keys global-map
-      '(("C-x w h" . windmove-left)
-        ("C-x w j" . windmove-down)
-        ("C-x w k" . windmove-up)
-        ("C-x w l" . windmove-right)
-        ;; window-split
-        ("C-x SPC" . good-split-window)
-        ("C-x -" . split-window-vertically)
-        ("C-x |" . split-window-horizontally)
-        ))
+    '(("C-x w h" . windmove-left)
+      ("C-x w j" . windmove-down)
+      ("C-x w k" . windmove-up)
+      ("C-x w l" . windmove-right)
+      ))
 #+end_src
+
+** いい感じにwindow 分割
+
+Window 幅に合わせていい感じに画面分割する。
+
+#+begin_src emacs-lisp
+  (defun good-split-window ()
+    "nicely window splitting"
+    (interactive)
+    (if (< (window-width) (* (window-height) 1.5) )
+        (split-window-vertically)
+      (split-window-horizontally)))
+
+  (define-many-keys global-map
+    '(("C-x SPC" . good-split-window)
+      ("C-x -" . split-window-vertically)
+      ("C-x |" . split-window-horizontally)
+      ))
+#+end_src
+
+** window を N分割
+
+#+begin_src emacs-lisp
+  (defun split-window-vertically-n (num_wins)
+    "vertical splitting the window N divide "
+    (interactive "p")
+    (if (= num_wins 2)
+    (split-window-vertically)
+      (progn
+    (split-window-vertically
+     (- (window-height) (/ (window-height) num_wins)))
+    (split-window-vertically-n (- num_wins 1)))))
+  (defun split-window-horizontally-n (num_wins)
+    "horizontal splitting the window N divide "
+    (interactive "p")
+    (if (= num_wins 2)
+    (split-window-horizontally)
+      (progn
+    (split-window-horizontally
+     (- (window-width) (/ (window-width) num_wins)))
+    (split-window-horizontally-n (- num_wins 1)))))
+#+end_src
+
+#+RESULTS:
+: split-window-horizontally-n
+
 * Search
 
 日本語検索するために ~migemo~ を使う。
@@ -397,7 +438,26 @@ windows の場合、
 - cmigemo をダウンロードする https://www.kaoriya.net/software/cmigemo/
 - ~.emacs.d/etc/migemo~ として配置する。
 
+** search by selected word
+#+begin_src emacs-lisp
+    (defadvice isearch-mode
+      (around isearch-mode-default-string
+          (forward &optional regexp op-fun recursive-edit word-p) activate)
+      (if (and transient-mark-mode mark-active (not (eq (mark) (point))))
+      (progn
+        (isearch-update-ring (buffer-substring-no-properties (mark) (point)))
+        (deactivate-mark)
+        ad-do-it
+        (if (not forward)
+            (isearch-repeat-backward)
+          (goto-char (mark))
+          (isearch-repeat-forward)))
+        ad-do-it))
+#+end_src
+
+
 * Scratch
+
 #+begin_src emacs-lisp
   (setq inhibit-startup-message nil)
     (defun my-make-scratch (&optional arg)
@@ -423,8 +483,8 @@ windows の場合、
               (lambda ()
                 (unless (member (get-buffer "*scratch*") (buffer-list))
                   (my-make-scratch 1))))
-
 #+END_SRC
+
 * Plugin
 ** helm
 #+BEGIN_SRC emacs-lisp
@@ -445,17 +505,18 @@ windows の場合、
     )
 
 #+END_SRC
-** auto-complete
+** completation
 
-#+BEGIN_SRC emacs-lisp
-  (use-package auto-complete
-    :config
-    (global-auto-complete-mode t)
-    :custom
-    (ac-use-menu-map t)
-    (ac-use-fuzzy t)
-    (ac-comphist-file (my-emacs-var-dir "ac-comphist.dat")))
+補完機能は ~company~ を使う。 ~auto-complete~ に比べて早くて開発が盛んらしい。
+
+#+begin_src emacs-lisp
+    (use-package company
+      :config
+      (global-company-mode)
+      (push 'company-lsp company-backends))
 #+end_src
+
+使い慣れてきたらカスタマイズする予定。
 
 ** projectile
 #+begin_src emacs-lisp
@@ -474,22 +535,44 @@ windows の場合、
     (helm-projectile-on))
 #+end_src
 ** markdown
+
+markdown-mode
+
 #+begin_src emacs-lisp
   (use-package markdown-mode
     :mode (("\\.md\\'". markdown-mode))
     :custom-face
-     ;; custom-set-faces was added by Custom.
-     ;; If you edit it by hand, you could mess it up, so be careful.
-     ;; Your init file should contain only one such instance.
-     ;; If there is more than one, they won't work right.
-     (markdown-code-face ((t (:inherit default :background "#6e8fa1"))))
-     (markdown-pre-face ((t (:inherit font-lock-constant-face)))))
+    ;; custom-set-faces was added by Custom.
+    ;; If you edit it by hand, you could mess it up, so be careful.
+    ;; Your init file should contain only one such instance.
+    ;; If there is more than one, they won't work right.
+    (markdown-code-face ((t (:inherit default :background "#6e8fa1"))))
+    (markdown-pre-face ((t (:inherit font-lock-constant-face)))))
+#+end_src
 
+markdown-preview-mode はMarkdownの自動プレビューする。
+
+#+begin_src emacs-lisp
   (use-package markdown-preview-mode :ensure markdown-mode
     :mode (("\\.md\\'". markdown-preview-mode)))
+#+end_src
 
+markdown-toc はTOC(Table Of Content) を自動挿入/更新する機能を提供する。
+
+#+begin_src emacs-lisp
   (use-package markdown-toc)
 #+end_src
+
+TODO をハイライトさせます。
+
+#+begin_src emacs-lisp
+  (use-package hl-todo
+    :config
+    (progn
+      (setq hl-todo-activate-in-modes '(prog-mode markdown-mode))
+      (global-hl-todo-mode 1)))
+#+end_src
+
 ** SKK
 
    SKK は独自の日本語入力IME。
@@ -521,40 +604,11 @@ git-gutter+ は差分を可視化します。
     (global-git-gutter+-mode +1))
 #+END_SRC
 
-** EditorConfig
+** ghq
 
-[[https://editorconfig.org/][editrorcofnig]] はエディタ間の設定を統一するための仕様です。
+[[https://github.com/motemen/ghq][ghq]] is Remote repository management tool.
 
-#+BEGIN_SRC emacs-lisp
-  (use-package editorconfig
-    :config
-    (editorconfig-mode 1))
-#+END_SRC
-
-** others
 #+begin_src emacs-lisp
-  (use-package yaml-mode
-    :mode (("\\.ya?ml\\'". yaml-mode)))
-
-  (use-package git-gutter+
-    :custom
-    (git-gutte+r:modified-sign "~")
-    (git-gutter+:added-sign    "+")
-    (git-gutter+:deleted-sign  "-")
-    :config
-    (global-git-gutter+-mode +1))
-
-  (use-package color-identifiers-mode)
-
-  (use-package which-key
-    :hook (after-init . which-key-mode))
-
-  (use-package hl-todo
-    :config
-    (progn
-      (setq hl-todo-activate-in-modes '(prog-mode markdown-mode))
-      (global-hl-todo-mode 1)))
-
   (use-package ghq
     :if (executable-find  "ghq"))
 
@@ -564,7 +618,19 @@ git-gutter+ は差分を可視化します。
     :bind
     ("C-c C-g" . helm-ghq))
 
-  (use-package ag)
+#+end_src
+** others
+#+begin_src emacs-lisp
+  (use-package yaml-mode
+    :mode (("\\.ya?ml\\'". yaml-mode)))
+
+  (use-package color-identifiers-mode)
+
+  (use-package which-key
+    :hook (after-init . which-key-mode))
+
+  (use-package ag
+    :if (executable-find  "ag"))
 #+END_SRC
 ** resolve PATH in GUI
 #+begin_src emacs-lisp
@@ -574,39 +640,49 @@ git-gutter+ は差分を可視化します。
       (exec-path-from-shell-initialize)))
 #+end_src
 * Org-mode
+
+Org-mode関連は別ファイルにて定義する。
+
 #+begin_src emacs-lisp
 (org-babel-load-file (expand-file-name "org.org" my-config-dir))
 #+end_src
-* Plantuml
-#+begin_src emacs-lisp
-  (use-package plantuml-mode
-    :mode (("\\.pu\\'". plantuml-mode))
-    :config
-    (setq plantuml-jar-path (getenv "PLANTUML_JAR_PATH"))
-    (setq plantuml-java-options "-DPLANTUML_LIMIT_SIZE=8192 -Xmx1024m")
-    (setq plantuml-options "-charset UTF-8")
 
-    (setq org-plantuml-jar-path (getenv "PLANTUML_JAR_PATH"))
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((plantuml . t)))
-    )
-#+end_src
-* LSP
+* Developments
+
+プログラム開発用の設定郡など
+
+** Plantuml
+
+ PlantUMLはテキストベースのUML作図ツール。
+
+ #+begin_src emacs-lisp
+   (use-package plantuml-mode
+     :mode (("\\.pu\\'". plantuml-mode))
+     :config
+     (setq plantuml-jar-path (getenv "PLANTUML_JAR_PATH"))
+     (setq plantuml-java-options "-DPLANTUML_LIMIT_SIZE=8192 -Xmx1024m")
+     (setq plantuml-options "-charset UTF-8")
+
+     (setq org-plantuml-jar-path (getenv "PLANTUML_JAR_PATH"))
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((plantuml . t)))
+     )
+ #+end_src
+
+** LSP
+
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :commands lsp)
 
-  (use-package company-lsp)
+  (use-package company-lsp
+    :ensure company)
   (use-package lsp-ui
     :config
     (add-hook 'lsp-mode-hook 'lsp-ui-mode))
-
-  (use-package company
-    :config
-    (global-company-mode)
-    (push 'company-lsp company-backends))
 #+end_src
+
 ** for python lsp
 #+begin_src emacs-lisp
   (use-package python-mode
@@ -617,6 +693,16 @@ git-gutter+ は差分を可視化します。
     :init
     (custom-set-variables '(conda-anaconda-home "~/miniconda3")))
 #+end_src
+** EditorConfig
+
+[[https://editorconfig.org/][Editorconfig]] はエディタ間の設定を統一するための仕様です。
+
+#+BEGIN_SRC emacs-lisp
+  (use-package editorconfig
+    :config
+    (editorconfig-mode 1))
+#+END_SRC
+
 * Etc
 ** Pomodoro
 #+begin_src emacs-lisp
@@ -666,10 +752,6 @@ git-gutter+ は差分を可視化します。
       (delete-trailing-whitespace))))
   (add-hook 'before-save-hook 'my:delete-trailing-whitespace)
 #+end_src
-** 起動時間の計測
-#+begin_src emacs-lisp
-  (use-package esup)
-#+end_src
 ** all cache will be cleared when opening remove file in offline
 #+begin_src emacs-lisp
   (setq recentf-auto-cleanup 'never)
@@ -700,27 +782,16 @@ git-gutter+ は差分を可視化します。
 #+begin_src emacs-lisp
     (setq eval-expression-print-length nil)
 #+end_src
-** C-x C-u/C-l upper / lower
+** 大文字/小文字変換
+
+- ~C-x C-u~ : 大文字
+- ~C-x C-l~ : 小文字
+
 #+begin_src emacs-lisp
   (put 'upcase-region 'disabled nil)
   (put 'downcase-region 'disabled nil)
 #+end_src
-** search by selected word
-#+begin_src emacs-lisp
-    (defadvice isearch-mode
-      (around isearch-mode-default-string
-          (forward &optional regexp op-fun recursive-edit word-p) activate)
-      (if (and transient-mark-mode mark-active (not (eq (mark) (point))))
-      (progn
-        (isearch-update-ring (buffer-substring-no-properties (mark) (point)))
-        (deactivate-mark)
-        ad-do-it
-        (if (not forward)
-            (isearch-repeat-backward)
-          (goto-char (mark))
-          (isearch-repeat-forward)))
-        ad-do-it))
-#+end_src
+
 ** ignore case in completion
 #+begin_src emacs-lisp
 (setq completion-ignore-case t)
@@ -869,18 +940,18 @@ git-gutter+ は差分を可視化します。
 #+begin_src emacs-lisp
   (define-key global-map "\C-cc" 'org-capture)
 #+end_src
-** emoji
+** スペルチェック
+
 #+begin_src emacs-lisp
-  (use-package ac-emoji
-    :hook
-    (text-mode . ac-emoji-setup)
-    (markdown-mode . ac-emoji-setup)
-    (org-mode . ac-emoji-setup)
-    :config
-    (add-to-list 'ac-modes 'text-mode)
-    (add-to-list 'ac-modes 'markdown-mode)
-    (add-to-list 'ac-modes 'org-mode))
+  (defun spell-check ()
+    "Enable auto spell check"
+    (setq-default flyspell-mode t)
+    (setq ispell-dictionaryonary "american")
+    (setq ispell-program-name "aspell")
+    (setq truncate-lines nil)
+    (setq truncate-partial-width-windows nil))
 #+end_src
+
 * local configration
 #+begin_src emacs-lisp
   (when (file-exists-p (expand-file-name "local.el.d" user-emacs-directory))
